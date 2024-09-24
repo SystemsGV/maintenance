@@ -12,13 +12,13 @@ export default function ProjectCard({ item }) {
 
   return (
     <Link
-      href={item.default !== 1 ? route("projects.tasks", item.id) : undefined}
+      href={item.default != '1' ? route("projects.tasks", item.id) : undefined}
       className={classes.link}
       onClick={stopOnIgnoreLink}
     >
       <Card withBorder padding="xl" radius="md" w={350} className={classes.card}>
         <Group justify="space-between">
-          <Text fz={23} fw={700} className={item.default !== 1 ? classes.title : ''}>
+          <Text fz={23} fw={700} className={item.default != '1' ? classes.title : ''}>
             {item.name}
           </Text>
           <ToggleFavorite item={item} />

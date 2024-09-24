@@ -11,7 +11,7 @@ export default function ProjectGroup({ group, projects, ...props }) {
   const { findProject, selectedProjects, moveSelectedProjects } = useProjectsStore();
   const projectsIds = selectedProjects.map(p => findProject(p));
   const disabledAction = () => {
-    if (selectedProjects.length === 0) return false;
+    if (selectedProjects.length < 0) return false;
     return projectsIds.every(p => p.group_id === group.id); // Verifica si todos los IDs de grupo son iguales
   };
 
