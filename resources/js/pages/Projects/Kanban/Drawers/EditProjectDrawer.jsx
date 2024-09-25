@@ -7,6 +7,8 @@ import {
   Center,
   Drawer,
   Group,
+  Loader,
+  LoadingOverlay,
   MultiSelect,
   NumberInput,
   Select,
@@ -25,38 +27,16 @@ import Task from "./Task";
 import classes from "./css/ProjectDrawer.module.css";
 import EmptyWithIcon from "@/components/EmptyWithIcon";
 import { IconSearch } from "@tabler/icons-react";
+import useTasksStore from "@/hooks/store/useTasksStore";
 
 export function EditProjectDrawer() {
   const { edit, openEditProject, closeEditProject } = useProjectDrawerStore();
-  const { initProjectWebSocket } = useWebSockets();
+  const { initProjectWebSocket, initTaskWebSocket } = useWebSockets();
   const { findProject, updateProjectProperty } = useProjectsStore();
+  const { checkTask, setTasks } = useTasksStore();
   const {users_access, games, labels, types, openedProject } = usePage().props;
   const [tasksCheck, setTasksCheck] = useState({});
-
-
-  const handleCheckChange = async (taskId, value) => {
-    const task = data.tasks.find(task => task.id === taskId);
-    if (task && task.sent_archive == 1) {
-      return  alert("No puedes cambiar el estado, primero deberas subir una imagen.");
-    }
-    setTasksCheck(prevState => ({
-      // ...prevState,
-      [taskId]: value,
-    }));
-
-    // Prepara un nuevo objeto que incluya todos los valores actualizados
-    const updatedTasks = data.tasks.map(task => ({
-      ...task, // Copia todos los campos de la tarea
-      check: task.id === taskId ? value : task.check,
-    }));
-    data.tasks = updatedTasks;
-    await updateProjectProperty(project, 'tasks', updatedTasks );
-  };
-
-
-  useEffect(() => {
-    if (openedProject) setTimeout(() => openEditProject(openedProject), 50);
-  }, []);
+  const [loading, setLoading] = useState(false);
 
   const project = findProject(edit.project.id);
 
@@ -77,8 +57,39 @@ export function EditProjectDrawer() {
     tasks: [],
   });
 
+  const handleCheckChange = async (taskId, value) => {
+
+    const task = data.tasks.find(task => task.id == taskId);
+    const newLabels = labels.find(label => label.id == 2);
+
+    initTaskWebSocket(task);
+    const options = {
+      property: 'check',
+      value: value,
+    };
+    // Prepara un nuevo objeto que incluya todos los valores actualizados
+    const updatedTasks = data.tasks.map(task => ({
+      ...task, // Copia todos los campos de la tarea
+      check: task.id == taskId ? value : task.check,
+      labels: task.id == taskId ? [newLabels] : task.labels,
+    }));
+
+    data.tasks = updatedTasks;
+
+    return await checkTask(project, task, options, setLoading);
+  };
+
+  useEffect(() => {
+    if (openedProject) setTimeout(() => openEditProject(openedProject), 50);
+  }, []);
+
   useEffect(() => {
     if (edit.opened) {
+      axios.get(route("projects.tasksGrouped"), { params: { project } } , { progress: false })
+      .then(response => {
+        setTasks(response.data);
+      })
+      .catch(() => alert("Fallo al consultar tareas"));
       return initProjectWebSocket(project);
     }
   }, [edit.opened]);
@@ -106,7 +117,6 @@ export function EditProjectDrawer() {
   }, [edit.opened, project]);
 
   const updateValue = (field, value) => {
-
     setData({ ...data, [field]: value });
 
     const dropdowns = ["labels", "users"];
@@ -288,6 +298,8 @@ export function EditProjectDrawer() {
           <Tabs.Panel value="tasks">
             {edit.opened && project.tasks.length ? (
               <>
+                <LoadingOverlay visible={loading} loaderProps={{ children: <Loader size={40} /> }} />
+
                 <Breadcrumbs
                   c="dark.3"
                   ml={24}

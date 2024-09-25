@@ -4,6 +4,7 @@ import createProjectTimeLogsSlice from '@/hooks/store/projects/ProjectTimeLogsSl
 import createProjectWebSocketUpdatesSlice from '@/hooks/store/projects/ProjectWebSocketUpdatesSlice';
 import { move, reorder } from '@/utils/reorder';
 import { router } from '@inertiajs/react';
+import { notifications } from '@mantine/notifications';
 import axios from 'axios';
 import { produce } from "immer";
 import { create } from 'zustand';
@@ -100,6 +101,7 @@ const useProjectsStore = create((set, get) => ({
     return set(produce(state => { state.projects[sourceGroupId] = result }));
   },
   moveProject: (source, destination) => {
+
     const sourceGroupId = +source.droppableId.split("-")[1];
     const destinationGroupId = +destination.droppableId.split("-")[1];
 
@@ -115,11 +117,18 @@ const useProjectsStore = create((set, get) => ({
 
     const canMove = data.ids.every((element) => {
       const project = get().findProject(element);
-      return !(project && (sourceGroupId + 1) !== destinationGroupId || project.default == 1);
+      const allTasksCheck = project?.tasks.every(task => task.check != null);
+      return !(project && (sourceGroupId + 1) != destinationGroupId || project.default == 1 || !allTasksCheck);
     });
 
     if (!canMove) {
-      return null; // Detener la acción si no se puede mover
+      return notifications.show({
+        title: 'Acción denegada',
+        message: 'Se debe completar todas las tareas para mover a otro grupo.',
+        radius: 'md',
+        color: 'orange',
+        autoClose: 2000,
+      });
     }
 
     axios
@@ -142,20 +151,21 @@ const useProjectsStore = create((set, get) => ({
     }));
   },
 
-  moveSelectedProjects: (projects) => {
+  moveSelectedProjects: async (projects, setLoading) => {
+    setLoading(true);
     try {
-      axios
+      await axios
       .post(route("projects.kanban.moveSelectedProjects"), { projects: projects }, { progress: true })
       .then(response => {
         get().clearSelectedProjects();
         return router.visit(route('projects.kanban'));
       })
-      .catch(() => alert("Failed to save project reorder action"));
-
-
+      .catch(() => alert("Falló al mover la orden de trabajo"));
     } catch (e) {
       console.error(e);
       alert("Failed to save project property change");
+    } finally {
+      setLoading(false);
     }
   },
 

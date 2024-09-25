@@ -1,4 +1,5 @@
 import { replaceUrlWithoutReload } from '@/utils/route';
+import { router } from '@inertiajs/react';
 import { produce } from 'immer';
 import { create } from 'zustand';
 
@@ -39,6 +40,16 @@ const useTaskDrawerStore = create((set, get) => ({
     return set(produce(state => {
       state.edit.opened = false;
     }));
+  },
+
+  closeProjectKanban: () => {
+
+    set(produce(state => {
+      state.edit.opened = false;
+    }));
+
+    return router.visit(route("projects.kanban"));
+
   },
 }));
 

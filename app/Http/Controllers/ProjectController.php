@@ -90,6 +90,7 @@ class ProjectController extends Controller
                                         'labels:id,name,color',
                                         'assignedToUser:id,name',
                                         'taskGroup:id,name',
+                                        'attachments',
                                     ]);
                             },
                         ])
@@ -106,7 +107,6 @@ class ProjectController extends Controller
             });
 
         return Inertia::render('Projects/Kanban/Index', [
-            // 'usersWithAccessToProject' => PermissionService::usersWithAccessToProject($project),
             'labels' => Label::get(['id', 'name', 'color']),
             'projectGroups' => $groups,
             'groupedProjects' => $groupedProjects,
@@ -161,12 +161,12 @@ class ProjectController extends Controller
         if (! in_array($updateField, ['users', 'labels', 'tasks'])) {
 
             $project->update($data);
-            if ($updateField === 'group_id') {
+            if ($updateField == 'group_id') {
                 $project->update(['order_column' => 0]);
             }
         }
 
-        if ($updateField === 'tasks') {
+        if ($updateField == 'tasks') {
             $tasks = $data['tasks'];
             foreach($tasks as $task){
                 $newTask = Task::find($task['id']);
@@ -178,11 +178,11 @@ class ProjectController extends Controller
             return response()->json();
         }
 
-        if ($updateField === 'users') {
+        if ($updateField == 'users') {
             $project->users()->sync($data['users']);
         }
 
-        if ($updateField === 'labels') {
+        if ($updateField == 'labels') {
             $project->labels()->sync($data['labels']);
         }
 
@@ -265,7 +265,7 @@ class ProjectController extends Controller
     {
 
         $project->update([
-            'completed_at' => ($request->completed === true) ? now() : null,
+            'completed_at' => ($request->completed == true) ? now() : null,
         ]);
         ProjectUpdated::dispatch($project, 'completed_at');
 

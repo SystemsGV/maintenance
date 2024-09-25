@@ -19,6 +19,10 @@ export default function Task({ task, onCheckChange  }) {
 
   const [check, setCheck] = useState(task.check || '');
   const handleChange = (value) => {
+    if (task.sent_archive == 1 && task.attachments.length == 0) {
+      alert("No puedes cambiar el estado, primero deberás subir una imagen.");
+      return; // No cambiar el estado
+    }
     setCheck(value);
     onCheckChange(task.id, value);
   };
@@ -70,7 +74,7 @@ export default function Task({ task, onCheckChange  }) {
         </Grid.Col>
 
         <Grid.Col span={4}>
-          <Chip.Group onChange={handleChange} value={check}>
+          <Chip.Group onChange={handleChange} value={check || false}>
             <Group justify='center'>
               <Chip value='bien'>Bien</Chip>
               <Chip value='mal'>Mal</Chip>

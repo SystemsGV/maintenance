@@ -16,12 +16,12 @@ class UpdateProject
         if (! in_array($updateField, ['users', 'labels', 'tasks'])) {
 
             $project->update($data);
-            if ($updateField === 'group_id') {
+            if ($updateField == 'group_id') {
                 $project->update(['order_column' => 0]);
             }
         }
 
-        if ($updateField === 'tasks') {
+        if ($updateField == 'tasks') {
             $tasks = $data['tasks'];
             foreach($tasks as $task){
                 $newTask = Task::find($task['id']);
@@ -33,11 +33,11 @@ class UpdateProject
             return response()->json();
         }
 
-        if ($updateField === 'users') {
+        if ($updateField == 'users') {
             $project->users()->sync($data['users']);
         }
 
-        if ($updateField === 'labels') {
+        if ($updateField == 'labels') {
             $project->labels()->sync($data['labels']);
         }
 

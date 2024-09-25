@@ -106,6 +106,7 @@ const useTasksStore = create((set, get) => ({
       from_index: source.index,
       to_index: destination.index,
     };
+    return console.log(data);
 
     axios
       .post(route("projects.tasks.move", [route().params.project]), data, { progress: false })
@@ -115,6 +116,43 @@ const useTasksStore = create((set, get) => ({
       state.tasks[sourceGroupId] = result[sourceGroupId];
       state.tasks[destinationGroupId] = result[destinationGroupId];
     }));
+  },
+  checkTask: async (project, task, options, setLoading) =>{
+
+    setLoading(true);
+
+    try {
+      get().addTask(task);
+      get().updateTaskProperty(task, options['property'], options['value']);
+      get().updateTaskProperty(task, 'labels', [2]);
+
+      const sourceGroupId = task.group_id;
+      const destinationGroupId = task.group_id + 1;
+      const sourceIndex = Object.values(get().tasks).findIndex(t => t.group_id == sourceGroupId) + 1;
+      const destinationIndex = get().tasks[destinationGroupId].length;
+
+      move(get().tasks, sourceGroupId, destinationGroupId, sourceIndex, destinationIndex);
+
+      const data = {
+        ids: [task.id],
+        from_group_id: sourceGroupId,
+        to_group_id: destinationGroupId,
+        from_index: sourceIndex,
+        to_index: destinationIndex,
+      };
+
+      await axios
+        .post(route("projects.tasks.move", [project]), data, { progress: false })
+        .catch(() => alert("Failed to save task move action"));
+
+    } catch (e) {
+      console.error(e);
+      alert("Falló al marcar tarea");
+
+    } finally {
+      setLoading(false);
+    }
+
   },
 }));
 

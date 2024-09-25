@@ -28,7 +28,7 @@ import classes from "./css/TaskDrawer.module.css";
 
 export function EditTaskDrawer() {
   const editorRef = useRef(null);
-  const { edit, openEditTask, closeEditTask } = useTaskDrawerStore();
+  const { edit, openEditTask, closeEditTask, closeProjectKanban } = useTaskDrawerStore();
   const { initTaskWebSocket } = useWebSockets();
   const { findTask, updateTaskProperty, complete, deleteAttachment, uploadAttachments } =
     useTasksStore();
@@ -37,6 +37,7 @@ export function EditTaskDrawer() {
     taskGroups,
     labels,
     openedTask,
+    controle,
     auth: { user },
   } = usePage().props;
 
@@ -114,7 +115,7 @@ export function EditTaskDrawer() {
   return (
     <Drawer
       opened={edit.opened}
-      onClose={closeEditTask}
+      onClose={controle == 0 ? closeEditTask : closeProjectKanban}
       title={
         <Group ml={25} my="sm" wrap="nowrap">
           <Checkbox

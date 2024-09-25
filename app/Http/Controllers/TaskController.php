@@ -24,7 +24,7 @@ use Inertia\Response;
 
 class TaskController extends Controller
 {
-    public function index(Request $request, Project $project, ?Task $task = null): Response
+    public function index(Request $request, Project $project, ?Task $task = null, $controle = '0'): Response
     {
         $this->authorize('viewAny', [Task::class, $project]);
 
@@ -58,9 +58,38 @@ class TaskController extends Controller
             'labels' => Label::get(['id', 'name', 'color']),
             'taskGroups' => $groups,
             'groupedTasks' => $groupedTasks,
+            'controle' => $controle,
             'openedTask' => $task ? $task->loadDefault() : null,
         ]);
     }
+
+    public function tasksGrouped(Request $request): JsonResponse
+    {
+
+        $project = Project::findOrFail($request->project['id']);
+        $this->authorize('reorder', [Task::class, $project]);
+
+        $groupedTasks = $project
+            ->taskGroups()
+            ->with(['project' => fn ($query) => $query->withArchived()])
+            ->get()
+            ->mapWithKeys(function (TaskGroup $group) use ($project) {
+                return [
+                    $group->id => Task::where('project_id', $project->id)
+                        ->where('group_id', $group->id)
+                        ->searchByQueryString()
+                        ->filterByQueryString()
+                        // ->when($request->user()->hasRole('cliente'), fn ($query) => $query->where('hidden_from_clients', false))
+                        // ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
+                        // ->when(! $request->has('status'), fn ($query) => $query->whereNull('completed_at'))
+                        ->withDefault()
+                        ->when($project->isArchived(), fn ($query) => $query->with(['project' => fn ($query) => $query->withArchived()]))
+                        ->get(),
+                ];
+            });
+
+            return response()->json($groupedTasks);
+        }
 
     public function store(StoreTaskRequest $request, Project $project): RedirectResponse
     {
@@ -119,7 +148,7 @@ class TaskController extends Controller
         $this->authorize('complete', [Task::class, $project]);
 
         $task->update([
-            'completed_at' => ($request->completed === true) ? now() : null,
+            'completed_at' => ($request->completed == true) ? now() : null,
         ]);
         TaskUpdated::dispatch($task, 'completed_at');
 

@@ -20,7 +20,7 @@ export default function TaskGroup({ group, tasks, ...props }) {
           <div className={classes.group}>
             <Group>
               <div {...provided.dragHandleProps} className={classes.dragHandle}>
-                <IconGripVertical
+                {/* <IconGripVertical
                   style={{
                     width: rem(18),
                     height: rem(18),
@@ -28,7 +28,7 @@ export default function TaskGroup({ group, tasks, ...props }) {
                       can("reordenar grupo de tarea") && !route().params.archived ? "inline" : "none",
                   }}
                   stroke={1.5}
-                />
+                /> */}
               </div>
               <Text size="xl" fw={700}>
                 {group.name}

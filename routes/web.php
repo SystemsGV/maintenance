@@ -81,10 +81,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('{project}/task-groups/reorder', [GroupController::class, 'reorder'])->name('task-groups.reorder');
 
         // TASKS
+        Route::get('tasksGrouped', [TaskController::class, 'tasksGrouped'])->name('tasksGrouped');
         Route::get('{project}/tasks', [TaskController::class, 'index'])->name('tasks');
         Route::post('{project}/tasks', [TaskController::class, 'store'])->name('tasks.store');
         Route::put('{project}/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update')->scopeBindings();
-        Route::get('{project}/tasks/{task}/open', [TaskController::class, 'index'])->name('tasks.open')->scopeBindings();
+        Route::get('{project}/tasks/{task}/open/{controle?}', [TaskController::class, 'index'])->name('tasks.open')->scopeBindings();
         Route::delete('{project}/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy')->scopeBindings();
         Route::post('{project}/tasks/{taskId}/restore', [TaskController::class, 'restore'])->name('tasks.restore')->scopeBindings();
 

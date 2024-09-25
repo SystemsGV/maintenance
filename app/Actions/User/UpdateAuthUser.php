@@ -16,7 +16,7 @@ class UpdateAuthUser
             'email' => $data['email'],
         ];
 
-        if ($user->avatar === null || $data['avatar']) {
+        if ($user->avatar == null || $data['avatar']) {
             $newData['avatar'] = UserService::storeOrFetchAvatar($user, $data['avatar']);
         }
 

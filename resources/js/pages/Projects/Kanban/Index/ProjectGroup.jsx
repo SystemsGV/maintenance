@@ -1,18 +1,20 @@
 import { Draggable, Droppable } from "@hello-pangea/dnd";
-import { ActionIcon, Checkbox, Group, Text, Tooltip, rem } from "@mantine/core";
+import { ActionIcon, Checkbox, Group, Loader, LoadingOverlay, Text, Tooltip, rem } from "@mantine/core";
 import { IconGripVertical, IconSend2 } from "@tabler/icons-react";
 import Project from "./Project";
 import ProjectGroupActions from "./ProjectGroupActions";
 import classes from "./css/ProjectGroup.module.css";
 import useProjectsStore from "@/hooks/store/useProjectsStore";
+import { useState } from "react";
 
 export default function ProjectGroup({ group, projects, ...props }) {
 
   const { findProject, selectedProjects, moveSelectedProjects } = useProjectsStore();
+  const [loading, setLoading] = useState  (false);
   const projectsIds = selectedProjects.map(p => findProject(p));
   const disabledAction = () => {
-    if (selectedProjects.length < 0) return false;
-    return projectsIds.every(p => p.group_id === group.id); // Verifica si todos los IDs de grupo son iguales
+    if (selectedProjects.length == 0){ return false};
+    return projectsIds.every(p => p.group_id == group.id); // Verifica si todos los IDs de grupo son iguales
   };
 
   return (
@@ -23,6 +25,9 @@ export default function ProjectGroup({ group, projects, ...props }) {
           ref={provided.innerRef}
           {...provided.draggableProps}
         >
+
+          <LoadingOverlay visible={loading} loaderProps={{ children: <Loader size={40} /> }} />
+
           <div className={classes.group}>
             <Group>
               <div {...provided.dragHandleProps} className={classes.dragHandle}>
@@ -47,7 +52,7 @@ export default function ProjectGroup({ group, projects, ...props }) {
                   variant="filled"
                   size="md"
                   radius="xl"
-                  onClick={() => moveSelectedProjects(projectsIds)}
+                  onClick={() => moveSelectedProjects(projectsIds, setLoading)}
                   disabled={!disabledAction()}
                 >
                   <IconSend2 style={{ width: rem(18), height: rem(18) }} stroke={2} />
@@ -57,6 +62,7 @@ export default function ProjectGroup({ group, projects, ...props }) {
           </div>
           <Droppable droppableId={`group-${group.id}-projects`} type="project">
             {(provided, snapshot) => (
+
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}

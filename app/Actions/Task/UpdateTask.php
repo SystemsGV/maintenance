@@ -14,16 +14,16 @@ class UpdateTask
         if (! in_array($updateField, ['subscribed_users', 'labels'])) {
             $task->update($data);
 
-            if ($updateField === 'group_id') {
+            if ($updateField == 'group_id') {
                 $task->update(['order_column' => 0]);
             }
         }
 
-        if ($updateField === 'subscribed_users') {
+        if ($updateField == 'subscribed_users') {
             $task->subscribedUsers()->sync($data['subscribed_users']);
         }
 
-        if ($updateField === 'labels') {
+        if ($updateField == 'labels') {
             $task->labels()->sync($data['labels']);
         }
 

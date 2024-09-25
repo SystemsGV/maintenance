@@ -39,6 +39,7 @@ const KanbanIndex = () => {
   }, [projectGroups, groupedProjects]);
 
   useEffect(() => {
+    initProjectWebSocket(openedProject);
     return initProjectWebSocket();
   }, []);
 

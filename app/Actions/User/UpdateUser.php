@@ -19,7 +19,7 @@ class UpdateUser
 
         $user->syncRoles($data['roles']);
 
-        if ($user->avatar === null || $data['avatar']) {
+        if ($user->avatar == null || $data['avatar']) {
             $newData['avatar'] = UserService::storeOrFetchAvatar($user, $data['avatar']);
         }
 
