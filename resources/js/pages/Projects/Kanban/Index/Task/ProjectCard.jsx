@@ -4,21 +4,24 @@ import { isOverdue } from "@/utils/project";
 import { getInitials } from "@/utils/user";
 import { Draggable } from "@hello-pangea/dnd";
 import { Link } from "@inertiajs/react";
-import { Avatar, Checkbox, Group, Progress, Text, Tooltip, rem, useComputedColorScheme } from "@mantine/core";
+import { Avatar, Checkbox, Group, Loader, LoadingOverlay, Text, Tooltip, rem, useComputedColorScheme } from "@mantine/core";
 import ProjectActions from "../ProjectActions";
 import classes from "./css/ProjectCard.module.css";
 import useProjectsStore from "@/hooks/store/useProjectsStore";
+import { useState } from "react";
 
 export default function   ProjectCard({ project, index }) {
   const { openEditProject } = useProjectDrawerStore();
   const computedColorScheme = useComputedColorScheme();
   const { toggleProjectSelection, selectedProjects } = useProjectsStore();
-
+  const [isClicked, setIsClicked] = useState(false);
+  
   const handleCheckboxChange = () => {
     toggleProjectSelection(project);
   };
   return (
     <Draggable draggableId={"project-" + project.id} index={index}>
+
       {(provided, snapshot) => (
         <div
           {...provided.draggableProps}
@@ -27,8 +30,12 @@ export default function   ProjectCard({ project, index }) {
             project.completed_at !== null && classes.completed
           }`}
         >
+
           <div {...(can("reordenar tarea") && provided.dragHandleProps)}>
+
           <Group wrap="nowrap">
+
+            <LoadingOverlay visible={isClicked} loaderProps={{ children: <Loader size={40} /> }} />
 
             <Checkbox
               checked={selectedProjects.some(p => p.id === project.id)}
@@ -42,7 +49,15 @@ export default function   ProjectCard({ project, index }) {
               size="xs"
               fw={500}
               c={isOverdue(project) && project.completed_at === null ? "red.7" : ""}
-              onClick={() => { if(project.default != 1) openEditProject(project) }}
+              onClick={() => { 
+                if(project.default != 1){
+                  setIsClicked(true);                  
+                  openEditProject(project);
+                  setTimeout(() => setIsClicked(false), 300); 
+                }
+              }
+              
+              }
             >
               #{project.number + ": " + project.name}
             </Text>

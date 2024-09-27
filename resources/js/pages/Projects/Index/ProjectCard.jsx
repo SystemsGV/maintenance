@@ -25,7 +25,7 @@ export default function ProjectCard({ item }) {
         </Group>
 
         <Text fz="md" fw={800}>
-          {item.default ? 'Defecto' : ''}
+          {item.default == 1 ? 'Defecto' : ''}
         </Text>
 
         {item.description?.length > 0 && (

@@ -27,7 +27,6 @@ const useProjectDrawerStore = create((set, get) => ({
     replaceUrlWithoutReload(
       route("projects.kanban.open", [project.id])
     );
-
     return set(produce(state => {
       state.edit.opened = true;
       state.edit.project = project;

@@ -34,7 +34,7 @@ export default function Task({ task, onCheckChange  }) {
   return (
       <Grid>
         <Grid.Col span={1}>
-          {task.sent_archive !== 0 &&(
+          {task.sent_archive != 0 &&(
             <Tooltip label="Obligatorio archivos adjuntos" openDelay={1000} withArrow>
               <TaskGroupLabel size="sm">Archivo</TaskGroupLabel>
             </Tooltip>

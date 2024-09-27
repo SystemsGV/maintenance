@@ -139,15 +139,12 @@ const useTasksStore = create((set, get) => ({
         to_index: destinationIndex,
       };
 
-      await axios
-        .post(route("projects.tasks.move", [project]), data, { progress: false })
-        .then(response => {
-          setLoading(false);
-        })
-        .catch(() => alert("Failed to save task move action"));
+      await axios.post(route("projects.tasks.move", [project]), data, { progress: false });
+      setLoading(false);
 
     } catch (e) {
       console.error(e);
+      setLoading(false);
       alert("Falló al marcar tarea");
     }
   },
