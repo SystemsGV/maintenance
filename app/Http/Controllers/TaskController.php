@@ -45,7 +45,6 @@ class TaskController extends Controller
                         ->filterByQueryString()
                         ->when($request->user()->hasRole('cliente'), fn ($query) => $query->where('hidden_from_clients', false))
                         ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
-                        ->when(! $request->has('status'), fn ($query) => $query->whereNull('completed_at'))
                         ->withDefault()
                         ->when($project->isArchived(), fn ($query) => $query->with(['project' => fn ($query) => $query->withArchived()]))
                         ->get(),
@@ -62,34 +61,6 @@ class TaskController extends Controller
             'openedTask' => $task ? $task->loadDefault() : null,
         ]);
     }
-
-    public function tasksGrouped(Request $request): JsonResponse
-    {
-
-        $project = Project::findOrFail($request->project['id']);
-        $this->authorize('reorder', [Task::class, $project]);
-
-        $groupedTasks = $project
-            ->taskGroups()
-            ->with(['project' => fn ($query) => $query->withArchived()])
-            ->get()
-            ->mapWithKeys(function (TaskGroup $group) use ($project) {
-                return [
-                    $group->id => Task::where('project_id', $project->id)
-                        ->where('group_id', $group->id)
-                        ->searchByQueryString()
-                        ->filterByQueryString()
-                        // ->when($request->user()->hasRole('cliente'), fn ($query) => $query->where('hidden_from_clients', false))
-                        // ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
-                        // ->when(! $request->has('status'), fn ($query) => $query->whereNull('completed_at'))
-                        ->withDefault()
-                        ->when($project->isArchived(), fn ($query) => $query->with(['project' => fn ($query) => $query->withArchived()]))
-                        ->get(),
-                ];
-            });
-
-            return response()->json($groupedTasks);
-        }
 
     public function store(StoreTaskRequest $request, Project $project): RedirectResponse
     {
@@ -183,4 +154,30 @@ class TaskController extends Controller
 
         return redirect()->back()->success('Task restored', 'The restoring of the Task was completed successfully.');
     }
+
+    public function grouped(Request $request, Project $project): JsonResponse
+    {
+
+        $this->authorize('reorder', [Task::class, $project]);
+
+        $groupedTasks = $project
+            ->taskGroups()
+            ->with(['project' => fn ($query) => $query->withArchived()])
+            ->get()
+            ->mapWithKeys(function (TaskGroup $group) use ($project) {
+                return [
+                    $group->id => Task::where('project_id', $project->id)
+                        ->where('group_id', $group->id)
+                        ->searchByQueryString()
+                        ->filterByQueryString()
+                        ->withDefault()
+                        ->when($project->isArchived(), fn ($query) => $query->with(['project' => fn ($query) => $query->withArchived()]))
+                        ->get(),
+                ];
+            });
+
+         return response()->json($groupedTasks);
+    }
+
+
 }

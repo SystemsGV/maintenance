@@ -18,27 +18,28 @@ class CreateProject
         return DB::transaction(function () use ($data) {
 
             $data['rate'] *= 100;
+            $data['labels'] = 2;
             $data['number'] = Project::withArchived()->count() + 1;
 
             $project = Project::create([
-                'client_company_id' => $data['client_company_id'],
+                'client_company_id' => $data['client_company_id'] ?? 1,
                 'group_id' => 2, // En proceso
-                'game_id' => $data['game_id'],
-                'period_id' => $data['period_id'],
-                'type_id' => $data['type_id'],
+                'game_id' => $data['game_id'] ?? null,
+                'period_id' => $data['period_id'] ?? null,
+                'type_id' => $data['type_id'] ?? null,
                 'name' => $data['name'],
-                'due_on' => Carbon::now(), // validar segun periodo
+                'due_on' => $data['due_on'] ?? now(), // validar segun periodo
                 'estimation' => 0,
                 'rate' => $data['rate'],
                 'number' => $data['number'],
                 'description' => $data['description'],
-                'completed_at' => $data['completed_at'],
                 'default' => false,
             ]);
 
+            $project->update(['name' => $project->name . ' ' . $project->id]);
             $project->moveToStart();
             $project->users()->attach($data['users'] ?? []);
-            $project->labels()->attach($data['labels'] ?? 1);
+            $project->labels()->attach($data['labels']);
             ProjectCreated::dispatch($project);
 
             $taskGroup = $project->taskGroups()->createMany([ // Almacenar solo los periodos predeterminados

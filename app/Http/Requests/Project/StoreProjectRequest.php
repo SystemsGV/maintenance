@@ -25,7 +25,7 @@ class StoreProjectRequest extends FormRequest
         return [
             'name' => ['required', 'string', Rule::unique('projects', 'name')],
             'description' => ['string', 'nullable'],
-            'client_company_id' => ['nullable', 'exists:client_companies,id'],
+            'client_company_id' => ['nullable'],
             'game_id' => ['nullable', 'exists:games,id'],
             'type_id' => ['nullable', 'exists:project_types,id'],
             'group_id' => ['nullable', 'exists:project_groups,id'],

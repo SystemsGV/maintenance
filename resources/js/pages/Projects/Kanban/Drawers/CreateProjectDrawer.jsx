@@ -1,7 +1,7 @@
-import { openConfirmModal } from "@/components/ConfirmModal";
-import useProjectDrawerStore from "@/hooks/store/useProjectDrawerStore";
-import useForm from "@/hooks/useForm";
-import { usePage } from "@inertiajs/react";
+import { openConfirmModal } from '@/components/ConfirmModal';
+import useProjectDrawerStore from '@/hooks/store/useProjectDrawerStore';
+import useForm from '@/hooks/useForm';
+import { usePage } from '@inertiajs/react';
 import {
   Button,
   Checkbox,
@@ -14,17 +14,17 @@ import {
   TextInput,
   Textarea,
   rem,
-} from "@mantine/core";
-import { DateInput } from "@mantine/dates";
-import { useEffect } from "react";
-import LabelsDropdown from "./LabelsDropdown";
-import classes from "./css/ProjectDrawer.module.css";
+} from '@mantine/core';
+import { DateInput } from '@mantine/dates';
+import { useEffect } from 'react';
+import LabelsDropdown from './LabelsDropdown';
+import classes from './css/ProjectDrawer.module.css';
 
 export function CreateProjectDrawer() {
   const { create, closeCreateProject } = useProjectDrawerStore();
   const {
     // usersWithAccessToProject,
-    users,
+    users_access,
     games,
     labels,
     types,
@@ -34,25 +34,25 @@ export function CreateProjectDrawer() {
   const initial = {
     client_company_id: 1,
     group_id: create.group_id ? create.group_id.toString() : 1,
-    game_id: "",
-    period_id: "",
-    type_id: "",
-    name: "",
-    description: "",
+    game_id: '',
+    period_id: '',
+    type_id: '',
+    name: '',
+    description: '',
     rate: 0,
-    estimation: "",
-    due_on: "",
+    estimation: '',
+    due_on: '',
     default: false,
     labels: [],
     users: [],
   };
 
   const [form, submit, updateValue] = useForm(
-    "post",
-    route("projects.kanban.store", [route().params.project]),
+    'post',
+    route('projects.kanban.store', [route().params.project]),
     {
       ...initial,
-    },
+    }
   );
 
   useEffect(() => {
@@ -64,11 +64,11 @@ export function CreateProjectDrawer() {
       closeCreateProject();
     } else {
       openConfirmModal({
-        type: "danger",
-        title: "¿Descartar cambios?",
+        type: 'danger',
+        title: '¿Descartar cambios?',
         content: `Todos los cambios no guardados se perderán.`,
-        confirmLabel: "Desechar",
-        confirmProps: { color: "red" },
+        confirmLabel: 'Desechar',
+        confirmProps: { color: 'red' },
         onConfirm: () => closeCreateProject(),
       });
     }
@@ -79,20 +79,27 @@ export function CreateProjectDrawer() {
       opened={create.opened}
       onClose={closeDrawer}
       title={
-        <Text fz={rem(28)} fw={600} ml={25} my="sm">
+        <Text
+          fz={rem(28)}
+          fw={600}
+          ml={25}
+          my='sm'
+        >
           Agregar nueva OT
         </Text>
       }
-      position="right"
+      position='right'
       size={1000}
       overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
       transitionProps={{
-        transition: "slide-left",
+        transition: 'slide-left',
         duration: 400,
-        timingFunction: "ease",
+        timingFunction: 'ease',
       }}
     >
-      <form onSubmit={(event) => submit(event, {
+      <form
+        onSubmit={event =>
+          submit(event, {
             onSuccess: () => closeDrawer(true),
             forceFormData: true,
           })
@@ -101,12 +108,12 @@ export function CreateProjectDrawer() {
       >
         <div className={classes.content}>
           <TextInput
-            label="Nombre"
-            placeholder="Nombre de la orden de trabajo"
+            label='Nombre'
+            placeholder='Nombre de la orden de trabajo'
             required
             data-autofocus
             value={form.data.name}
-            onChange={(e) => updateValue("name", e.target.value)}
+            onChange={e => updateValue('name', e.target.value)}
             error={form.errors.name}
           />
 
@@ -122,79 +129,93 @@ export function CreateProjectDrawer() {
           />
 
           <MultiSelect
-            label="Conceder acceso a las usuarias"
-            placeholder="Seleccionar usuarios"
+            label='Conceder acceso a las usuarias'
+            placeholder='Seleccionar usuarios'
             searchable
-            mt="md"
+            mt='md'
             value={form.data.users}
-            onChange={(values) => updateValue("users", values)}
-            data={users}
+            onChange={values => updateValue('users', values)}
+            data={users_access.map((i) => ({
+              value: i.id.toString(),
+              label: i.name,
+            }))}
             error={form.errors.users}
           />
 
-          <Flex justify="space-between" mt="xl">
-            <Button variant="transparent" w={100} disabled={form.processing} onClick={closeDrawer}>
+          <Flex
+            justify='space-between'
+            mt='xl'
+          >
+            <Button
+              variant='transparent'
+              w={100}
+              disabled={form.processing}
+              onClick={closeDrawer}
+            >
               Cancelar
             </Button>
 
-            <Button type="submit" w={120} loading={form.processing}>
+            <Button
+              type='submit'
+              w={120}
+              loading={form.processing}
+            >
               Agregar OT
             </Button>
           </Flex>
         </div>
         <div className={classes.sidebar}>
           <Select
-            label="Atracción que requiere mantenimiento"
-            placeholder="Seleccionar atracción"
+            label='Atracción que requiere mantenimiento'
+            placeholder='Seleccionar atracción'
             searchable
             value={form.data.game_id}
-            onChange={(value) => updateValue("game_id", value)}
+            onChange={value => updateValue('game_id', value)}
             data={games}
             error={form.errors.game_id}
           />
 
           <Select
-            label="Tipo de mantenimiento"
-            placeholder="Seleccionar tipo de mantenimiento"
+            label='Tipo de mantenimiento'
+            placeholder='Seleccionar tipo de mantenimiento'
             searchable
-            mt="md"
+            mt='md'
             value={form.data.type_id}
-            onChange={(value) => updateValue("type_id", value)}
+            onChange={value => updateValue('type_id', value)}
             data={types}
             error={form.errors.type_id}
           />
 
           <DateInput
             clearable
-            valueFormat="DD MMM YYYY"
+            valueFormat='DD MMM YYYY'
             minDate={new Date()}
-            mt="md"
-            label="Fecha de vencimiento"
-            placeholder="Elija la fecha de vencimiento de la OT"
+            mt='md'
+            label='Fecha de vencimiento'
+            placeholder='Elija la fecha de vencimiento de la OT'
             value={form.data.due_on}
-            onChange={(value) => updateValue("due_on", value)}
+            onChange={value => updateValue('due_on', value)}
           />
 
           <LabelsDropdown
             items={labels}
             selected={form.data.labels}
-            onChange={(values) => updateValue("labels", values)}
-            mt="md"
+            onChange={values => updateValue('labels', values)}
+            mt='md'
           />
 
           <NumberInput
-            label="Estimación de tiempo"
-            mt="md"
+            label='Estimación de tiempo'
+            mt='md'
             decimalScale={2}
             fixedDecimalScale
             defaultValue={0}
             min={0}
             allowNegative={false}
             step={0.5}
-            suffix=" hours"
-            onChange={(value) => updateValue("estimation", value)}
+            suffix=' hours'
+            onChange={value => updateValue('estimation', value)}
           />
-
         </div>
       </form>
     </Drawer>

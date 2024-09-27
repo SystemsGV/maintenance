@@ -24,10 +24,7 @@ class ProjectUpdated implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(
-        Project $project,
-        string $updateField,
-    ) {
+    public function __construct(Project $project, string $updateField,) {
         $this->project = $project->loadDefault();
 
         $this->projectId = $project->id;

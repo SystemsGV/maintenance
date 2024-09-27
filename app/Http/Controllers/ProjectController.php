@@ -72,7 +72,6 @@ class ProjectController extends Controller
     {
         $groups = ProjectGroup::when($request->has('archived'), fn ($query) => $query->onlyArchived())->get();
         $user = auth()->user();
-
         $groupedProjects = ProjectGroup::with(['projects' => fn ($query) => $query->withArchived()])->get()
             ->mapWithKeys(function (ProjectGroup $group) use ($request, $user) {
                 return [
@@ -83,7 +82,6 @@ class ProjectController extends Controller
                             'tasks' => function ($query) use ($user) {
                                 $query->when($user->hasRole('cliente'), fn ($query) => $query->where('hidden_from_clients', false))
                                     ->where('assigned_to_user_id', $user->id)
-                                    ->whereNull('completed_at')
                                     ->withoutGlobalScope('ordered')
                                     ->orderByRaw('-due_on DESC')
                                     ->with([
@@ -133,7 +131,6 @@ class ProjectController extends Controller
 
     public function store(StoreProjectRequest $request): RedirectResponse
     {
-
         (new CreateProject)->create($request->validated());
 
         return redirect()->route('projects.kanban')->success('Project created', 'A new project was successfully created.');
@@ -167,15 +164,7 @@ class ProjectController extends Controller
         }
 
         if ($updateField == 'tasks') {
-            $tasks = $data['tasks'];
-            foreach($tasks as $task){
-                $newTask = Task::find($task['id']);
-                $newTask->group_id = 2;
-                $newTask->labels()->sync(2);
-                $newTask->check = $task['check'];
-                $newTask->save();
-            }
-            return response()->json();
+            return response()->json($project->tasks()->get());
         }
 
         if ($updateField == 'users') {
@@ -249,7 +238,7 @@ class ProjectController extends Controller
     {
 
         Project::setNewOrder($request->ids);
-        Project::whereIn('id', $request->ids)->update(['group_id' => $request->to_group_id]);
+        Project::whereIn('id', $request->ids)->update(['group_id' => $request->to_group_id,]);
 
         ProjectGroupChanged::dispatch(
             $request->from_group_id,
@@ -258,7 +247,7 @@ class ProjectController extends Controller
             $request->to_index,
         );
 
-        return response()->json();
+        return response()->json(Label::get(['id', 'name', 'color']));
     }
 
     public function complete(Request $request, Project $project): JsonResponse
@@ -281,32 +270,32 @@ class ProjectController extends Controller
 
     public function moveSelectedProjects(Request $request): JsonResponse
     {
-        foreach ($request->projects as $project) {
-            if($project['group_id'] == 1){
-                $data = $project;
-                $data['labels'] = [2];
-                (new CreateProject)->create($data);
-                continue;
-            }
-
-            $project = Project::find($project['id']);
-
-            $project->update(['group_id' => $project['group_id'] + 1]);
-            ProjectUpdated::dispatch($project, 'group_id');
-
-            $project->tasks()->each( function (Task $task) use ( $project ) {
-                $task->group_id += 1;
-                $task->save();
-                TaskUpdated::dispatch($task, 'group_id');
-                $task->labels()->sync(3);
-                TaskUpdated::dispatch($task, 'labels');
-            });
-
-            $project->labels()->sync(3);
-            ProjectUpdated::dispatch($project, 'labels');
-
-        }
-        return response()->json();
+        $project = (new CreateProject)->create($request->newProject);
+        $user = auth()->user();
+        $project = Project::find($project->id)
+                    ->loadDefault()
+                    ->load([
+                        'tasks' => function ($query) use ($user) {
+                            $query->when($user->hasRole('cliente'), fn ($query) => $query->where('hidden_from_clients', false))
+                                ->where('assigned_to_user_id', $user->id)
+                                ->whereNull('completed_at')
+                                ->withoutGlobalScope('ordered')
+                                ->orderByRaw('-due_on DESC')
+                                ->with([
+                                    'labels:id,name,color',
+                                    'assignedToUser:id,name',
+                                    'taskGroup:id,name',
+                                    'attachments',
+                                ]);
+                        },
+                    ])
+                    ->loadCount([
+                        'tasks AS all_tasks_count',
+                        'tasks AS completed_tasks_count' => fn ($query) => $query->whereNotNull('completed_at'),
+                        'tasks AS overdue_tasks_count' => fn ($query) => $query->whereNull('completed_at')->whereDate('due_on', '<', now()),
+                    ]);
+                        
+        return response()->json($project);
     }
 
 }

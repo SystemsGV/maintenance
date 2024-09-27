@@ -81,7 +81,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('{project}/task-groups/reorder', [GroupController::class, 'reorder'])->name('task-groups.reorder');
 
         // TASKS
-        Route::get('tasksGrouped', [TaskController::class, 'tasksGrouped'])->name('tasksGrouped');
         Route::get('{project}/tasks', [TaskController::class, 'index'])->name('tasks');
         Route::post('{project}/tasks', [TaskController::class, 'store'])->name('tasks.store');
         Route::put('{project}/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update')->scopeBindings();
@@ -93,6 +92,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('{project}/tasks/reorder', [TaskController::class, 'reorder'])->name('tasks.reorder');
         Route::post('{project}/tasks/move', [TaskController::class, 'move'])->name('tasks.move');
         Route::post('{project}/tasks/{task}/expired', [TaskController::class, 'expired'])->name('tasks.expired')->scopeBindings();
+        Route::post('{project}/tasks/grouped', [TaskController::class, 'grouped'])->name('tasks.grouped');
 
         // ATTACHMENTS
         Route::group(['prefix' => '{project}/tasks/{task}', 'as' => 'tasks.'], function () {

@@ -36,7 +36,7 @@ class UpdateProjectRequest extends FormRequest
             'default' => ['boolean'],
             'labels' => ['array'],
             'users' => ['array'],
-            'tasks' => ['nullable'],
+            'tasks' => ['array'],
         ];
     }
 }

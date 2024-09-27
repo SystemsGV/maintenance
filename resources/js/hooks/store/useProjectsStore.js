@@ -3,7 +3,6 @@ import createProjectCommentsSlice from '@/hooks/store/projects/ProjectCommentsSl
 import createProjectTimeLogsSlice from '@/hooks/store/projects/ProjectTimeLogsSlice';
 import createProjectWebSocketUpdatesSlice from '@/hooks/store/projects/ProjectWebSocketUpdatesSlice';
 import { move, reorder } from '@/utils/reorder';
-import { router } from '@inertiajs/react';
 import { notifications } from '@mantine/notifications';
 import axios from 'axios';
 import { produce } from "immer";
@@ -37,23 +36,21 @@ const useProjectsStore = create((set, get) => ({
     }
     return null;
   },
-  updateProjectProperty: async (project, property, value, options = null) => {
+  updateProjectProperty: async (project, property, value, options = null) => {  
     try {
-      if(property == 'tasks' && project.sent_archive == 1){
-        return alert('Se debe subir imagen a la tarea');
+      if(property != 'completed_tasks_count'){
+        await axios
+        .put(
+          route("projects.kanban.update", [project.id]),
+          { [property]: value },
+          { progress: false },
+        )
       }
 
-      await axios
-      .put(
-        route("projects.kanban.update", [project.id]),
-        { [property]: value },
-        { progress: false },
-      )
-
       return set(produce(state => {
-        const index = state.projects[project.group_id].findIndex((i) => i.id === project.id);
+        const index = state.projects[project.group_id].findIndex((i) => i.id == project.id);
 
-        if (property === 'group_id' && project.group_id !== value) {
+        if (property == 'group_id' && project.group_id != value) {
           const result = move(state.projects, project.group_id, value, index, 0);
 
           state.projects[project.group_id] = result[project.group_id];
@@ -70,7 +67,6 @@ const useProjectsStore = create((set, get) => ({
     }
   },
   complete: (project, checked) => {
-    return null;
     const newState = checked ? true : null;
     const index = get().projects[project.group_id].findIndex((i) => i.id === project.id);
 
@@ -101,12 +97,11 @@ const useProjectsStore = create((set, get) => ({
     return set(produce(state => { state.projects[sourceGroupId] = result }));
   },
   moveProject: (source, destination) => {
-
     const sourceGroupId = +source.droppableId.split("-")[1];
     const destinationGroupId = +destination.droppableId.split("-")[1];
 
     const result = move(get().projects, sourceGroupId, destinationGroupId, source.index, destination.index);
-
+    const project = result[destinationGroupId][destination.index];
     const data = {
       ids: result[destinationGroupId].map((i) => i.id),
       from_group_id: sourceGroupId,
@@ -115,16 +110,11 @@ const useProjectsStore = create((set, get) => ({
       to_index: destination.index,
     };
 
-    const canMove = data.ids.every((element) => {
-      const project = get().findProject(element);
-      const allTasksCheck = project?.tasks.every(task => task.check != null);
-      return !(project && (sourceGroupId + 1) != destinationGroupId || project.default == 1 || !allTasksCheck);
-    });
-
-    if (!canMove) {
+    const check = project.tasks.some(task => task.check == null);
+    if (project && (destinationGroupId == 1 || project.tasks.length == 0 || check || project.completed_at != null || sourceGroupId == 4 || project.default == 1)) {
       return notifications.show({
         title: 'Acción denegada',
-        message: 'Se debe completar todas las tareas para mover a otro grupo.',
+        message: 'No se puede mover esta orden de trabajo',
         radius: 'md',
         color: 'orange',
         autoClose: 2000,
@@ -133,40 +123,106 @@ const useProjectsStore = create((set, get) => ({
 
     axios
       .post(route("projects.kanban.move", [route().params.project]), data, { progress: false }) // revisar el params.proyect
-      .catch(() => alert("Failed to save project move action"));
+      .then(response => {
+        const label = response.data.find(item => item.id == project.group_id);
+        get().clearSelectedProjects();
+        get().updateProjectProperty(project, 'labels', [project.group_id], [label]); // Para actualizar los labels
+      })
+      .catch(() => alert("No se pudo guardar la acción de movimiento del proyecto"));
 
-    return set(produce(state => {
+    set(produce(state => {
       state.projects[sourceGroupId] = result[sourceGroupId];
       state.projects[destinationGroupId] = result[destinationGroupId];
     }));
+    
+    if(destinationGroupId == 4) return get().complete(project, true)
+    return;
   },
 
-  toggleProjectSelection: (projectId) => {
+  toggleProjectSelection: (project) => {
     set(produce(state => {
-      if (state.selectedProjects.includes(projectId)) {
-        state.selectedProjects = state.selectedProjects.filter(id => id !== projectId);
+      const index = state.selectedProjects.findIndex(p => p.id == project.id);
+      if (index !== -1) {
+        state.selectedProjects.splice(index, 1);
       } else {
-        state.selectedProjects.push(projectId);
+        state.selectedProjects.push(project);
       }
     }));
   },
 
   moveSelectedProjects: async (projects, setLoading) => {
     setLoading(true);
-    try {
-      await axios
-      .post(route("projects.kanban.moveSelectedProjects"), { projects: projects }, { progress: true })
-      .then(response => {
-        get().clearSelectedProjects();
-        return router.visit(route('projects.kanban'));
-      })
-      .catch(() => alert("Falló al mover la orden de trabajo"));
-    } catch (e) {
-      console.error(e);
-      alert("Failed to save project property change");
-    } finally {
-      setLoading(false);
-    }
+    let canMove = false;
+
+    for (const project of projects) {
+        
+      const check = project.tasks.some(task => task.check == null);
+      canMove = project && project.default != 1 && (project.tasks.length == 0 || check || project.completed_at != null);
+
+      if(canMove) {
+        notifications.show({
+          title: 'Acción denegada',
+          message: 'No se puede mover esta orden de trabajo',
+          radius: 'md',
+          color: 'orange',
+          autoClose: 2000,
+        });
+        continue;
+      }
+
+      if(project.default == 1){
+        const newProject = {
+          ...project,
+          name: project.name.replace('001', ''),
+          created_at: null,
+          updated_at: null,
+          default: 0,
+          id: null,
+          labels: [],
+          number: null,
+          order_column: null,
+        }  
+        try {
+          const response = await axios.post(route("projects.kanban.moveSelectedProjects"), { newProject }, { progress: true });          
+          get().addProject(response.data);
+        } catch {
+            alert("Falló al crear la orden de trabajo");
+        }
+        continue;
+      }
+
+      const sourceGroupId = project.group_id;
+      const destinationGroupId = project.group_id + 1;
+      const sourceIndex = Object.values(get().projects[sourceGroupId]).findIndex(p => p.id == project.id);
+      const destinationIndex = get().projects[destinationGroupId].length;
+
+      const result = move(get().projects, sourceGroupId, destinationGroupId, sourceIndex, destinationIndex);      
+      const data = {
+        ids: [project.id],
+        from_group_id: sourceGroupId,
+        to_group_id: destinationGroupId,
+        from_index: sourceIndex,
+        to_index: destinationIndex,
+      };
+
+
+       await axios
+              .post(route("projects.kanban.move", [route().params.project]), data, { progress: true })
+              .then(response => {
+                const projectMoved = result[destinationGroupId][destinationIndex];                
+                const label = response.data.find(item => item.id == projectMoved.group_id);                
+                get().updateProjectProperty(projectMoved, 'labels', [projectMoved.group_id], [label]); // Para actualizar los labels
+              });
+
+      set(produce(state => {
+        state.projects[sourceGroupId] = result[sourceGroupId];
+        state.projects[destinationGroupId] = result[destinationGroupId];
+      }));
+
+    };
+
+    get().clearSelectedProjects();
+    setLoading(false);
   },
 
   clearSelectedProjects: () => set({ selectedProjects: [] }),

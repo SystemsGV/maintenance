@@ -44,7 +44,7 @@ export default function Task({ task, onCheckChange  }) {
         <Grid.Col span={5}>
           <Tooltip
             disabled={!isOverdue(task)}
-            label={`${diffForHumans(task.due_on, true)} overdue`}
+            label={`${diffForHumans(task.due_on, true)} atrasado`}
             openDelay={1000}
             withArrow
           >

@@ -54,6 +54,7 @@ const Login = ({ notify }) => {
               leftSection={<GoogleIcon />}
               variant="default"
               radius="xl"
+              display="none"
               component="a"
               href={route("auth.login.social.google")}
               loading={socialLoginPending}
@@ -63,11 +64,11 @@ const Login = ({ notify }) => {
             </Button>
           </Group>
 
-          <Divider label="Or continue with email" labelPosition="center" my="lg" />
+          <Divider display="none" label="Or continue with email" labelPosition="center" my="lg" />
 
           <TextInput
-            label="Email"
-            placeholder="Your email"
+            label="Correo eléctronico"
+            placeholder="Escribe tu correo"
             required
             value={form.data.email}
             onChange={(e) => form.setData("email", e.target.value)}
@@ -76,25 +77,25 @@ const Login = ({ notify }) => {
           />
           <PasswordInput
             ref={passwordRef}
-            label="Password"
-            placeholder="Your password"
+            label="Contraseña"
+            placeholder="Escribe tu contraseña"
             required
             mt="md"
             value={form.data.password}
             onChange={(e) => form.setData("password", e.target.value)}
           />
           <Group justify="space-between" mt="lg">
-            <Checkbox label="Remember me" />
+            <Checkbox label="Recordarme" />
             <Anchor
               type="button"
               size="sm"
               onClick={() => router.get(route("auth.forgotPassword.form"))}
             >
-              Forgot password?
+              ¿Has olvidado tu contraseña?
             </Anchor>
           </Group>
           <Button type="submit" fullWidth mt="xl" disabled={form.processing}>
-            Sign in
+            Ingresar
           </Button>
         </ContainerBox>
       </form>

@@ -172,6 +172,7 @@ export function CreateTaskDrawer() {
             label="Assignee"
             placeholder="Select assignee"
             searchable
+            required
             mt="md"
             value={form.data.assigned_to_user_id}
             onChange={(value) => updateValue("assigned_to_user_id", value)}

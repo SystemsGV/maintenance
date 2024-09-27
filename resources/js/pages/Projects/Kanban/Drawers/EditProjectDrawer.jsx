@@ -72,10 +72,13 @@ export function EditProjectDrawer() {
       ...task, // Copia todos los campos de la tarea
       check: task.id == taskId ? value : task.check,
       labels: task.id == taskId ? [newLabels] : task.labels,
+      completed_at: task.id == taskId ? dayjs().toISOString() : task.completed_at,
     }));
 
-    data.tasks = updatedTasks;
+    let completed_tasks_count = task.check == null ? project.completed_tasks_count + 1 : project.completed_tasks_count;
 
+    await updateProjectProperty(project, 'tasks', updatedTasks);
+    await updateProjectProperty(project, 'completed_tasks_count', completed_tasks_count);
     return await checkTask(project, task, options, setLoading);
   };
 
@@ -85,7 +88,7 @@ export function EditProjectDrawer() {
 
   useEffect(() => {
     if (edit.opened) {
-      axios.get(route("projects.tasksGrouped"), { params: { project } } , { progress: false })
+      axios.post(route("projects.tasks.grouped", project) , { progress: false })
       .then(response => {
         setTasks(response.data);
       })
@@ -129,6 +132,7 @@ export function EditProjectDrawer() {
           users_access.find((i) => i.id.toString() === id),
         ),
       };
+
       updateProjectProperty(project, field, value, options[field]);
     } else if (!onBlurInputs.includes(field)) {
       updateProjectProperty(project, field, value);
@@ -310,7 +314,7 @@ export function EditProjectDrawer() {
                 >
                 </Breadcrumbs>
 
-                {data.tasks.map((task) => (
+                {project.tasks.map((task) => (
                   <Task
                     key={task.id}
                     task={task}

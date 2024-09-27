@@ -15,7 +15,7 @@ export default function   ProjectCard({ project, index }) {
   const { toggleProjectSelection, selectedProjects } = useProjectsStore();
 
   const handleCheckboxChange = () => {
-    toggleProjectSelection(project.id);
+    toggleProjectSelection(project);
   };
   return (
     <Draggable draggableId={"project-" + project.id} index={index}>
@@ -31,7 +31,7 @@ export default function   ProjectCard({ project, index }) {
           <Group wrap="nowrap">
 
             <Checkbox
-              checked={selectedProjects.includes(project.id)}
+              checked={selectedProjects.some(p => p.id === project.id)}
               key={project.id}
               color="rgba(79, 79, 79, 79)"
               onChange={handleCheckboxChange}
