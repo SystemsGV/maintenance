@@ -21,7 +21,7 @@ export default function ArchivedItems({ groups, projects }) {
       {groups.length > 0 && (
         <>
           <Text fz={24} fw={600} mt={35} mb={20}>
-            Grupos de OT
+            Grupos de orden de trabajo
           </Text>
           {groups.map((group) => (
             <ArchivedProjectGroup key={`group-${group.id}`} group={group} />
@@ -30,6 +30,6 @@ export default function ArchivedItems({ groups, projects }) {
       )}
     </>
   ) : (
-    <EmptyResult title="No projects or groups found" subtitle="or none match your search criteria" />
+    <EmptyResult title="No se encontraron ordenes de trabajo o grupos" subtitle="o ninguno coincide con sus criterios de búsqueda" />
   );
 }

@@ -15,16 +15,16 @@ const InvoicesIndex = () => {
   const { items } = usePage().props;
 
   const columns = prepareColumns([
-    { label: "Number", column: "number" },
-    { label: "Status", column: "status" },
-    { label: "Company", column: "name" },
-    { label: "Note", column: "note" },
+    { label: "Número", column: "number" },
+    { label: "Estado", column: "status" },
+    { label: "Empresa", column: "name" },
+    { label: "Nota", column: "note" },
     { label: "Total", column: "amount" },
-    { label: "Total with tax", column: "amount_with_tax" },
-    { label: "Payment due", column: "due_date" },
-    { label: "Created", column: "created_at" },
+    { label: "Total con impuestos", column: "amount_with_tax" },
+    { label: "Pago vencido", column: "due_date" },
+    { label: "Creado", column: "created_at" },
     {
-      label: "Actions",
+      label: "Acciones",
       sortable: false,
       visible: actionColumnVisibility("invoice"),
     },
@@ -44,7 +44,7 @@ const InvoicesIndex = () => {
       <Grid justify="space-between" align="center">
         <Grid.Col span="content">
           <Group>
-            <SearchInput placeholder="Search invoices" search={search} />
+            <SearchInput placeholder="Buscar facturas" search={search} />
             <ArchivedFilterButton />
           </Group>
         </Grid.Col>
@@ -55,7 +55,7 @@ const InvoicesIndex = () => {
               radius="xl"
               onClick={() => redirectTo("invoices.create")}
             >
-              Create
+              Crear
             </Button>
           )}
         </Grid.Col>
@@ -73,6 +73,6 @@ const InvoicesIndex = () => {
   );
 };
 
-InvoicesIndex.layout = (page) => <Layout title="Invoices">{page}</Layout>;
+InvoicesIndex.layout = (page) => <Layout title="Facturas">{page}</Layout>;
 
 export default InvoicesIndex;

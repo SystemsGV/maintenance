@@ -48,7 +48,7 @@ export default function TableRow({ item }) {
           </Text>
         </Anchor>
         <Text fz="xs" c="dimmed">
-          Client company
+          Empresa cliente
         </Text>
       </Table.Td>
       <Table.Td>
@@ -96,15 +96,15 @@ export default function TableRow({ item }) {
             restorePermission="restaurar factura"
             archive={{
               route: "invoices.destroy",
-              title: "Archive invoice",
-              content: `Are you sure you want to archive this invoice?`,
-              confirmLabel: "Archive",
+              title: "Archivar factura",
+              content: `¿Está seguro de que desea archivar esta factura?`,
+              confirmLabel: "Archivar",
             }}
             restore={{
               route: "invoices.restore",
-              title: "Restore invoice",
-              content: `Are you sure you want to restore this invoice?`,
-              confirmLabel: "Restore",
+              title: "Restaurar factura",
+              content: `¿Está seguro de que desea restaurar esta factura?`,
+              confirmLabel: "Restaurar",
             }}
           >
             {can("descargar factura") && (

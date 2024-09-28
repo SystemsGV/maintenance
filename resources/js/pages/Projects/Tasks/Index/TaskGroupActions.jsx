@@ -17,9 +17,9 @@ export default function TaskGroupActions({ group, ...props }) {
   const openArchiveModal = () =>
     openConfirmModal({
       type: "danger",
-      title: "Archive task group",
-      content: `Are you sure you want to archive this task group?`,
-      confirmLabel: "Archive",
+      title: "Archivar grupo de tarea",
+      content: `¿Está seguro de que desea archivar este grupo?`,
+      confirmLabel: "Archivar",
       confirmProps: { color: "red" },
       onConfirm: () => archiveForm.submit({ preserveScroll: true }),
     });
@@ -27,9 +27,9 @@ export default function TaskGroupActions({ group, ...props }) {
   const openRestoreModal = () =>
     openConfirmModal({
       type: "info",
-      title: "Restore task group",
-      content: `Are you sure you want to restore this task group?`,
-      confirmLabel: "Restore",
+      title: "Restaurar grupo de tarea",
+      content: `¿Está seguro de que desea archivar este grupo?`,
+      confirmLabel: "Restaurar",
       confirmProps: { color: "blue" },
       onConfirm: () => restoreForm.submit({ preserveScroll: true }),
     });
@@ -73,7 +73,7 @@ export default function TaskGroupActions({ group, ...props }) {
                 color="blue"
                 onClick={openRestoreModal}
               >
-                Restore
+                Restaurar
               </Menu.Item>
             )}
             {can("archivar grupo de tarea") && !route().params.archived && (
@@ -84,7 +84,7 @@ export default function TaskGroupActions({ group, ...props }) {
                 color="red"
                 onClick={openArchiveModal}
               >
-                Archive
+                Archivar
               </Menu.Item>
             )}
           </Menu.Dropdown>

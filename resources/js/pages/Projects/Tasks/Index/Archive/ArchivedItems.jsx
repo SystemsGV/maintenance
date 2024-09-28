@@ -11,7 +11,7 @@ export default function ArchivedItems({ groups, tasks }) {
       {hasTasks && (
         <>
           <Text fz={24} fw={600} mb={20}>
-            Tasks
+            Tareas
           </Text>
           {Object.keys(tasks).map((key) =>
             tasks[key].map((task) => <ArchivedTask key={`task-${task.id}`} task={task} />),
@@ -21,7 +21,7 @@ export default function ArchivedItems({ groups, tasks }) {
       {groups.length > 0 && (
         <>
           <Text fz={24} fw={600} mt={35} mb={20}>
-            Task groups
+            Grupo de tareas
           </Text>
           {groups.map((group) => (
             <ArchivedTaskGroup key={`group-${group.id}`} group={group} />

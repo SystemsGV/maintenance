@@ -24,7 +24,7 @@ export default function TableRow({ item }) {
       <Table.Td>
         <Text fz="sm">{item.email}</Text>
         <Text fz="xs" c="dimmed">
-          Email
+          Correo electrónico
         </Text>
       </Table.Td>
       <Table.Td>
@@ -48,17 +48,17 @@ export default function TableRow({ item }) {
             restorePermission="restaurar usuario cliente"
             archive={{
               route: "clients.users.destroy",
-              title: "Archive client",
-              content: `Are you sure you want to archive this client? This action will prevent
-                the client from logging in, while all other aspects related to the
-                client's actions will remain unaffected.`,
-              confirmLabel: "Archive",
+              title: "Archivar cliente",
+              content: `¿Está seguro de que desea archivar este cliente? Esta acción evitará
+              el cliente inicie sesión, mientras que todos los demás aspectos relacionados con el
+              las acciones del cliente no se verán afectadas.`,
+              confirmLabel: "Archivar",
             }}
             restore={{
               route: "clients.users.restore",
-              title: "Restore client",
-              content: `Are you sure you want to restore this client? This action will allow the client to login.`,
-              confirmLabel: "Restore",
+              title: "Restaurar cliente",
+              content: `¿Está seguro de que desea restaurar este cliente? Esta acción permitirá que el cliente inicie sesión.`,
+              confirmLabel: "Restaurar",
             }}
           />
         </Table.Td>

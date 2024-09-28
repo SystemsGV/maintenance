@@ -20,7 +20,7 @@ class PermissionService
             'Check List' => ['ver checklists', 'crear checklist', 'editar checklist', 'archivar checklist', 'restaurar checklist'],
             'Mi Empresa' => ['ver mi empresa', 'editar mi empresa'],
             'Usuario Cliente' => ['ver usuarios cliente', 'crear usuario cliente', 'editar usuario cliente', 'archivar usuario cliente', 'restaurar usuario cliente'],
-            'Empresa Cliente' => ['ver empresas cliente', 'crear cliente empresa cliente', 'editar empresa cliente', 'archivar empresa cliente', 'restaurar empresa cliente'],
+            'Empresa Cliente' => ['ver empresas cliente', 'crear empresa cliente', 'editar empresa cliente', 'archivar empresa cliente', 'restaurar empresa cliente'],
             'Proyecto' => [
                 'ver proyectos', 'ver proyecto', 'crear proyecto', 'editar proyecto', 'archivar proyecto', 'restaurar proyecto', 'editar acceso usuario al proyecto'
             ],

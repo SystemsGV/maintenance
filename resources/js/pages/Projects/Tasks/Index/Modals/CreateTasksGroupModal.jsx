@@ -19,8 +19,8 @@ function ModalForm() {
   return (
     <form onSubmit={submitModal}>
       <TextInput
-        label="Name"
-        placeholder="Group name"
+        label="Nombre"
+        placeholder="Nombre del grupo"
         required
         data-autofocus
         value={form.data.name}
@@ -30,7 +30,7 @@ function ModalForm() {
 
       <Flex justify="flex-end" mt="xl">
         <Button type="submit" w={100} loading={form.processing}>
-          Create
+          Crear
         </Button>
       </Flex>
     </form>

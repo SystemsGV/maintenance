@@ -17,7 +17,7 @@ export default function Dropzone({ selected, onChange, remove, ...props }) {
     openConfirmModal({
       type: "danger",
       title: "Eliminar imagen",
-      content: `Are you sure you want to delete this attachment?`,
+      content: `¿Está seguro de que desea eliminar este archivo adjunto?`,
       confirmLabel: "Eliminar",
       confirmProps: { color: "red" },
       onConfirm: () => remove(index),
@@ -36,7 +36,7 @@ export default function Dropzone({ selected, onChange, remove, ...props }) {
         filename: file.name,
         contentType: file.type,
         nativeFallbackOnError: true,
-      }).catch((error) => console.error("Failed to download file", error));
+      }).catch((error) => console.error("No se pudo descargar el archivo", error));
     }
   };
 
@@ -83,10 +83,10 @@ export default function Dropzone({ selected, onChange, remove, ...props }) {
 
           <div>
             <Text size="md" inline>
-              Drag files here or click to select
+              Arrastre los archivos aquí o haga clic para seleccionar
             </Text>
             <Text size="xs" c="dimmed" inline mt={7}>
-              Files of any type will be accepted
+              Se aceptarán archivos de cualquier tipo.
             </Text>
           </div>
         </Group>

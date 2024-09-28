@@ -24,13 +24,13 @@ export default function Comments({ project }) {
   const editorRef = useRef(null);
 
   useEffect(() => {
-    // fetchComments(project, () => setLoading(false));
+    fetchComments(project, () => setLoading(false));
   }, []);
 
   return (
     <Box mb="xl">
       <Title order={3} mt="xl">
-        Discussion
+        Comentarios
         {!loading && (
           <Text c="dimmed" fw={500} display="inline-block" ml={5}>
             ({comments.length})
@@ -40,7 +40,7 @@ export default function Comments({ project }) {
       <RichTextEditor
         ref={editorRef}
         mt="md"
-        placeholder="Write a comment"
+        placeholder="Escribe un comentario"
         height={100}
         content={comment}
         onChange={(content) => setComment(content)}
@@ -52,7 +52,7 @@ export default function Comments({ project }) {
           disabled={comment.length <= 7}
           onClick={() => saveComment(project, comment, () => editorRef.current.setContent(""))}
         >
-          Add comment
+          Agregar un comentario
         </Button>
       </Flex>
 

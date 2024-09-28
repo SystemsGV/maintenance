@@ -42,14 +42,14 @@ const ClientEdit = () => {
     <>
       <Breadcrumbs fz={14} mb={30}>
         <Anchor href="#" onClick={() => redirectTo("clients.users.index")} fz={14}>
-          Clients
+          Clientes
         </Anchor>
-        <div>Edit</div>
+        <div>Editar</div>
       </Breadcrumbs>
 
       <Grid justify="space-between" align="flex-end" gutter="xl" mb="lg">
         <Grid.Col span="auto">
-          <Title order={1}>Edit client</Title>
+          <Title order={1}>Editar cliente</Title>
         </Grid.Col>
         <Grid.Col span="content"></Grid.Col>
       </Grid>
@@ -70,26 +70,25 @@ const ClientEdit = () => {
             </Grid.Col>
             <Grid.Col span="auto">
               <FileInput
-                label="Profile image"
-                placeholder="Choose image"
+                label="Foto de perfil"
+                placeholder="Cargar imagen"
                 accept="image/png,image/jpeg"
                 onChange={(image) => updateValue("avatar", image)}
                 clearable
                 error={form.errors.avatar}
               />
               <Text size="xs" c="dimmed" mt="sm">
-                If no image is uploaded we will try to fetch it via{" "}
+                Si no se carga ninguna imagen, intentaremos recuperarla a través del servicio{" "}
                 <Anchor href="https://unavatar.io" target="_blank" opacity={0.6}>
                   unavatar.io
-                </Anchor>{" "}
-                service.
+                </Anchor>
               </Text>
             </Grid.Col>
           </Grid>
 
           <TextInput
-            label="Name"
-            placeholder="User full name"
+            label="Nombre"
+            placeholder="Nombre completo del usuario"
             required
             mt="md"
             value={form.data.name}
@@ -98,8 +97,8 @@ const ClientEdit = () => {
           />
 
           <TextInput
-            label="Phone"
-            placeholder="Users phone number"
+            label="Teléfono"
+            placeholder="Número de teléfono del usuario"
             mt="md"
             value={form.data.phone}
             onChange={(e) => updateValue("phone", e.target.value)}
@@ -107,8 +106,8 @@ const ClientEdit = () => {
           />
 
           <MultiSelect
-            label="Companies"
-            placeholder="Clients companies"
+            label="Empresas"
+            placeholder="Empresas cliente"
             required
             mt="md"
             value={form.data.companies}
@@ -117,11 +116,11 @@ const ClientEdit = () => {
             error={form.errors.companies}
           />
 
-          <Divider mt="xl" mb="md" label="Login credentials" labelPosition="center" />
+          <Divider mt="xl" mb="md" label="Credenciales de inicio de sesión" labelPosition="center" />
 
           <TextInput
-            label="Email"
-            placeholder="User email"
+            label="Correo electrónico"
+            placeholder="Correo electrónico del usuario"
             required
             value={form.data.email}
             onChange={(e) => updateValue("email", e.target.value)}
@@ -130,8 +129,8 @@ const ClientEdit = () => {
           />
 
           <PasswordInput
-            label="Password"
-            placeholder="User password"
+            label="Contraseña"
+            placeholder="Contraseña del usuario"
             mt="md"
             value={form.data.password}
             onChange={(e) => updateValue("password", e.target.value)}
@@ -139,8 +138,8 @@ const ClientEdit = () => {
           />
 
           <PasswordInput
-            label="Confirm password"
-            placeholder="Confirm password"
+            label="Confirmar contraseña"
+            placeholder="Confirmar contraseña"
             mt="md"
             value={form.data.password_confirmation}
             onChange={(e) => updateValue("password_confirmation", e.target.value)}
@@ -149,7 +148,7 @@ const ClientEdit = () => {
 
           <Group justify="space-between" mt="xl">
             <BackButton route="clients.users.index" />
-            <ActionButton loading={form.processing}>Update</ActionButton>
+            <ActionButton loading={form.processing}>Actualizar</ActionButton>
           </Group>
         </form>
       </ContainerBox>
@@ -157,6 +156,6 @@ const ClientEdit = () => {
   );
 };
 
-ClientEdit.layout = (page) => <Layout title="Edit client">{page}</Layout>;
+ClientEdit.layout = (page) => <Layout title="Editar cliente">{page}</Layout>;
 
 export default ClientEdit;

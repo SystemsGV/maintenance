@@ -19,8 +19,8 @@ function ModalForm() {
   return (
     <form onSubmit={submitModal}>
       <TextInput
-        label="Name"
-        placeholder="Group name"
+        label="Nombre"
+        placeholder="Nombre del grupo"
         required
         data-autofocus
         value={form.data.name}

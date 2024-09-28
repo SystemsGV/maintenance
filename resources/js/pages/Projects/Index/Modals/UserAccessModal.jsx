@@ -41,7 +41,7 @@ function ModalForm({ item }) {
         setClients([...data.clients]);
       })
       .catch(() =>
-        alert("Something went wrong, failed to load dropdown values"),
+        alert("Algo salió mal, no se pudieron cargar los valores del menú desplegable"),
       )
       .finally(() => setRequestPending(false));
   }, [form.data]);
@@ -88,7 +88,7 @@ function ModalForm({ item }) {
           disabled={requestPending}
           loading={form.processing}
         >
-          Save
+          Guardar
         </Button>
       </Flex>
     </form>

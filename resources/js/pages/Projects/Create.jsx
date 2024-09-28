@@ -164,6 +164,6 @@ const ProjectCreate = ({ dropdowns: { companies, users, currencies, games, types
   );
 };
 
-ProjectCreate.layout = page => <Layout title='Create project'>{page}</Layout>;
+ProjectCreate.layout = page => <Layout title='Crear orden de trabajo'>{page}</Layout>;
 
 export default ProjectCreate;

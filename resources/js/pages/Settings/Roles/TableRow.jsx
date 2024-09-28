@@ -3,7 +3,7 @@ import { Table, Text } from "@mantine/core";
 
 export default function TableRow({ item }) {
   const isLocked = (role) => {
-    return ["admin", "client"].includes(role);
+    return ["admin", "cliente"].includes(role);
   };
 
   return (
@@ -17,7 +17,7 @@ export default function TableRow({ item }) {
         <Text fz="sm">{item.permissions_count}</Text>
       </Table.Td>
       {(can("editar rol") || can("archivar rol") || can("restaurar rol")) &&
-        item.name !== "admin2" && (
+        item.name !== "admin" && (
           <Table.Td w={100}>
             <TableRowActions
               item={item}
@@ -27,15 +27,15 @@ export default function TableRow({ item }) {
               restorePermission="restaurar rol"
               archive={{
                 route: "settings.roles.destroy",
-                title: "Archive role",
-                content: "Are you sure you want to archive this role?",
-                confirmLabel: "Archive",
+                title: "Archivar rol",
+                content: "¿Está seguro de que desea archivar este rol?",
+                confirmLabel: "Archivar",
               }}
               restore={{
                 route: "settings.roles.restore",
-                title: "Restore role",
-                content: "Are you sure you want to restore this role?",
-                confirmLabel: "Restore",
+                title: "Restaurar rol",
+                content: "¿Está seguro de que desea archivar este rol?",
+                confirmLabel: "Restaurar",
               }}
             />
           </Table.Td>

@@ -94,7 +94,7 @@ export default function ProjectCardActions({ item }) {
                 onClick={openRestoreModal}
                 data-ignore-link
               >
-                Restore
+                Restaurar
               </Menu.Item>
             )}
             {can("archivar proyecto") && !route().params.archived && (
@@ -110,7 +110,7 @@ export default function ProjectCardActions({ item }) {
                 onClick={openArchiveModal}
                 data-ignore-link
               >
-                Archive
+                Archivar
               </Menu.Item>
             )}
           </Menu.Dropdown>

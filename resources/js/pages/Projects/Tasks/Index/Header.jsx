@@ -87,7 +87,7 @@ export default function Header() {
               radius="xl"
               onClick={() => openCreateTask()}
             >
-              Add task
+              Agregar tarea
             </Button>
           )}
         </Group>

@@ -39,10 +39,10 @@ const Login = ({ notify }) => {
   return (
     <>
       <Title ta="center" className={classes.title}>
-        Welcome back!
+        Bienvenido!
       </Title>
       <Text c="dimmed" size="sm" ta="center" mt={5}>
-        You may login to your account below
+        Puede iniciar sesión en su cuenta a continuación
       </Text>
 
       <LoginNotification notify={notify} />

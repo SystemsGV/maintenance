@@ -36,7 +36,7 @@ export default function TaskGroup({ group, tasks, ...props }) {
               <TaskGroupActions group={group} className={classes.actions} />
             </Group>
             {!route().params.archived && can("crear tarea") && (
-              <Tooltip label="Add task" openDelay={1000} withArrow>
+              <Tooltip label="Agregar tarea" openDelay={1000} withArrow>
                 <ActionIcon
                   variant="filled"
                   size="md"

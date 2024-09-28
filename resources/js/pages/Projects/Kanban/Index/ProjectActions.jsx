@@ -32,8 +32,8 @@ export default function ProjectActions({ project, ...props }) {
 
   return (
     <Group gap={0} justify="flex-end" {...props}>
-      {((can("archivar tarea") && !route().params.archived) ||
-        (can("restaurar tarea") && route().params.archived)) && (
+      {((can("archivar proyecto") && !route().params.archived) ||
+        (can("restaurar proyecto") && route().params.archived)) && (
         <Menu
           withArrow
           position="bottom-end"
@@ -48,7 +48,7 @@ export default function ProjectActions({ project, ...props }) {
             </ActionIcon>
           </Menu.Target>
           <Menu.Dropdown>
-            {can("restaurar tarea") && route().params.archived && (
+            {can("restaurar proyecto") && route().params.archived && (
               <Menu.Item
                 leftSection={
                   <IconArchiveOff style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
@@ -59,7 +59,7 @@ export default function ProjectActions({ project, ...props }) {
                 Restaurar
               </Menu.Item>
             )}
-            {can("archivar tarea") && !route().params.archived && (
+            {can("archivar proyecto") && !route().params.archived && (
               <Menu.Item
                 leftSection={
                   <IconArchive style={{ width: rem(16), height: rem(16) }} stroke={1.5} />

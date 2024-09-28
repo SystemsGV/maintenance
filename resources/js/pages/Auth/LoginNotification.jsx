@@ -10,7 +10,7 @@ export default function LoginNotification({ notify }) {
     <div style={{ marginTop: "25px" }}>
       {notify === "password-reset" && (
         <Alert radius="md" title="Password was reset" icon={<IconInfoCircle />}>
-          Your password was successfully updated, you may use it to login.
+          Su contraseña se actualizó exitosamente, puede usarla para iniciar sesión.
         </Alert>
       )}
       {notify === "social-login-user-not-found" && (
@@ -20,7 +20,7 @@ export default function LoginNotification({ notify }) {
           icon={<IconAlertTriangle />}
           color="orange"
         >
-          No user was found with your Google email address.
+          No se encontró ningún usuario con su dirección de correo electrónico de Google.
         </Alert>
       )}
       {notify === "social-login-failed" && (
@@ -30,8 +30,7 @@ export default function LoginNotification({ notify }) {
           icon={<IconExclamationCircle />}
           color="red"
         >
-          Unexpected error has occurred, please try logging in with your email
-          and password.
+          Se ha producido un error inesperado, intenta iniciar sesión con tu correo electrónico y contraseña.
         </Alert>
       )}
     </div>

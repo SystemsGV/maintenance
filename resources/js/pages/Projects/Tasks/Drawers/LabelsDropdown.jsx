@@ -49,7 +49,7 @@ export default function LabelsDropdown({ items, selected, onChange, ...props }) 
                   );
                 })
               ) : (
-                <Input.Placeholder>Select labels</Input.Placeholder>
+                <Input.Placeholder>Seleccionar etiquetas</Input.Placeholder>
               )}
 
               <Combobox.EventsTarget>

@@ -53,15 +53,15 @@ const LoggedTimeSum = () => {
         fz={14}
         mb={30}
       >
-        <div>Reports</div>
-        <div>Logged time sum</div>
+        <div>Reportes</div>
+        <div>Suma de tiempo registrado</div>
       </Breadcrumbs>
 
       <Title
         order={1}
         mb={20}
       >
-        Logged time sum
+        Suma de tiempo registrado
       </Title>
 
       <ContainerBox
@@ -72,7 +72,7 @@ const LoggedTimeSum = () => {
           <Group justify='space-between'>
             <Group gap='xl'>
               <MultiSelect
-                placeholder={form.data.projects.length ? null : 'Select projects'}
+                placeholder={form.data.projects.length ? null : 'Seleccionar ordenes de trabajo'}
                 required
                 w={220}
                 value={form.data.projects}
@@ -82,7 +82,7 @@ const LoggedTimeSum = () => {
               />
 
               <MultiSelect
-                placeholder={form.data.users.length ? null : 'Select users'}
+                placeholder={form.data.users.length ? null : 'Seleccionar usuarios'}
                 required
                 w={220}
                 value={form.data.users}
@@ -95,7 +95,7 @@ const LoggedTimeSum = () => {
                 <DatePickerInput
                   type='range'
                   valueFormat='MMM D'
-                  placeholder='Pick dates range'
+                  placeholder='Elija el rango de fechas'
                   clearable
                   allowSingleDateInRange
                   miw={200}
@@ -105,13 +105,13 @@ const LoggedTimeSum = () => {
               </DatesProvider>
 
               <Checkbox
-                label='Billable'
+                label='Facturable'
                 checked={form.data.billable}
                 onChange={event => updateValue('billable', event.currentTarget.checked)}
               />
 
               <Checkbox
-                label='Completed'
+                label='Completado'
                 checked={form.data.completed}
                 onChange={event => updateValue('completed', event.currentTarget.checked)}
               />
@@ -121,7 +121,7 @@ const LoggedTimeSum = () => {
               type='submit'
               disabled={form.processing}
             >
-              Submit
+              Enviar
             </Button>
           </Group>
         </form>
@@ -150,12 +150,12 @@ const LoggedTimeSum = () => {
               >
                 <Table.Thead>
                   <Table.Tr>
-                    <Table.Th>User</Table.Th>
-                    <Table.Th>Logged time</Table.Th>
-                    <Table.Th>Project rate</Table.Th>
-                    <Table.Th>User rate</Table.Th>
-                    <Table.Th>Expense</Table.Th>
-                    <Table.Th>Profit</Table.Th>
+                    <Table.Th>Usuario</Table.Th>
+                    <Table.Th>Tiempo registrado</Table.Th>
+                    <Table.Th>Tarifa de la orden de tabajo</Table.Th>
+                    <Table.Th>Tarifa de usuario</Table.Th>
+                    <Table.Th>Gastos</Table.Th>
+                    <Table.Th>Ganancia</Table.Th>
                   </Table.Tr>
                 </Table.Thead>
                 <Table.Tbody>
@@ -182,8 +182,8 @@ const LoggedTimeSum = () => {
         ) : (
           <Center mih={300}>
             <EmptyWithIcon
-              title='No logged time found'
-              subtitle='Try changing selected filters'
+              title='No se encontró tiempo registrado'
+              subtitle='Intente cambiar los filtros seleccionados'
               icon={IconClock}
             />
           </Center>
@@ -193,6 +193,6 @@ const LoggedTimeSum = () => {
   );
 };
 
-LoggedTimeSum.layout = page => <Layout title='Logged time sum'>{page}</Layout>;
+LoggedTimeSum.layout = page => <Layout title='Suma de tiempo registrado'>{page}</Layout>;
 
 export default LoggedTimeSum;

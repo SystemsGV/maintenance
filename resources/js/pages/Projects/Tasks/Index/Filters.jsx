@@ -36,7 +36,7 @@ export default function Filters() {
         {usersWithAccessToProject.length > 0 && (
           <div>
             <Text fz="xs" fw={700} tt="uppercase" mb="sm">
-              Assignees
+              Asignados
             </Text>
             <Stack justify="flex-start" gap={6}>
               {usersWithAccessToProject.map((item) => (
@@ -54,20 +54,20 @@ export default function Filters() {
 
         <div>
           <Text fz="xs" fw={700} tt="uppercase" mb="sm">
-            Due date
+            Fecha de vencimiento
           </Text>
           <Stack justify="flex-start" gap={6}>
             <FilterButton
               selected={filters.due_date.not_set === 1}
               onClick={() => toggleObjectFilter("due_date", "not_set")}
             >
-              Not set
+              No establecido
             </FilterButton>
             <FilterButton
               selected={filters.due_date.overdue === 1}
               onClick={() => toggleObjectFilter("due_date", "overdue")}
             >
-              Overdue
+              Vencido
             </FilterButton>
           </Stack>
         </div>
@@ -81,7 +81,7 @@ export default function Filters() {
               selected={filters.status === "completed"}
               onClick={() => toggleValueFilter("status", "completed")}
             >
-              Completed
+              Completedo
             </FilterButton>
           </Stack>
         </div>
@@ -89,7 +89,7 @@ export default function Filters() {
         {labels.length > 0 && (
           <div>
             <Text fz="xs" fw={700} tt="uppercase" mb="sm">
-              Labels
+              Etiquetas
             </Text>
             <Stack justify="flex-start" gap={6}>
               {labels.map((item) => (

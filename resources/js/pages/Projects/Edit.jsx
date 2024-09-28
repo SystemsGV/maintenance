@@ -67,7 +67,7 @@ const ProjectEdit = ({ dropdowns: { companies, users, currencies, games, types }
         mb='lg'
       >
         <Grid.Col span='auto'>
-          <Title order={1}>Edit project</Title>
+          <Title order={1}>Editar orden de trabajo</Title>
         </Grid.Col>
         <Grid.Col span='content'></Grid.Col>
       </Grid>
@@ -130,8 +130,8 @@ const ProjectEdit = ({ dropdowns: { companies, users, currencies, games, types }
           />
 
           <MultiSelect
-            label="Grant access to users"
-            placeholder="Select users"
+            label="Conceder acceso a los usuarios"
+            placeholder="Seleccionar usuarios"
             mt='md'
             searchable
             value={form.data.users}
@@ -141,7 +141,7 @@ const ProjectEdit = ({ dropdowns: { companies, users, currencies, games, types }
           />
 
           <NumberInput
-            label='Hourly rate'
+            label='Tarifa por hora'
             mt='md'
             allowNegative={false}
             clampBehavior='strict'
@@ -167,6 +167,6 @@ const ProjectEdit = ({ dropdowns: { companies, users, currencies, games, types }
   );
 };
 
-ProjectEdit.layout = page => <Layout title='Edit project'>{page}</Layout>;
+ProjectEdit.layout = page => <Layout title='Editar orden de trabajo'>{page}</Layout>;
 
 export default ProjectEdit;

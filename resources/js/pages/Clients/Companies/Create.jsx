@@ -62,7 +62,7 @@ const ClientCompanyCreate = () => {
         mb='lg'
       >
         <Grid.Col span='auto'>
-          <Title order={1}>Create company</Title>
+          <Title order={1}>Crear empresa</Title>
         </Grid.Col>
         <Grid.Col span='content'></Grid.Col>
       </Grid>
@@ -70,8 +70,8 @@ const ClientCompanyCreate = () => {
       <ContainerBox maw={600}>
         <form onSubmit={submit}>
           <TextInput
-            label='Name'
-            placeholder='Company name'
+            label='Nombre'
+            placeholder='Nombre de la empresa'
             required
             value={form.data.name}
             onChange={e => updateValue('name', e.target.value)}
@@ -79,8 +79,8 @@ const ClientCompanyCreate = () => {
           />
 
           <Select
-            label='Default currency'
-            placeholder='Select currency'
+            label='Moneda por defecto'
+            placeholder='Seleccionar moneda'
             required
             mt='md'
             searchable={true}
@@ -91,8 +91,8 @@ const ClientCompanyCreate = () => {
           />
 
           <MultiSelect
-            label='Clients'
-            placeholder='Select clients'
+            label='Clientes'
+            placeholder='Seleccionar clientes'
             required
             mt='md'
             value={form.data.clients}
@@ -102,12 +102,12 @@ const ClientCompanyCreate = () => {
           />
 
           <Fieldset
-            legend='Location'
+            legend='Localización'
             mt='xl'
           >
             <TextInput
-              label='Address'
-              placeholder='Address'
+              label='Dirección'
+              placeholder='Dirección'
               value={form.data.address}
               onChange={e => updateValue('address', e.target.value)}
               error={form.errors.address}
@@ -115,8 +115,8 @@ const ClientCompanyCreate = () => {
 
             <Group grow>
               <TextInput
-                label='Postal code'
-                placeholder='Postal code'
+                label='Código postal'
+                placeholder='Código postal'
                 mt='md'
                 value={form.data.postal_code}
                 onChange={e => updateValue('postal_code', e.target.value)}
@@ -124,8 +124,8 @@ const ClientCompanyCreate = () => {
               />
 
               <TextInput
-                label='City'
-                placeholder='City'
+                label='Ciudad'
+                placeholder='Ciudad'
                 mt='md'
                 value={form.data.city}
                 onChange={e => updateValue('city', e.target.value)}
@@ -134,8 +134,8 @@ const ClientCompanyCreate = () => {
             </Group>
 
             <Select
-              label='Country'
-              placeholder='Select country'
+              label='Pais'
+              placeholder='Seleccionar pais'
               mt='md'
               searchable={true}
               value={form.data.country_id}
@@ -146,20 +146,20 @@ const ClientCompanyCreate = () => {
           </Fieldset>
 
           <Fieldset
-            legend='Details'
+            legend='Detalles'
             mt='xl'
           >
             <TextInput
-              label='Business ID'
-              placeholder='Business ID'
+              label='Identificación comercial'
+              placeholder='Identificación comercial'
               value={form.data.business_id}
               onChange={e => updateValue('business_id', e.target.value)}
               error={form.errors.business_id}
             />
 
             <TextInput
-              label='Tax ID'
-              placeholder='Tax ID'
+              label='Identificación fiscal'
+              placeholder='Identificación fiscal'
               mt='md'
               value={form.data.tax_id}
               onChange={e => updateValue('tax_id', e.target.value)}
@@ -177,7 +177,7 @@ const ClientCompanyCreate = () => {
           </Fieldset>
 
           <Fieldset
-            legend='Finance'
+            legend='Finanzas'
             mt='xl'
           >
             <TextInput
@@ -198,8 +198,8 @@ const ClientCompanyCreate = () => {
             />
 
             <Select
-              label='Default currency'
-              placeholder='Select currency'
+              label='Moneda por defecto'
+              placeholder='Seleccionar moneda'
               required
               mt='md'
               searchable={true}
@@ -216,16 +216,16 @@ const ClientCompanyCreate = () => {
           >
             <Group grow>
               <TextInput
-                label='Email'
-                placeholder='Email'
+                label='Correo electrónico'
+                placeholder='Correo electrónico'
                 value={form.data.email}
                 onChange={e => updateValue('email', e.target.value)}
                 error={form.errors.email}
               />
 
               <TextInput
-                label='Phone'
-                placeholder='Phone'
+                label='Teléfono'
+                placeholder='Teléfono'
                 value={form.data.phone}
                 onChange={e => updateValue('phone', e.target.value)}
                 error={form.errors.phone}
@@ -233,8 +233,8 @@ const ClientCompanyCreate = () => {
             </Group>
 
             <TextInput
-              label='Web'
-              placeholder='Web'
+              label='Sitio web'
+              placeholder='Sitio web'
               mt='md'
               value={form.data.web}
               onChange={e => updateValue('web', e.target.value)}
@@ -247,7 +247,7 @@ const ClientCompanyCreate = () => {
             mt='xl'
           >
             <BackButton route='clients.companies.index' />
-            <ActionButton loading={form.processing}>Create</ActionButton>
+            <ActionButton loading={form.processing}>Crear</ActionButton>
           </Group>
         </form>
       </ContainerBox>
@@ -255,6 +255,6 @@ const ClientCompanyCreate = () => {
   );
 };
 
-ClientCompanyCreate.layout = page => <Layout title='Create company'>{page}</Layout>;
+ClientCompanyCreate.layout = page => <Layout title='Crear empresa'>{page}</Layout>;
 
 export default ClientCompanyCreate;

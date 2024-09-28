@@ -32,28 +32,27 @@ const ForgotPassword = ({ status }) => {
   return (
     <>
       <Title className={classes.title} ta="center">
-        Forgot your password?
+        ¿Olvidaste tu contraseña?
       </Title>
       <Text c="dimmed" fz="sm" ta="center">
-        Enter your email to get a reset link
+        Ingrese su correo electrónico para obtener un enlace de reinicio
       </Text>
 
       <ContainerBox shadow="md" p={30} mt="xl" radius="md">
         <Text c="dimmed" fz="sm" mb={20}>
-          Enter your email and we will email you a password reset link that will allow you to choose
-          a new one.
+          Ingrese su correo electrónico y le enviaremos un enlace para restablecer su contraseña que le permitirá elegir uno nuevo.
         </Text>
 
         {status && (
           <Alert radius="md" title={status} icon={<IconInfoCircle />} mb={10}>
-            Please read instruction in the email to set a new password for your account.
+            Lea las instrucciones en el correo electrónico para establecer una nueva contraseña para su cuenta.
           </Alert>
         )}
 
         <form onSubmit={submit}>
           <TextInput
-            label="Email"
-            placeholder="Your email"
+            label="Correo electrónico"
+            placeholder="Tu correo electrónico"
             required
             onChange={(e) => form.setData("email", e.target.value)}
             onBlur={() => form.validate("email")}
@@ -68,11 +67,11 @@ const ForgotPassword = ({ status }) => {
             >
               <Center inline>
                 <IconArrowLeft style={{ width: rem(12), height: rem(12) }} stroke={1.5} />
-                <Box ml={5}>Back to the login</Box>
+                <Box ml={5}>Volver al inicio de sesión</Box>
               </Center>
             </Anchor>
             <Button type="submit" className={classes.control} disabled={form.processing}>
-              Reset password
+              Restablecer contraseña
             </Button>
           </Group>
         </form>

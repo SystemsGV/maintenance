@@ -101,7 +101,7 @@ export default function Timer({ task, ...props }) {
                   </Text>
                   {isTimerRunning(timeLog) ? (
                     <Text fz={14} fw={600} c="blue" className={classes.blink}>
-                      running
+                      corriendo
                     </Text>
                   ) : (
                     <Group gap={7}>

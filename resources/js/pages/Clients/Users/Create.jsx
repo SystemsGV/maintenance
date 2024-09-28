@@ -40,14 +40,14 @@ const ClientCreate = () => {
     <>
       <Breadcrumbs fz={14} mb={30}>
         <Anchor href="#" onClick={() => redirectTo("clients.users.index")} fz={14}>
-          Clients
+          Clientes
         </Anchor>
-        <div>Create</div>
+        <div>Crear</div>
       </Breadcrumbs>
 
       <Grid justify="space-between" align="flex-end" gutter="xl" mb="lg">
         <Grid.Col span="auto">
-          <Title order={1}>Create client</Title>
+          <Title order={1}>Crear cliente</Title>
         </Grid.Col>
         <Grid.Col span="content"></Grid.Col>
       </Grid>
@@ -66,26 +66,25 @@ const ClientCreate = () => {
             </Grid.Col>
             <Grid.Col span="auto">
               <FileInput
-                label="Profile image"
-                placeholder="Choose image"
+                label="Foto de perfil"
+                placeholder="Cargar imagen"
                 accept="image/png,image/jpeg"
                 onChange={(image) => updateValue("avatar", image)}
                 clearable
                 error={form.errors.avatar}
               />
               <Text size="xs" c="dimmed" mt="sm">
-                If no image is uploaded we will try to fetch it via{" "}
+                Si no se carga ninguna imagen, intentaremos recuperarla a través del servicio{" "}
                 <Anchor href="https://unavatar.io" target="_blank" opacity={0.6}>
                   unavatar.io
-                </Anchor>{" "}
-                service.
+                </Anchor>
               </Text>
             </Grid.Col>
           </Grid>
 
           <TextInput
-            label="Name"
-            placeholder="User full name"
+            label="Nombre"
+            placeholder="Nombre completo del usuario"
             required
             mt="md"
             value={form.data.name}
@@ -94,8 +93,8 @@ const ClientCreate = () => {
           />
 
           <TextInput
-            label="Phone"
-            placeholder="Users phone number"
+            label="Teléfono"
+            placeholder="Número de teléfono del usuario"
             mt="md"
             value={form.data.phone}
             onChange={(e) => updateValue("phone", e.target.value)}
@@ -103,8 +102,8 @@ const ClientCreate = () => {
           />
 
           <MultiSelect
-            label="Companies"
-            placeholder="Clients companies"
+            label="Empresas"
+            placeholder="Empresas cliente"
             mt="md"
             value={form.data.companies}
             onChange={(values) => updateValue("companies", values)}
@@ -114,15 +113,15 @@ const ClientCreate = () => {
 
           {form.data.companies.length === 0 && (
             <Text c="dimmed" fz="xs" mt="xs">
-              If left empty, you will be asked to create a company after creating the client.
+              Si se deja vacío, se le pedirá que cree una empresa después de crear el cliente.
             </Text>
           )}
 
-          <Divider mt="xl" mb="md" label="Login credentials" labelPosition="center" />
+          <Divider mt="xl" mb="md" label="Credenciales de inicio de sesión" labelPosition="center" />
 
           <TextInput
-            label="Email"
-            placeholder="User email"
+            label="Correo eletrónico"
+            placeholder="Correo eletrónico del usuario"
             required
             value={form.data.email}
             onChange={(e) => updateValue("email", e.target.value)}
@@ -131,8 +130,8 @@ const ClientCreate = () => {
           />
 
           <PasswordInput
-            label="Password"
-            placeholder="User password"
+            label="Contraseña"
+            placeholder="Contraseña del usuario"
             required
             mt="md"
             value={form.data.password}
@@ -141,8 +140,8 @@ const ClientCreate = () => {
           />
 
           <PasswordInput
-            label="Confirm password"
-            placeholder="Confirm password"
+            label="Confirmar contraseña"
+            placeholder="Confirmar contraseña"
             required
             mt="md"
             value={form.data.password_confirmation}
@@ -152,7 +151,7 @@ const ClientCreate = () => {
 
           <Group justify="space-between" mt="xl">
             <BackButton route="clients.users.index" />
-            <ActionButton loading={form.processing}>Create</ActionButton>
+            <ActionButton loading={form.processing}>Crear</ActionButton>
           </Group>
         </form>
       </ContainerBox>
@@ -160,6 +159,6 @@ const ClientCreate = () => {
   );
 };
 
-ClientCreate.layout = (page) => <Layout title="Create client">{page}</Layout>;
+ClientCreate.layout = (page) => <Layout title="Crear cliente">{page}</Layout>;
 
 export default ClientCreate;

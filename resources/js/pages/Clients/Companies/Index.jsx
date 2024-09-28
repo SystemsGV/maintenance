@@ -15,11 +15,11 @@ const ClientCompaniesIndex = () => {
   const { items } = usePage().props;
 
   const columns = prepareColumns([
-    { label: 'Company', column: 'name' },
-    { label: 'Email', column: 'email' },
-    { label: 'Clients', sortable: false },
+    { label: 'Empresa', column: 'name' },
+    { label: 'Correo electrónico', column: 'email' },
+    { label: 'Clientes', sortable: false },
     {
-      label: 'Actions',
+      label: 'Acciones',
       sortable: false,
       visible: actionColumnVisibility('client company'),
     },
@@ -48,7 +48,7 @@ const ClientCompaniesIndex = () => {
         <Grid.Col span='content'>
           <Group>
             <SearchInput
-              placeholder='Search companies'
+              placeholder='Buscar empresas'
               search={search}
             />
             <ArchivedFilterButton />
@@ -61,7 +61,7 @@ const ClientCompaniesIndex = () => {
               radius='xl'
               onClick={() => redirectTo('clients.companies.create')}
             >
-              Create
+              Crear
             </Button>
           )}
         </Grid.Col>
@@ -88,6 +88,6 @@ const ClientCompaniesIndex = () => {
   );
 };
 
-ClientCompaniesIndex.layout = page => <Layout title='Clients'>{page}</Layout>;
+ClientCompaniesIndex.layout = page => <Layout title='Clientes'>{page}</Layout>;
 
 export default ClientCompaniesIndex;

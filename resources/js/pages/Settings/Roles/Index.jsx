@@ -15,10 +15,10 @@ const RolesIndex = () => {
   const { items } = usePage().props;
 
   const columns = prepareColumns([
-    { label: "Name", column: "name" },
-    { label: "Permissions count", sortable: false },
+    { label: "Nombre", column: "name" },
+    { label: "Cantidad de permisos", sortable: false },
     {
-      label: "Actions",
+      label: "Acciones",
       sortable: false,
       visible: actionColumnVisibility("role"),
     },
@@ -38,7 +38,7 @@ const RolesIndex = () => {
       <Grid justify="space-between" align="center">
         <Grid.Col span="content">
           <Group>
-            <SearchInput placeholder="Search roles" search={search} />
+            <SearchInput placeholder="Buscar roles" search={search} />
             <ArchivedFilterButton />
           </Group>
         </Grid.Col>
@@ -49,7 +49,7 @@ const RolesIndex = () => {
               radius="xl"
               onClick={() => redirectTo("settings.roles.create")}
             >
-              Create
+              Crear
             </Button>
           )}
         </Grid.Col>

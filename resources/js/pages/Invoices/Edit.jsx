@@ -119,9 +119,9 @@ const InvoiceEdit = () => {
           onClick={() => redirectTo('invoices.index')}
           fz={14}
         >
-          Invoices
+          Facturas
         </Anchor>
-        <div>Edit</div>
+        <div>Editar</div>
       </Breadcrumbs>
 
       <Grid
@@ -131,7 +131,7 @@ const InvoiceEdit = () => {
         mb='lg'
       >
         <Grid.Col span='auto'>
-          <Title order={1}>Edit invoice</Title>
+          <Title order={1}>Editar facturas</Title>
         </Grid.Col>
         <Grid.Col span='content'></Grid.Col>
       </Grid>
@@ -145,8 +145,8 @@ const InvoiceEdit = () => {
         <ContainerBox miw='440'>
           <form onSubmit={submit}>
             <TextInput
-              label='Invoice number'
-              placeholder='Invoice number'
+              label='Número de la factura'
+              placeholder='Número de la factura'
               required
               value={form.data.number}
               onChange={e => updateValue('number', e.target.value)}
@@ -154,8 +154,8 @@ const InvoiceEdit = () => {
             />
 
             <Select
-              label='Client company'
-              placeholder='Select client company'
+              label='Empresa cliente'
+              placeholder='Seleccionar empresa cliente'
               searchable={true}
               allowDeselect={false}
               mt='md'
@@ -167,9 +167,9 @@ const InvoiceEdit = () => {
             />
 
             <MultiSelect
-              label='Projects'
+              label='Proyectos'
               placeholder={
-                filteredProjects.length ? 'Select projects' : 'Please select client company first'
+                filteredProjects.length ? 'Seleccionar proyectos' : 'Seleccione primero la empresa cliente'
               }
               disabled={filteredProjects.length === 0}
               withAsterisk
@@ -181,7 +181,7 @@ const InvoiceEdit = () => {
             />
 
             <Radio.Group
-              label='Payment type'
+              label='Tipo de pago'
               mt='md'
               withAsterisk
               value={form.data.type}
@@ -190,18 +190,18 @@ const InvoiceEdit = () => {
               <Group mt='xs'>
                 <Radio
                   value='hourly'
-                  label='Hourly'
+                  label='Hora'
                 />
                 <Radio
                   value='fixed_amount'
-                  label='Fixed amount'
+                  label='Monto fijo'
                 />
               </Group>
             </Radio.Group>
 
             {form.data.type === 'hourly' && (
               <NumberInput
-                label='Hourly rate'
+                label='Tarifa por hora'
                 mt='md'
                 allowNegative={false}
                 clampBehavior='strict'
@@ -216,7 +216,7 @@ const InvoiceEdit = () => {
 
             {form.data.type === 'fixed_amount' && (
               <NumberInput
-                label='Fixed amount'
+                label='Monto fijo'
                 mt='md'
                 allowNegative={false}
                 clampBehavior='strict'
@@ -230,8 +230,8 @@ const InvoiceEdit = () => {
             )}
 
             <Textarea
-              label='Note'
-              placeholder='Invoice note'
+              label='Nota'
+              placeholder='Nota de la factura'
               mt='md'
               autosize
               minRows={4}
@@ -245,7 +245,7 @@ const InvoiceEdit = () => {
               mt={30}
             >
               <BackButton route='invoices.index' />
-              <ActionButton loading={form.processing}>Update</ActionButton>
+              <ActionButton loading={form.processing}>Actualizar</ActionButton>
             </Group>
           </form>
         </ContainerBox>
@@ -280,7 +280,7 @@ const InvoiceEdit = () => {
                       size='sm'
                       c='dimmed'
                     >
-                      No tasks with logged time were found
+                      No se encontraron tareas con tiempo registrado
                     </Text>
                   )}
                 </Box>
@@ -320,13 +320,13 @@ const InvoiceEdit = () => {
                     fw={600}
                     align='center'
                   >
-                    No tasks found
+                    No se encontraron tareas
                   </Text>
                   <Text
                     fz={15}
                     c='dimmed'
                   >
-                    Select company and at least one project
+                    Seleccionar empresa y al menos un proyecto
                   </Text>
                 </Box>
               </Center>
@@ -338,6 +338,6 @@ const InvoiceEdit = () => {
   );
 };
 
-InvoiceEdit.layout = page => <Layout title='Edit invoice'>{page}</Layout>;
+InvoiceEdit.layout = page => <Layout title='Editar factura'>{page}</Layout>;
 
 export default InvoiceEdit;

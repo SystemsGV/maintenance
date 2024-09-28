@@ -105,7 +105,7 @@ const TasksIndex = () => {
                               onClick={CreateTasksGroupModal}
                               style={{ width: "200px" }}
                             >
-                              Add {tasksView === "list" ? "tasks group" : "group"}
+                              Agregar {tasksView === "list" ? "grupo de tareas" : "grupo"}
                             </Button>
                           )}
                         </div>
@@ -115,7 +115,7 @@ const TasksIndex = () => {
                 </DragDropContext>
               </>
             ) : (
-              <EmptyResult title="No tasks found" subtitle="or none match your search criteria" />
+              <EmptyResult title="No se encontraron tareas" subtitle="o ninguno coincide con sus criterios de búsqueda" />
             )}
           </Grid.Col>
         ) : (
