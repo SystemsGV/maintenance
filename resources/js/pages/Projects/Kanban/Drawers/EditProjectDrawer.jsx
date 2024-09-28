@@ -75,7 +75,7 @@ export function EditProjectDrawer() {
       completed_at: task.id == taskId ? dayjs().toISOString() : task.completed_at,
     }));
 
-    let completed_tasks_count = task.check == null ? project.completed_tasks_count + 1 : project.completed_tasks_count;
+    let completed_tasks_count = task.check == null ? Number(project.completed_tasks_count) + 1 : Number(project.completed_tasks_count);
 
     await updateProjectProperty(project, 'tasks', updatedTasks);
     await updateProjectProperty(project, 'completed_tasks_count', completed_tasks_count);

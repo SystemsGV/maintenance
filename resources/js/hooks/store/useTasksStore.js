@@ -125,7 +125,7 @@ const useTasksStore = create((set, get) => ({
       get().complete(task, true)
 
       const sourceGroupId = task.group_id;
-      const destinationGroupId = task.check == null ? task.group_id + 1 : task.group_id;
+      const destinationGroupId = task.check == null ? Number(task.group_id) + 1 : task.group_id;
       const sourceIndex = Object.values(get().tasks[sourceGroupId]).findIndex(t => t.id == task.id);
       const destinationIndex = get().tasks[destinationGroupId].length;
 
