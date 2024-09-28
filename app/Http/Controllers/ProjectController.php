@@ -98,7 +98,6 @@ class ProjectController extends Controller
                             'tasks AS overdue_tasks_count' => fn ($query) => $query->whereNull('completed_at')->whereDate('due_on', '<', now()),
                         ])
                         ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
-                        ->when(! $request->has('status'), fn ($query) => $query->whereNull('completed_at'))
                         ->withDefault()
                         ->get(),
                 ];
@@ -294,7 +293,7 @@ class ProjectController extends Controller
                         'tasks AS completed_tasks_count' => fn ($query) => $query->whereNotNull('completed_at'),
                         'tasks AS overdue_tasks_count' => fn ($query) => $query->whereNull('completed_at')->whereDate('due_on', '<', now()),
                     ]);
-                        
+
         return response()->json($project);
     }
 
