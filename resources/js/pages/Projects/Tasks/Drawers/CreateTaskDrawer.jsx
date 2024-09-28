@@ -84,7 +84,7 @@ export function CreateTaskDrawer() {
       onClose={closeDrawer}
       title={
         <Text fz={rem(28)} fw={600} ml={25} my="sm">
-          Add new task
+          Agregar nueva tarea
         </Text>
       }
       position="right"

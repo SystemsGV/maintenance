@@ -15,7 +15,7 @@ export default function   ProjectCard({ project, index }) {
   const computedColorScheme = useComputedColorScheme();
   const { toggleProjectSelection, selectedProjects } = useProjectsStore();
   const [isClicked, setIsClicked] = useState(false);
-  
+
   const handleCheckboxChange = () => {
     toggleProjectSelection(project);
   };
@@ -27,7 +27,7 @@ export default function   ProjectCard({ project, index }) {
           {...provided.draggableProps}
           ref={provided.innerRef}
           className={`${classes.project} ${snapshot.isDragging && classes.itemDragging} ${
-            project.completed_at !== null && classes.completed
+            project.completed_at != null && classes.completed
           }`}
         >
 
@@ -40,6 +40,7 @@ export default function   ProjectCard({ project, index }) {
             <Checkbox
               checked={selectedProjects.some(p => p.id === project.id)}
               key={project.id}
+              display={project.completed_at != null ? 'none' : 'inline'}
               color="rgba(79, 79, 79, 79)"
               onChange={handleCheckboxChange}
             />
@@ -49,14 +50,14 @@ export default function   ProjectCard({ project, index }) {
               size="xs"
               fw={500}
               c={isOverdue(project) && project.completed_at === null ? "red.7" : ""}
-              onClick={() => { 
+              onClick={() => {
                 if(project.default != 1){
-                  setIsClicked(true);                  
+                  setIsClicked(true);
                   openEditProject(project);
-                  setTimeout(() => setIsClicked(false), 300); 
+                  setTimeout(() => setIsClicked(false), 300);
                 }
               }
-              
+
               }
             >
               #{project.number + ": " + project.name}
