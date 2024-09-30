@@ -181,7 +181,7 @@ export function EditProjectDrawer() {
       <Tabs defaultValue="info">
         <Tabs.List grow>
           <Tabs.Tab value="info">Información</Tabs.Tab>
-          <Tabs.Tab value="tasks">Tareas</Tabs.Tab>
+          <Tabs.Tab value="tasks" disabled={project?.completed_at != null ? true : false}>Tareas</Tabs.Tab>
         </Tabs.List>
 
         <form>
@@ -291,7 +291,8 @@ export function EditProjectDrawer() {
                       readOnly={!can("editar proyecto")}
                     />
 
-                    {(can("ver registros de tiempo") || can("agregar registro de tiempo")) && <Timer mt="xl" project={project} />}
+                    {(can("ver registros de tiempo") || can("agregar registro de tiempo")) && project.completed_at == null
+                      && <Timer mt="xl" project={project} />}
                   </div>
                 </div>
               </>

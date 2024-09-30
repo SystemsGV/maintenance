@@ -298,7 +298,7 @@
                   <td align="center">
                     @foreach ($task->attachments as $attachment)
                         @if(count($task->attachments) > 0)
-                            <span><img src="{{ asset($attachment->path) }}" height="80" style="text-align:center" border="0"></span>
+                            <span><img src="{{public_path($attachment->path)}}" height="80" style="text-align:center" border="0"></span>
                         @endif
                     @endforeach
                     <br></td>

@@ -4,12 +4,12 @@ import { produce } from "immer";
 
 const createTaskAttachmentsSlice = (set, get) => ({
   uploadAttachments: async (task, files) => {
-    const index = get().tasks[task.group_id].findIndex((i) => i.id === task.id);
+    const index = get().tasks[task.group_id].findIndex((i) => i.id == task.id);
 
     try {
       const { data } = await axios.postForm(
         route("projects.tasks.attachments.upload", [task.project_id, task.id]),
-        { attachments: files.filter(i => i.id === undefined) },
+        { attachments: files.filter(i => i.id == undefined) },
         { onUploadProgress }
       );
 
@@ -25,7 +25,7 @@ const createTaskAttachmentsSlice = (set, get) => ({
     }
   },
   deleteAttachment: async (task, index) => {
-    const taskIndex = get().tasks[task.group_id].findIndex((i) => i.id === task.id);
+    const taskIndex = get().tasks[task.group_id].findIndex((i) => i.id == task.id);
 
     try {
       const deleteId = get().tasks[task.group_id][taskIndex].attachments[index].id;
@@ -33,7 +33,7 @@ const createTaskAttachmentsSlice = (set, get) => ({
 
       return set(produce(state => {
         state.tasks[task.group_id][taskIndex].attachments = [
-          ...state.tasks[task.group_id][taskIndex].attachments.filter(i => i.id !== deleteId)
+          ...state.tasks[task.group_id][taskIndex].attachments.filter(i => i.id != deleteId)
         ];
       }));
     } catch (e) {

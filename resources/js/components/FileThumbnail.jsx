@@ -27,7 +27,7 @@ export default function FileThumbnail({ file, remove, open, ...props }) {
   const iconProps = { width: rem(45), height: rem(45) };
   let icon = <IconFile style={iconProps} />;
 
-  const alreadyUploaded = file.id !== undefined;
+  const alreadyUploaded = file.id != undefined;
 
   if (isImage(file)) {
     const imageUrl = alreadyUploaded
@@ -66,7 +66,7 @@ export default function FileThumbnail({ file, remove, open, ...props }) {
     icon = <IconFileTypeSvg style={iconProps} />;
   } else if (file.type.includes("application/zip")) {
     icon = <IconFileTypeZip style={iconProps} />;
-  } else if (file.type === "text/plain") {
+  } else if (file.type == "text/plain") {
     icon = <IconFileTypeTxt style={iconProps} />;
   } else if (file.name.includes(".vue")) {
     icon = <IconFileTypeVue style={iconProps} />;
