@@ -1,7 +1,8 @@
 import { openConfirmModal } from "@/components/ConfirmModal";
 import { ActionIcon, Group, Menu, rem } from "@mantine/core";
-import { IconArchive, IconArchiveOff, IconDots } from "@tabler/icons-react";
+import { IconArchive, IconArchiveOff, IconDots, IconFileDownload } from "@tabler/icons-react";
 import { useForm } from "laravel-precognition-react-inertia";
+import PdfProject from "./Modals/PdfProject";
 
 export default function ProjectActions({ project, ...props }) {
   const archiveForm = useForm(
@@ -30,6 +31,8 @@ export default function ProjectActions({ project, ...props }) {
       onConfirm: () => restoreForm.submit({ preserveScroll: true }),
     });
 
+  const openPdfProject = () => PdfProject(project);
+
   return (
     <Group gap={0} justify="flex-end" {...props}>
       {((can("archivar proyecto") && !route().params.archived) ||
@@ -48,6 +51,17 @@ export default function ProjectActions({ project, ...props }) {
             </ActionIcon>
           </Menu.Target>
           <Menu.Dropdown>
+            {project.group_id != 1 && (
+              <Menu.Item
+                leftSection={
+                  <IconFileDownload style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
+                }
+                color="teal"
+                onClick={openPdfProject}
+              >
+                Descargar
+              </Menu.Item>
+            )}
             {can("restaurar proyecto") && route().params.archived && (
               <Menu.Item
                 leftSection={

@@ -43,26 +43,10 @@ export default function ProjectRow({ project, index }) {
             <Checkbox
               checked={selectedProjects.includes(project.id)}
               key={project.id}
+              display={project.completed_at != null ? 'none' : 'inline'}
               color="rgba(79, 79, 79, 79)"
               onChange={handleCheckboxChange}
             />
-            {/* <Checkbox
-              size="sm"
-              radius="xl"
-              color="green"
-              checked={project.completed_at !== null}
-              onChange={(e) => complete(project, e.currentTarget.checked)}
-              className={can("completar tarea") ? classes.checkbox : classes.disabledCheckbox}
-            /> */}
-            {/* {project.assigned_to_user && (
-              <Link href={route("users.edit", project.assigned_to_user.id)}>
-                <Tooltip label={project.assigned_to_user.name} openDelay={1000} withArrow>
-                  <Pill size="sm" className={classes.user}>
-                    {shortName(project.assigned_to_user.name)}
-                  </Pill>
-                </Tooltip>
-              </Link>
-            )} */}
             <Text
               className={classes.name}
               size="sm"

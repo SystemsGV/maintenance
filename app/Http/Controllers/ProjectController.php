@@ -3,30 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Project\CreateProject;
-use App\Events\Project\ProjectCreated;
 use App\Events\Project\ProjectDeleted;
 use App\Events\Project\ProjectGroupChanged;
 use App\Events\Project\ProjectOrderChanged;
 use App\Events\Project\ProjectRestored;
 use App\Events\Project\ProjectUpdated;
-use App\Events\Task\TaskCreated;
-use App\Events\Task\TaskUpdated;
 use App\Http\Requests\Project\StoreProjectRequest;
 use App\Http\Requests\Project\UpdateProjectRequest;
 use App\Http\Resources\Project\ProjectResource;
-use App\Models\CheckList;
+use App\Models\Asset;
 use App\Models\ClientCompany;
 use App\Models\Currency;
 use App\Models\Game;
 use App\Models\Label;
+use App\Models\OwnerCompany;
 use App\Models\Project;
 use App\Models\ProjectGroup;
 use App\Models\ProjectType;
 use App\Models\Task;
 use App\Models\User;
-use App\Services\PermissionService;
 use App\Services\ProjectService;
-use Carbon\Carbon;
+use Dompdf\Dompdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -295,6 +292,27 @@ class ProjectController extends Controller
                     ]);
 
         return response()->json($project);
+    }
+
+    public function pdf(Request $request, Project $project)
+    {
+
+        $html = view('vendor.project.pdf', [
+            'ownerCompany' => OwnerCompany::first(),
+            'user' => User::find(auth()->id()),
+            'project' => $project->loadDefault(),
+            'asset' => Asset::find($project->game()->get('asset_id')),
+            'tasks' => Task::where('project_id', $project->id)->withDefault()->get(),
+        ])->render();
+
+        $dompdf = new Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->render();
+
+        return response($dompdf->output(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="invoice.pdf"'
+        ]);
     }
 
 }

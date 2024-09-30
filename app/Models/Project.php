@@ -65,6 +65,7 @@ class Project extends Model implements AuditableContract, Sortable
         'clientCompany:id,name',
         'users:id,name,avatar',
         'game:id,name',
+        'type:id,name',
         'period:id,name',
         'labels:id,name,color',
         'timeLogs.user:id,name',
