@@ -261,10 +261,10 @@
                 </tr>
                 <tr>
                   <td width="30%" align="left"><strong> Orden de trabajo:  </strong> {{ $project->name }} </td>
-                  <td width="70%" align="left"><strong> Atracción:  </strong> {{ $project->game->name }} </td>
+                  <td width="70%" align="left"><strong> Atracción:  </strong> {{ $project->game ? $project->game->name : '' }} </td>
                 </tr>
                 <tr>
-                  <td width="30%" align="left"><strong>Ubicación: </strong> {{ $asset[0]['name'] }}</td>
+                  <td width="30%" align="left"><strong>Ubicación: </strong> {{ $project->game ? $asset[0]['name'] : '' }}</td>
                   <td width="70%" align="left"><strong>Tipo: </strong> {{ $project->type ? $project->type->name : '' }}</td>
                 </tr>
                 <tr>
@@ -298,7 +298,10 @@
                   <td align="center">
                     @foreach ($task->attachments as $attachment)
                         @if(count($task->attachments) > 0)
-                            <span><img src="{{public_path($attachment->path)}}" height="80" style="text-align:center" border="0"></span>
+                            @php
+                                $imageData = base64_encode(file_get_contents(public_path($attachment->path)));
+                            @endphp
+                            <img  src="data:image/png;base64, {{ $imageData }}" height="200" style="text-align:center" border="0">
                         @endif
                     @endforeach
                     <br></td>

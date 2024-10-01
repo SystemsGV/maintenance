@@ -3,6 +3,7 @@ import { ActionIcon, Group, Menu, rem } from "@mantine/core";
 import { IconArchive, IconArchiveOff, IconDots, IconFileDownload } from "@tabler/icons-react";
 import { useForm } from "laravel-precognition-react-inertia";
 import PdfProject from "./Modals/PdfProject";
+import axios from "axios";
 
 export default function ProjectActions({ project, ...props }) {
   const archiveForm = useForm(
@@ -31,7 +32,11 @@ export default function ProjectActions({ project, ...props }) {
       onConfirm: () => restoreForm.submit({ preserveScroll: true }),
     });
 
-  const openPdfProject = () => PdfProject(project);
+  const openPdfProject = async () => {
+    const response = await axios.get(route("projects.kanban.pdf", project.id), {responseType:"blob"});
+    const urlPdf = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
+    window.open(urlPdf, "_blanck");
+  };
 
   return (
     <Group gap={0} justify="flex-end" {...props}>
