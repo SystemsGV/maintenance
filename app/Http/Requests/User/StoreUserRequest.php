@@ -32,6 +32,7 @@ class StoreUserRequest extends FormRequest
             'password' => 'required|min:8|confirmed',
             'roles' => 'required|array|min:1',
             'avatar' => [File::image(), 'nullable'],
+            'signature' => [File::image(), 'nullable'],
         ];
     }
 }

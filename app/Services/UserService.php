@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
+
 
 class UserService
 {
@@ -40,4 +42,18 @@ class UserService
             }
         }
     }
+
+    public static function storeOrFetchSignature(User $user, ?UploadedFile $signature): ?string
+    {
+        if ($signature) {
+            $filename = strtolower(Str::ulid()).'.'.$signature->getClientOriginalExtension();
+            $filepath = "signatures/{$user->id}/{$filename}";
+
+            $signature->storeAs('public', $filepath);
+            return "/storage/$filepath";
+        } else {
+            return null;
+        }
+    }
+
 }

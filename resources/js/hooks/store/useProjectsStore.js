@@ -36,7 +36,7 @@ const useProjectsStore = create((set, get) => ({
     }
     return null;
   },
-  updateProjectProperty: async (project, property, value, options = null) => {  
+  updateProjectProperty: async (project, property, value, options = null) => {
     try {
       if(property != 'completed_tasks_count'){
         await axios
@@ -68,7 +68,7 @@ const useProjectsStore = create((set, get) => ({
   },
   complete: (project, checked) => {
     const newState = checked ? true : null;
-    const index = get().projects[project.group_id].findIndex((i) => i.id === project.id);
+    const index = get().projects[project.group_id].findIndex((i) => i.id == project.id);
 
     axios
       .post(route("projects.kanban.complete", [project.id]), { completed: checked })
@@ -134,7 +134,7 @@ const useProjectsStore = create((set, get) => ({
       state.projects[sourceGroupId] = result[sourceGroupId];
       state.projects[destinationGroupId] = result[destinationGroupId];
     }));
-    
+
     if(destinationGroupId == 4) return get().complete(project, true)
     return;
   },
@@ -155,7 +155,7 @@ const useProjectsStore = create((set, get) => ({
     let canMove = false;
 
     for (const project of projects) {
-        
+
       const check = project.tasks.some(task => task.check == null);
       canMove = project && project.default != 1 && (project.tasks.length == 0 || check || project.completed_at != null);
 
@@ -181,9 +181,9 @@ const useProjectsStore = create((set, get) => ({
           labels: [],
           number: null,
           order_column: null,
-        }  
+        }
         try {
-          const response = await axios.post(route("projects.kanban.moveSelectedProjects"), { newProject }, { progress: true });          
+          const response = await axios.post(route("projects.kanban.moveSelectedProjects"), { newProject }, { progress: true });
           get().addProject(response.data);
         } catch {
             alert("Falló al crear la orden de trabajo");
@@ -196,7 +196,9 @@ const useProjectsStore = create((set, get) => ({
       const sourceIndex = Object.values(get().projects[sourceGroupId]).findIndex(p => p.id == project.id);
       const destinationIndex = get().projects[destinationGroupId].length;
 
-      const result = move(get().projects, sourceGroupId, destinationGroupId, sourceIndex, destinationIndex);      
+      const result = move(get().projects, sourceGroupId, destinationGroupId, sourceIndex, destinationIndex);
+      const projectMoved = result[destinationGroupId][destinationIndex];
+
       const data = {
         ids: [project.id],
         from_group_id: sourceGroupId,
@@ -209,8 +211,7 @@ const useProjectsStore = create((set, get) => ({
        await axios
               .post(route("projects.kanban.move", [route().params.project]), data, { progress: true })
               .then(response => {
-                const projectMoved = result[destinationGroupId][destinationIndex];                
-                const label = response.data.find(item => item.id == projectMoved.group_id);                
+                const label = response.data.find(item => item.id == projectMoved.group_id);
                 get().updateProjectProperty(projectMoved, 'labels', [projectMoved.group_id], [label]); // Para actualizar los labels
               });
 
@@ -219,8 +220,9 @@ const useProjectsStore = create((set, get) => ({
         state.projects[destinationGroupId] = result[destinationGroupId];
       }));
 
-    };
+      if(destinationGroupId == 4) get().complete(projectMoved, true);
 
+    };
     get().clearSelectedProjects();
     setLoading(false);
   },

@@ -63,7 +63,7 @@ class Project extends Model implements AuditableContract, Sortable
 
     public array $defaultWith = [
         'clientCompany:id,name',
-        'users:id,name,avatar',
+        'users:id,name,signature',
         'game:id,name',
         'type:id,name',
         'period:id,name',

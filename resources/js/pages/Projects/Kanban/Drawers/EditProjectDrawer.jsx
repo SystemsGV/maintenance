@@ -33,9 +33,8 @@ export function EditProjectDrawer() {
   const { edit, openEditProject, closeEditProject } = useProjectDrawerStore();
   const { initProjectWebSocket, initTaskWebSocket } = useWebSockets();
   const { findProject, updateProjectProperty } = useProjectsStore();
-  const { checkTask, setTasks } = useTasksStore();
+  const { tasks, setTasks } = useTasksStore();
   const {users_access, games, labels, types, openedProject } = usePage().props;
-  const [tasksCheck, setTasksCheck] = useState({});
   const [loading, setLoading] = useState(false);
 
   const project = findProject(edit.project.id);
@@ -58,28 +57,17 @@ export function EditProjectDrawer() {
   });
 
   const handleCheckChange = async (taskId, value) => {
+    setLoading(true);
+    const response = await axios.post(route("projects.kanban.check-list", [project.id, taskId]), { check: value })
+                      .catch(() => alert("No se pudo guardar la acción checked de la tarea"));
 
-    const task = data.tasks.find(task => task.id == taskId);
-    const newLabels = labels.find(label => label.id == 2);
+    if (response.data.message) {
+      alert("No puedes cambiar el estado, primero deberás subir una imagen.");
+    }
 
-    initTaskWebSocket(task);
-    const options = {
-      property: 'check',
-      value: value,
-    };
-    // Prepara un nuevo objeto que incluya todos los valores actualizados
-    const updatedTasks = data.tasks.map(task => ({
-      ...task, // Copia todos los campos de la tarea
-      check: task.id == taskId ? value : task.check,
-      labels: task.id == taskId ? [newLabels] : task.labels,
-      completed_at: task.id == taskId ? dayjs().toISOString() : task.completed_at,
-    }));
-
-    let completed_tasks_count = task.check == null ? Number(project.completed_tasks_count) + 1 : Number(project.completed_tasks_count);
-
-    await updateProjectProperty(project, 'tasks', updatedTasks);
-    await updateProjectProperty(project, 'completed_tasks_count', completed_tasks_count);
-    return await checkTask(project, task, options, setLoading);
+    await updateProjectProperty(project, 'tasks', response.data.project.tasks);
+    await updateProjectProperty(project, 'completed_tasks_count', response.data.project.completed_tasks_count);
+    return setLoading(false);
   };
 
   useEffect(() => {

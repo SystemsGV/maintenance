@@ -30,6 +30,7 @@ class UpdateAuthUserRequest extends FormRequest
             'email' => ['required', 'email:rfc,dns', Rule::unique('users')->ignore(auth()->id())],
             'password' => 'nullable|min:8|confirmed',
             'avatar' => [File::image(), 'nullable'],
+            'signature' => [File::image(), 'nullable'],
         ];
     }
 }

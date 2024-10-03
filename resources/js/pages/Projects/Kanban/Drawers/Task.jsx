@@ -14,15 +14,12 @@ import {
 import classes from './css/Task.module.css';
 import { useEffect, useState } from 'react';
 import TaskGroupLabel from '@/components/TaskGroupLabel';
+import EditTaskModal from '../Index/Modals/EditTaskModal';
 
-export default function Task({ task, onCheckChange  }) {
+export default function Task({ task, data, onCheckChange  }) {
 
   const [check, setCheck] = useState(task.check || '');
   const handleChange = (value) => {
-    if (task.sent_archive == 1 && task.attachments.length == 0) {
-      alert("No puedes cambiar el estado, primero deberás subir una imagen.");
-      return; // No cambiar el estado
-    }
     setCheck(value);
     onCheckChange(task.id, value);
   };
@@ -54,7 +51,8 @@ export default function Task({ task, onCheckChange  }) {
               fw={500}
               truncate='end'
               c={isOverdue(task) && task.completed_at === null ? 'red' : ''}
-              onClick={() => redirectTo('projects.tasks.open', [task.project_id, task.id, 1])}
+              onClick={() => EditTaskModal(task)}
+              // onClick={() => redirectTo('projects.tasks.open', [task.project_id, task.id, 1])}
             >
               #{task.number + ': ' + task.name}
             </Text>

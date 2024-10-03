@@ -29,6 +29,7 @@ class User extends Authenticatable implements AuditableContract, CanResetPasswor
         'password',
         'job_title',
         'avatar',
+        'signature',
         'phone',
         'rate',
         'google_id',

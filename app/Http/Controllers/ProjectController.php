@@ -23,7 +23,7 @@ use App\Models\ProjectType;
 use App\Models\Task;
 use App\Models\User;
 use App\Services\ProjectService;
-use Dompdf\Dompdf;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -75,12 +75,14 @@ class ProjectController extends Controller
                     $group->id => Project::where('group_id', $group->id)
                         ->searchByQueryString()
                         ->filterByQueryString()
+                        ->when($request->user()->isNotAdmin(), function ($query) {
+                            $query->whereHas('users', fn ($query) => $query->where('id', auth()->id()));
+                        })
                         ->with([
                             'tasks' => function ($query) use ($user) {
                                 $query->when($user->hasRole('cliente'), fn ($query) => $query->where('hidden_from_clients', false))
-                                    ->where('assigned_to_user_id', $user->id)
-                                    ->withoutGlobalScope('ordered')
-                                    ->orderByRaw('-due_on DESC')
+                                    // ->where('assigned_to_user_id', $user->id)
+                                    ->orderByRaw('number ASC')
                                     ->with([
                                         'labels:id,name,color',
                                         'assignedToUser:id,name',
@@ -88,7 +90,7 @@ class ProjectController extends Controller
                                         'attachments',
                                     ]);
                             },
-                        ])
+                            ])
                         ->withCount([
                             'tasks AS all_tasks_count',
                             'tasks AS completed_tasks_count' => fn ($query) => $query->whereNotNull('completed_at'),
@@ -160,7 +162,7 @@ class ProjectController extends Controller
         }
 
         if ($updateField == 'tasks') {
-            return response()->json($project->tasks()->get());
+            return response()->json();
         }
 
         if ($updateField == 'users') {
@@ -259,9 +261,49 @@ class ProjectController extends Controller
 
     public function expired(Request $request, Project $project): JsonResponse
     {
-        $project->labels()->sync(6, false);
+
+        $request->option ? $project->labels()->sync(6, false) :  $project->labels()->detach(6);
         ProjectUpdated::dispatch($project, 'labels');
         return response()->json();
+    }
+
+    public function checklist(Request $request, Project $project, Task $task): JsonResponse
+    {
+        if($request->check && ($task->sent_archive != 1 || !$task->attachments->isEmpty())){
+            $task->update([
+                'check' => $request->check,
+                'group_id' => 2,
+                'completed_at' => now(),
+            ]);
+            $task->labels()->sync(2);
+        }
+
+        $user = auth()->user();
+        $project = Project::find($project->id)
+                    ->loadDefault()
+                    ->load([
+                        'tasks' => function ($query) use ($user) {
+                            $query->when($user->hasRole('cliente'), fn ($query) => $query->where('hidden_from_clients', false))
+                                ->where('assigned_to_user_id', $user->id)
+                                ->orderByRaw('number ASC')
+                                ->with([
+                                    'labels:id,name,color',
+                                    'assignedToUser:id,name',
+                                    'taskGroup:id,name',
+                                    'attachments',
+                                ]);
+                        },
+                    ])
+                    ->loadCount([
+                        'tasks AS all_tasks_count',
+                        'tasks AS completed_tasks_count' => fn ($query) => $query->whereNotNull('completed_at'),
+                        'tasks AS overdue_tasks_count' => fn ($query) => $query->whereNull('completed_at')->whereDate('due_on', '<', now()),
+                    ]);
+        return response()->json([
+            'project' => $project,
+            'task' => $task->loadDefault(),
+            'message' => $task->sent_archive == 1 && $task->attachments->isEmpty() ? true : false,
+        ]);
     }
 
     public function moveSelectedProjects(Request $request): JsonResponse
@@ -274,9 +316,7 @@ class ProjectController extends Controller
                         'tasks' => function ($query) use ($user) {
                             $query->when($user->hasRole('cliente'), fn ($query) => $query->where('hidden_from_clients', false))
                                 ->where('assigned_to_user_id', $user->id)
-                                ->whereNull('completed_at')
-                                ->withoutGlobalScope('ordered')
-                                ->orderByRaw('-due_on DESC')
+                                ->orderByRaw('number ASC')
                                 ->with([
                                     'labels:id,name,color',
                                     'assignedToUser:id,name',
@@ -297,22 +337,15 @@ class ProjectController extends Controller
     public function pdf(Request $request, Project $project)
     {
 
-        $html = view('vendor.project.pdf', [
+        $data = [
             'ownerCompany' => OwnerCompany::first(),
             'user' => User::find(auth()->id()),
             'project' => $project->loadDefault(),
             'asset' => Asset::find($project->game()->get('asset_id')),
             'tasks' => Task::where('project_id', $project->id)->withDefault()->get(),
-        ])->render();
-
-        $dompdf = new Dompdf();
-        $dompdf->loadHtml($html);
-        $dompdf->render();
-
-        return response($dompdf->output(), 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="invoice.pdf"'
-        ]);
+        ];
+        $pdf = Pdf::loadView('vendor.project.pdf', $data);
+        return $pdf->stream();
     }
 
 }

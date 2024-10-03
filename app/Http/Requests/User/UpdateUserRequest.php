@@ -32,6 +32,7 @@ class UpdateUserRequest extends FormRequest
             'password' => 'nullable|min:8|confirmed',
             'roles' => 'required|array|min:1',
             'avatar' => [File::image(), 'nullable'],
+            'signature' => [File::image(), 'nullable'],
         ];
     }
 }

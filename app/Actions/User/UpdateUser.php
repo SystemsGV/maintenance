@@ -23,6 +23,10 @@ class UpdateUser
             $newData['avatar'] = UserService::storeOrFetchAvatar($user, $data['avatar']);
         }
 
+        if ($user->signature === null || $data['signature']) {
+            $newData['signature'] = UserService::storeOrFetchSignature($user, $data['signature']);
+        }
+
         if (! empty($data['password'])) {
             $newData['password'] = Hash::make($data['password']);
         }

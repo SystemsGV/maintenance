@@ -49,7 +49,7 @@ export default function   ProjectCard({ project, index }) {
               className={classes.name}
               size="xs"
               fw={500}
-              c={isOverdue(project) && project.completed_at === null ? "red.7" : ""}
+              c={isOverdue(project) && project.completed_at == null ? "red.7" : ""}
               onClick={() => {
                 if(project.default != 1){
                   setIsClicked(true);

@@ -45,6 +45,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         // KANBAN
         Route::get('kanban', [ProjectController::class, 'kanban'])->name('kanban');
         Route::group(['prefix' => 'kanban', 'as' => 'kanban.'], function () {
+
             // PROJECTS GROUPS
             Route::post('groups', [GroupController::class, 'store'])->name('groups.store');
             Route::put('groups/{projectGroup}', [GroupController::class, 'update'])->name('groups.update');
@@ -56,7 +57,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::post('', [ProjectController::class, 'store'])->name('store');
             Route::put('{project}', [ProjectController::class, 'update'])->name('update');
             Route::get('{project}/pdf', [ProjectController::class, 'pdf'])->name('pdf');
-            Route::get('{project}/open', [ProjectController::class, 'index'])->name('open');
+            Route::get('{project}/open', [ProjectController::class, 'kanban'])->name('open');
             Route::delete('{project}', [ProjectController::class, 'destroy'])->name('destroy');
             Route::post('{projectId}/restore', [ProjectController::class, 'restore'])->name('restore');
             Route::post('{project}/expired', [ProjectController::class, 'expired'])->name('expired');
@@ -70,6 +71,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
             Route::delete('{project}/time-log/{timeLog}', [TimeLogProjectController::class, 'destroy'])->name('time-logs.destroy')->scopeBindings();
             Route::post('{project}/time-log/timer/start', [TimeLogProjectController::class, 'startTimer'])->name('time-logs.timer.start');
             Route::post('{project}/time-log/{timeLog}/timer/stop', [TimeLogProjectController::class, 'stopTimer'])->name('time-logs.timer.stop')->scopeBindings();
+
+            // CHECKLIST
+            Route::post('{project}/checklist/{task}', [ProjectController::class, 'checklist'])->name('check-list')->scopeBindings();
 
         });
 

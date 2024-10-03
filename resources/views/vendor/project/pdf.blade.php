@@ -1,320 +1,293 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <style type="text/css">
-    .bold,
-    b,
-    strong {
-        font-weight: 700;
-    }
-    body {
-        background-repeat: no-repeat;
-        background-position: center center;
-        text-align: center;
-        margin: 0 auto;
-        font-family: Verdana, monospace;
-    }
-    .tabla_borde {
-        border: 1px solid #666;
-        border-radius: 10px;
-    }
-    tr.border_bottom td {
-        border-bottom: 1px solid #000;
-    }
-    tr.border_top td {
-        border-top: 1px solid #666;
-    }
-    td.border_right {
-        border-right: 1px solid #666;
-    }
-    .table-valores-totales tbody > tr > td {
-        border: 0;
-    }
-    .table-valores-totales > tbody > tr > td:first-child {
-        text-align: right;
-    }
-    .table-valores-totales > tbody > tr > td:last-child {
-        border-bottom: 1px solid #666;
-        text-align: right;
-        width: 30%;
-    }
-    hr,
-    img {
-        border: 0;
-    }
-    table td {
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+
+<body>
+    <!--HEADER-->
+    <table class="div-1Header">
+        <tr>
+            <td class="logotd">
+                @php
+                    $imageData = $ownerCompany->logo ? base64_encode(file_get_contents(public_path($ownerCompany->logo))) : null;
+                @endphp
+                <img  src="data:image/png;base64, {{ $imageData }}" height="150" style="text-align:center" border="0">
+            </td>
+            <td class="datos-grales-td">
+                <table class="table_h_factura">
+                    <thead>
+                        <th class="headerDatosh titulos">Orden de trabajo</th>
+                    </thead>
+                    <tr>
+                        <td class="titulos"><p class="titulos">{{ $ownerCompany->name }}</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>RUC: <span>{{ $ownerCompany->business_id }}</span></p></td>
+                    </tr>
+                    <tr>
+                        <td><p>TELEFONO: <span>{{ $ownerCompany->phone }}</span> </p></td>
+                    </tr>
+                    <tr>
+                        <td><p>CORREO: <span>{{ $ownerCompany->email }}</span> </p></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <table class="div-1Datos">
+        <tr>
+            <td class="receptor">
+                <table class="table_receptor">
+                    <tr>
+                        <td class="titulos"><p class="titulos tituloRec">Datos generales</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>Generó: <span>{{ $user->name }}</span></p></td>
+                    </tr>
+                    <tr>
+                        <td><p>Duración estimada: <span>{{ $project->stimation }}</span></p></td>
+                    </tr>
+                    <tr>
+                        <td><p>Responsable: <span>{{ $user->name }}</span></p></td>
+                    </tr>
+                    <tr>
+                        <td><p>Orden de trabajo: <span>{{ $project->name }}</span></p></td>
+                    </tr>
+                    <tr>
+                        <td><p>Atracción: <span>{{ $project->game ? $project->game->name : '' }}</span></p></td>
+                    </tr>
+                    <tr>
+                        <td><p>Ubicación: <span>{{ $project->game ? $asset[0]['name'] : '' }}</span></p></td>
+                    </tr>
+                    <tr>
+                        <td><p>Tipo: <span>{{ $project->type ? $project->type->name : '' }}</span></p></td>
+                    </tr>
+                </table>
+            </td>
+            <td class="datosGral">
+                <table class="table_datos">
+                    <tr>
+                        <td><p>FECHA DE INICIO:</p></td>
+                        <td><p>{{ $project->created_at }}</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>FECHA DE TERMINO:</p></td>
+                        <td><p>{{ $project->completed_at }}</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>TIEMPO DE EJECUCIÓN:</p></td>
+                        <td><p>{{ count($project->timeLogs) > 0 ? $project->timeLogs[0] : 'No registrado' }}</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>FECHA DE VENCIMIENTO:</p></td>
+                        <td><p>{{ $project->due_on }}</p></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <table class="table_materiales">
+        <thead>
+            <tr>
+                <td>Tarea</td>
+                <td>Resultado</td>
+                <td>Detalle</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($tasks as $task)
+                <tr>
+                    <td>{{ $task->name }}</td>
+                    <td>{{ $task->check }}</td>
+                    <td>
+                        @foreach ($task->attachments as $attachment)
+                            @if(count($task->attachments) > 0)
+                                @php
+                                    $imageData = base64_encode(file_get_contents(public_path($attachment->path)));
+                                @endphp
+                                <img  src="data:image/png;base64, {{ $imageData }}" height="200" style="text-align:center" border="0">
+                            @endif
+                        @endforeach
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+    <table class="table_firmas">
+        @php
+            $signatureAcept = $user->signature ? base64_encode(file_get_contents(public_path($user->signature))) : null;
+            $signatureValid = $user->signature ? base64_encode(file_get_contents(public_path($user->signature))) : null;
+            $signatureDo = count($project->users) > 0 ? base64_encode(file_get_contents(public_path($project->users[0]->signature))) : null;
+        @endphp
+
+        <thead>
+            <tr>
+                <td>
+                    @if($project->group_id == 4 && $signatureAcept)
+                        <img  src="data:image/png;base64, {{ $signatureAcept }}" height="100" style="text-align:center" border="0">
+                    @endif
+                </td>
+                <td>
+                    @if($project->group_id == 3 && $signatureValid)
+                        <img  src="data:image/png;base64, {{ $signatureValid }}" height="100" style="text-align:center" border="0">
+                    @endif
+                </td>
+                <td>
+                    @if($signatureDo)
+                        <img  src="data:image/png;base64, {{ $signatureDo }}" height="100" style="text-align:center" border="0">
+                    @endif
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Aceptado por</td>
+                <td>Validado por</td>
+                <td>Realizado por</td>
+            </tr>
+        </tbody>
+    </table>
+    <footer>
+        <p>Todos los derechos reservados: https://lagranjavilla.com | Sistema Mantenimiento </p>
+    </footer>
+</body>
+
+</html>
+<style>
+    * {
+        font-family: Arial, Helvetica, sans-serif;
         font-size: 12px;
     }
-    html {
-        font-family: sans-serif;
-        -webkit-text-size-adjust: 100%;
-        -ms-text-size-adjust: 100%;
-        font-size: 10px;
-        -webkit-tap-highlight-color: transparent;
+
+    .titulos {
+        font-size: 15px;
+        text-transform: uppercase;
     }
-    a {
-        background-color: transparent;
+
+    /*HEADER*/
+    .div-1Header,
+    .div-1Datos {
+        width: 100%;
     }
-    a:active,
-    a:hover {
-        outline: 0;
+
+    .logotd {
+        width: 50%;
+        height: auto;
     }
-    img {
-        vertical-align: middle;
+
+    .datos-grales-td,
+    .receptor {
+        width: 50%;
     }
-    hr {
-        height: 0;
-        -webkit-box-sizing: content-box;
-        -moz-box-sizing: content-box;
-        box-sizing: content-box;
-        margin-top: 20px;
-        margin-bottom: 20px;
-        border-top: 1px solid #eee;
+
+    .table_h_factura {
+        width: 50%;
+        height: 150px;
+        background-color: #FFF;
+        width: 100%;
+        margin: 0px;
+        padding: 0px;
     }
-    table {
-        border-spacing: 0;
-        border-collapse: collapse;
+
+    .headerDatosh {
+        text-align: right;
+        color: #FFF;
+        padding: 5px;
+        background-color: rgb(24, 140, 207);
     }
-    @media print {
-        blockquote,
-        img,
-        tr {
-            page-break-inside: avoid;
-        }
-        *,
-        :after,
-        :before {
-            color: #000 !important;
-            text-shadow: none !important;
-            background: 0 0 !important;
-            -webkit-box-shadow: none !important;
-            box-shadow: none !important;
-        }
-        a,
-        a:visited {
-            text-decoration: underline;
-        }
-        a[href]:after {
-            content: " (" attr(href) ")";
-        }
-        blockquote {
-            border: 1px solid #999;
-        }
-        img {
-            max-width: 100% !important;
-        }
-        p {
-            orphans: 3;
-            widows: 3;
-        }
-        .table {
-            border-collapse: collapse !important;
-        }
-        .table td {
-            background-color: #fff !important;
-        }
+
+    .table_h_factura tr td p {
+        margin: 0px;
+        padding: 2px;
+        text-align: right;
+        padding-right: 5px;
     }
-    a,
-    a:focus,
-    a:hover {
-        text-decoration: none;
+
+    /*DATOS*/
+    .table_receptor,
+    .table_datos {
+        width: 42%;
+        height: 100px;
+        background-color: rgba(243, 243, 243, 0.521);
+        width: 100%;
+        margin: 0px;
+        padding: 10px;
+        border-radius: 5px;
     }
-    *,
-    :after,
-    :before {
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
+
+    .table_receptor tr td p {
+        margin: 0px;
+        padding: 2px;
+        text-align: left;
     }
-    a {
-        color: #428bca;
-        cursor: pointer;
+
+    .tituloRec {
+        color: rgb(24, 140, 207);
     }
-    a:focus,
-    a:hover {
-        color: #2a6496;
+
+    .table_datos tr td p {
+        margin: 0px;
+        padding: 2px;
+        text-align: left;
     }
-    a:focus {
-        outline: dotted thin;
-        outline: -webkit-focus-ring-color auto 5px;
-        outline-offset: -2px;
-    }
-    h6 {
-        font-family: inherit;
-        line-height: 1.1;
-        color: inherit;
+
+    /*MATERIALES*/
+    .table_materiales {
+        width: 100%;
         margin-top: 10px;
         margin-bottom: 10px;
     }
-    p {
-        margin: 0 0 10px;
+
+    .table_materiales thead tr {
+        background-color: rgb(24, 140, 207);
+        color: #FFF;
     }
-    blockquote {
-        padding: 10px 20px;
-        margin: 0 0 20px;
-        border-left: 5px solid #eee;
+
+    .table_materiales thead tr td {
+        padding: 5px;
+        text-align: left;
+        font-size: 14px;
     }
-    table {
-        background-color: transparent;
+
+    .table_materiales tr td {
+        text-align: left;
+        padding: 5px;
+        border-bottom: 1px solid rgba(20, 20, 20, 0.096);
     }
-    .table {
+
+    /*FIRMA*/
+    .table_firmas {
         width: 100%;
-        max-width: 100%;
-        margin-bottom: 20px;
-    }
-    h6 {
-        font-weight: 100;
-        font-size: 10px;
-    }
-    body {
-        line-height: 1.42857143;
-        font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-        background-color: #2f4050;
-        font-size: 13px;
-        color: #676a6c;
-        overflow-x: hidden;
-    }
-    .table > tbody > tr > td {
-        vertical-align: top;
-        border-top: 1px solid #e7eaec;
-        line-height: 1.42857;
-        padding: 8px;
-    }
-    .white-bg {
-        background-color: #fff;
-    }
-    td {
-        padding: 6;
-    }
-    .table-valores-totales tbody > tr > td {
-        border-top: 0 none !important;
+        margin-top: 100px;
+        margin-bottom: 10px;
     }
 
-  </style>
-</head>
+    .table_firmas thead tr {
+        background-color: rgba(95, 95, 95, 0.452);
+        color: #FFF;
+    }
 
-<body class="white-bg">
-  <table width="100%">
-    <tbody>
-      <tr>
-        <td style="padding:30px; !important">
-          <table width="100%" height="200px" border="0" aling="center" cellpadding="0" cellspacing="0">
-            <tbody>
-              <tr>
-                <td valign="bottom" style="padding-left:0">
-                  <div class="tabla_borde">
-                    <table width="96%" height="100%" border="0" border-radius="" cellpadding="9" cellspacing="0">
-                      <tbody>
-                        <tr>
-                          <td align="center">
-                            <strong><span style="font-size:15px">{{ $ownerCompany->name }}</span></strong>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td align="left">
-                            <strong>Dirección: </strong>{{ $ownerCompany->address }}
-                          </td>
-                          <td align="left">
-                            <strong>Ciudad: </strong>{{ $ownerCompany->city }}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td align="left">
-                            Cel: <b> {{ $ownerCompany->phone }} </b>
-                          </td>
-                          <td align="left">
-                            <strong>Web: </strong>{{ $ownerCompany->web }}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="tabla_borde">
-            <table width="100%" border="0" cellpadding="5" cellspacing="0">
-              <tbody>
-                <tr>
-                    <td align="left"><strong><span style="font-size:20px">Datos Genreales</span></strong></td>
-                </tr>
-                <tr>
-                  <td width="100%" align="left"><strong> Generó:  </strong> {{ $user->name }} </td>
-                </tr>
-                <tr>
-                  <td width="100%" align="left"><strong>Duración estimada: </strong> {{ $project->estimation }}</td>
-                </tr>
-                <tr>
-                  <td width="60%" align="left"><strong>Responsable: </strong> {{ $user->name }} </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <br>
-          <div class="tabla_borde">
-            <table width="100%" border="0" cellpadding="5" cellspacing="0">
-              <tbody>
-                <tr>
-                    <td align="left"><strong><span style="font-size:20px">Activos</span></strong></td>
-                </tr>
-                <tr>
-                  <td width="30%" align="left"><strong> Orden de trabajo:  </strong> {{ $project->name }} </td>
-                  <td width="70%" align="left"><strong> Atracción:  </strong> {{ $project->game ? $project->game->name : '' }} </td>
-                </tr>
-                <tr>
-                  <td width="30%" align="left"><strong>Ubicación: </strong> {{ $project->game ? $asset[0]['name'] : '' }}</td>
-                  <td width="70%" align="left"><strong>Tipo: </strong> {{ $project->type ? $project->type->name : '' }}</td>
-                </tr>
-                <tr>
-                  <td width="70%" align="left"><strong>Descripción: </strong> {{ $project->description }} </td>
-                  <td width="30%" align="left"><strong>Responsable: </strong> {{ $user->name }} </td>
-                </tr>
-                <tr>
-                  <td width="50%" align="left"><strong>Fecha de incio: </strong> {{ $project->created_at }} </td>
-                  <td width="50%" align="left"><strong>Fecha de termino: </strong> {{ $project->completed_at }} </td>
-                </tr>
-                <tr>
-                    <td width="30%" align="left"><strong>Tiempo de ejecucion: </strong> {{ count($project->timeLogs) > 0 ? $project->timeLogs[0] : 'No registrado' }} </td>
-                    <td width="50%" align="left"><strong>Fecha de vencimiento: </strong> {{ $project->due_on }} </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <br>
-          <div class="tabla_borde">
-            <table width="100%" border="0" cellpadding="5" cellspacing="0">
-              <tbody>
-                <tr>
-                  <td align="left" class="bold">Procedimiento</td>
-                  <td align="center" class="bold">Resultado</td>
-                  <td align="center" class="bold">Detalle</td>
-                </tr>
-                @foreach($tasks as $task)
-                <tr class="border_top">
-                  <td align="left" width="200px">{{ $task->name }}</td>
-                  <td align="center">{{ $task->check }}<br></td>
-                  <td align="center">
-                    @foreach ($task->attachments as $attachment)
-                        @if(count($task->attachments) > 0)
-                            @php
-                                $imageData = base64_encode(file_get_contents(public_path($attachment->path)));
-                            @endphp
-                            <img  src="data:image/png;base64, {{ $imageData }}" height="200" style="text-align:center" border="0">
-                        @endif
-                    @endforeach
-                    <br></td>
-                </tr>
-                @endforeach
-              </tbody>
-            </table>
-          </div>
+    .table_firmas thead tr td {
+        padding: 50px;
+        text-align: center;
+    }
 
-          <br>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</body>
-</html>
+    .table_firmas tbody tr td {
+        border-top: 1px solid rgba(20, 20, 20, 0.5);
+        text-align: center;
+        padding: 5px;
+        font-size: 14px;
+    }
+
+    /*FOOTER*/
+    footer {
+        width: 100%;
+        text-align: center;
+        position: absolute;
+        bottom: 0px;
+    }
+</style>
