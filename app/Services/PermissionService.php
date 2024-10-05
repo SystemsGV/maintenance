@@ -34,26 +34,48 @@ class PermissionService
             'Reportes' => ['ver informe de suma de tiempo registrado', 'ver informe diario de tiempo registrado'],
             'Actividades' => ['ver actividades'],
         ],
+        'admin mantenimiento' => [
+            'Usuario' => ['ver usuarios', 'ver tarifa de usuario', 'crear usuario', 'editar usuario', 'archivar usuario', 'restaurar usuario'],
+            'Etiqueta' => ['ver etiquetas', 'crear etiqueta', 'editar etiqueta', 'archivar etiqueta', 'restaurar etiqueta'],
+            'Periodo' => ['ver periodos', 'crear periodo', 'editar periodo', 'archivar periodo', 'restaurar periodo'],
+            'Rol' => ['ver roles', 'crear rol', 'editar rol', 'archivar rol', 'restaurar rol'],
+            'Ubicación' => ['ver ubicaciones', 'crear ubicacion', 'editar ubicacion', 'archivar ubicacion', 'restaurar ubicacion'],
+            'Juego' => ['ver juegos', 'crear juego', 'editar juego', 'archivar juego', 'restaurar juego'],
+            'Check List' => ['ver checklists', 'crear checklist', 'editar checklist', 'archivar checklist', 'restaurar checklist'],
+            'Mi Empresa' => ['ver mi empresa', 'editar mi empresa'],
+            'Proyecto' => [
+                'ver proyectos', 'ver proyecto', 'crear proyecto', 'editar proyecto', 'archivar proyecto', 'restaurar proyecto', 'editar acceso usuario al proyecto'
+            ],
+            'Grupo de tareas' => ['crear grupo de tarea', 'editar grupo de tarea', 'archivar grupo de tarea', 'restaurar grupo de tarea', 'reordenar grupo de tarea'],
+            'Grupo de proyectos' => ['crear grupo de proyecto', 'editar grupo de proyecto', 'archivar grupo de proyecto', 'restaurar grupo de proyecto', 'reordenar grupo de proyecto'],
+            'Tareas' => [
+                'ver tareas', 'crear tarea', 'editar tarea', 'archivar tarea', 'restaurar tarea', 'reordenar tarea', 'completar tarea', 'agregar registro de tiempo', 'eliminar registro de tiempo',
+                'ver registros de tiempo', 'ver comentarios',
+            ],
+            'Reportes' => ['ver informe de suma de tiempo registrado', 'ver informe diario de tiempo registrado'],
+        ],
+        'mantenimiento' => [
+            'Ubicación' => ['ver ubicaciones', 'crear ubicacion', 'editar ubicacion', 'archivar ubicacion', 'restaurar ubicacion'],
+            'Juego' => ['ver juegos', 'crear juego', 'editar juego', 'archivar juego', 'restaurar juego'],
+            'Check List' => ['ver checklists', 'crear checklist', 'editar checklist', 'archivar checklist', 'restaurar checklist'],
+            'Proyecto' => ['ver proyectos', 'editar proyecto'],
+            'Tareas' => [
+                'ver tareas', 'crear tarea', 'ver registros de tiempo', 'ver comentarios', 'reordenar tarea', 'completar tarea', 'agregar registro de tiempo', 'editar tarea',
+            ],
+            'Reports' => ['ver informe de suma de tiempo registrado', 'ver informe diario de tiempo registrado'],
+        ],
+
         'cliente' => [
             'Proyecto' => ['ver proyectos', 'ver proyecto'],
             'Tareas' => [
                 'ver tareas', 'crear tarea', 'ver registros de tiempo', 'ver comentarios',
             ],
         ],
-        'mantenimiento' => [
-            'Ubicación' => ['ver ubicaciones', 'crear ubicacion', 'editar ubicacion', 'archivar ubicacion', 'restaurar ubicacion'],
-            'Juego' => ['ver juegos', 'crear juego', 'editar juego', 'archivar juego', 'restaurar juego'],
-            'Check List' => ['ver checklists', 'crear checklist', 'editar checklist', 'archivar checklist', 'restaurar checklist'],
-            'Proyecto' => ['ver proyectos'],
-            'Tareas' => [
-                'ver tareas', 'crear tarea', 'ver registros de tiempo', 'ver comentarios', 'reordenar tarea'
-            ],
-            'Reports' => ['ver informe de suma de tiempo registrado', 'ver informe diario de tiempo registrado'],
-        ],
     ];
 
     public static function allPermissionsGrouped(): array
     {
+        self::$permissionsByRole['admin mantenimiento'];
         return self::$permissionsByRole['admin'];
     }
 
@@ -70,6 +92,11 @@ class PermissionService
             ->get(['id', 'name', 'avatar'])
             ->map(fn ($user) => [...$user->toArray(), 'reason' => 'admin']);
 
+        $adminsMant = User::role('admin mantenimiento')
+            ->with('roles:id,name')
+            ->get(['id', 'name', 'avatar'])
+            ->map(fn ($user) => [...$user->toArray(), 'reason' => 'admin mantenimiento']);
+
         $owners = $project
             ->clientCompany
             ->clients
@@ -83,6 +110,7 @@ class PermissionService
 
         return self::$usersWithAccessToProject[$project->id] = collect([
             ...$admins,
+            ...$adminsMant,
             ...$owners,
             ...$givenAccess,
         ])
@@ -98,7 +126,7 @@ class PermissionService
         if (self::$projectsThatUserCanAccess !== null) {
             return self::$projectsThatUserCanAccess;
         }
-        if ($user->hasRole('admin')) {
+        if ($user->hasRole('admin') || $user->hasRole('admin mantenimiento')) {
             return Project::all();
         }
         $projects = collect($user->projects->toArray());

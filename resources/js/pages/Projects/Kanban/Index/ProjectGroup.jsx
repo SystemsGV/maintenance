@@ -6,6 +6,8 @@ import ProjectGroupActions from "./ProjectGroupActions";
 import classes from "./css/ProjectGroup.module.css";
 import useProjectsStore from "@/hooks/store/useProjectsStore";
 import { useState } from "react";
+import AccesUsersModal from "./Modals/AccesUsersModal";
+import { usePage } from "@inertiajs/react";
 
 export default function ProjectGroup({ group, projects, ...props }) {
 
@@ -14,6 +16,13 @@ export default function ProjectGroup({ group, projects, ...props }) {
   const disabledAction = () => {
     if (selectedProjects.length == 0){ return false};
     return selectedProjects.every(p => p.group_id == group.id); // Verifica si todos los IDs de grupo son iguales
+  };
+  const assignedUsers = () => {
+    const projectDefault = selectedProjects.every(p => p.default == 1);
+    if(projectDefault){
+      return AccesUsersModal(setLoading);
+    }
+    moveSelectedProjects(selectedProjects, setLoading, null)
   };
 
   return (
@@ -51,7 +60,7 @@ export default function ProjectGroup({ group, projects, ...props }) {
                   variant="filled"
                   size="md"
                   radius="xl"
-                  onClick={() => moveSelectedProjects(selectedProjects, setLoading)}
+                  onClick={() => assignedUsers()}
                   disabled={!disabledAction()}
                 >
                   <IconSend2 style={{ width: rem(18), height: rem(18) }} stroke={2} />

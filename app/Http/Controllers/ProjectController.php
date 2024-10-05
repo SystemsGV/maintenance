@@ -90,7 +90,8 @@ class ProjectController extends Controller
                                         'attachments',
                                     ]);
                             },
-                            ])
+                            'users:id,name',
+                        ])
                         ->withCount([
                             'tasks AS all_tasks_count',
                             'tasks AS completed_tasks_count' => fn ($query) => $query->whereNotNull('completed_at'),
@@ -284,7 +285,7 @@ class ProjectController extends Controller
                     ->load([
                         'tasks' => function ($query) use ($user) {
                             $query->when($user->hasRole('cliente'), fn ($query) => $query->where('hidden_from_clients', false))
-                                ->where('assigned_to_user_id', $user->id)
+                                // ->where('assigned_to_user_id', $user->id)
                                 ->orderByRaw('number ASC')
                                 ->with([
                                     'labels:id,name,color',
@@ -315,7 +316,7 @@ class ProjectController extends Controller
                     ->load([
                         'tasks' => function ($query) use ($user) {
                             $query->when($user->hasRole('cliente'), fn ($query) => $query->where('hidden_from_clients', false))
-                                ->where('assigned_to_user_id', $user->id)
+                                // ->where('assigned_to_user_id', $user->id)
                                 ->orderByRaw('number ASC')
                                 ->with([
                                     'labels:id,name,color',
@@ -330,7 +331,6 @@ class ProjectController extends Controller
                         'tasks AS completed_tasks_count' => fn ($query) => $query->whereNotNull('completed_at'),
                         'tasks AS overdue_tasks_count' => fn ($query) => $query->whereNull('completed_at')->whereDate('due_on', '<', now()),
                     ]);
-
         return response()->json($project);
     }
 

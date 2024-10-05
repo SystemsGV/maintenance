@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $rolesExceptClient = collect(RoleSeeder::$roles)
-            ->filter(fn ($i) => $i !== 'client')
+            ->filter(fn ($i) => $i !== 'cliente')
             ->toArray();
 
         foreach ($rolesExceptClient as $role) {

@@ -2,7 +2,6 @@ import { openConfirmModal } from "@/components/ConfirmModal";
 import { ActionIcon, Group, Menu, rem } from "@mantine/core";
 import { IconArchive, IconArchiveOff, IconDots, IconFileDownload } from "@tabler/icons-react";
 import { useForm } from "laravel-precognition-react-inertia";
-import PdfProject from "./Modals/PdfProject";
 import axios from "axios";
 
 export default function ProjectActions({ project, ...props }) {

@@ -3,7 +3,6 @@ import { forwardRef } from "react";
 
 export default forwardRef(function TaskGroupLabel(props, ref) {
   const computedColorScheme = useComputedColorScheme();
-
   return (
     <Pill
       ref={ref}

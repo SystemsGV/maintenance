@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react';
 import TaskGroupLabel from '@/components/TaskGroupLabel';
 import EditTaskModal from '../Index/Modals/EditTaskModal';
 
-export default function Task({ task, data, onCheckChange  }) {
+export default function Task({ task, onCheckChange  }) {
 
   const [check, setCheck] = useState(task.check || '');
   const handleChange = (value) => {
@@ -33,7 +33,10 @@ export default function Task({ task, data, onCheckChange  }) {
         <Grid.Col span={1}>
           {task.sent_archive != 0 &&(
             <Tooltip label="Obligatorio archivos adjuntos" openDelay={1000} withArrow>
-              <TaskGroupLabel size="sm">Archivo</TaskGroupLabel>
+              {task.attachments.length == 0 ?
+                <TaskGroupLabel size="sm">Archivo</TaskGroupLabel>
+                :
+                <TaskGroupLabel size="sm" bg="teal">Subido</TaskGroupLabel>}
             </Tooltip>
           )}
         </Grid.Col>

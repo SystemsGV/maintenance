@@ -150,7 +150,7 @@ const useProjectsStore = create((set, get) => ({
     }));
   },
 
-  moveSelectedProjects: async (projects, setLoading) => {
+  moveSelectedProjects: async (projects, setLoading, accessUsers) => {
     setLoading(true);
     let canMove = false;
 
@@ -170,7 +170,7 @@ const useProjectsStore = create((set, get) => ({
         continue;
       }
 
-      if(project.default == 1){
+      if(project.default == 1 && accessUsers != null){
         const newProject = {
           ...project,
           name: project.name.replace('001', ''),
@@ -179,6 +179,7 @@ const useProjectsStore = create((set, get) => ({
           default: 0,
           id: null,
           labels: [],
+          users: accessUsers,
           number: null,
           order_column: null,
         }
@@ -206,7 +207,6 @@ const useProjectsStore = create((set, get) => ({
         from_index: sourceIndex,
         to_index: destinationIndex,
       };
-
 
        await axios
               .post(route("projects.kanban.move", [route().params.project]), data, { progress: true })

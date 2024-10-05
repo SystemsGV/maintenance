@@ -64,7 +64,7 @@ class User extends Authenticatable implements AuditableContract, CanResetPasswor
 
     public function isAdmin(): bool
     {
-        return $this->hasRole('admin');
+        return $this->hasRole('admin') || $this->hasRole('admin mantenimiento');
     }
 
     public function isNotAdmin(): bool

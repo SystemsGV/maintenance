@@ -14,7 +14,6 @@ class CreateProject
 {
     public function create(array $data): Project
     {
-
         return DB::transaction(function () use ($data) {
 
             $data['rate'] *= 100;
@@ -36,7 +35,7 @@ class CreateProject
                 'default' => false,
             ]);
 
-            $project->update(['name' => $project->name . ' ' . $project->id]);
+            $project->update(['name' => $project->name . ' ' . $project->id . Carbon::now()->format('Y-m-d')]);
             $project->moveToStart();
             $project->users()->attach($data['users'] ?? []);
             $project->labels()->attach($data['labels']);
@@ -49,7 +48,7 @@ class CreateProject
                 ['name' => 'Finalizado' ]
             ]);
             CheckList::get()->each(function ($checklist) use ($project, $taskGroup) {
-                if ($checklist->period_id == $project->period_id && $checklist->game_id == $project->game->id) { // Verifica si el campo group_name de la tabla CheckList existe o es igual con la clave: "Diario" de $period
+                if ($checklist->period_id == $project->period_id && $checklist->game_id == $project->game_id) { // Verifica si el campo group_name de la tabla CheckList existe o es igual con la clave: "Diario" de $period
                     $task = $project->tasks()->create([
                         'group_id' => $taskGroup->pluck('id', 'name')['Pendiente'],
                         'created_by_user_id' => auth()->id(),
@@ -60,7 +59,7 @@ class CreateProject
                         'due_on' => Carbon::now(),
                         'hidden_from_clients' => 0,
                         'billable' => 1,
-                        'sent_archive' => rand(true, false),
+                        'sent_archive' => false,
                         'completed_at' => null,
                     ]);
                     $task->labels()->attach([1]); // Pendiente

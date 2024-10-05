@@ -49,7 +49,7 @@
                         <td><p>Generó: <span>{{ $user->name }}</span></p></td>
                     </tr>
                     <tr>
-                        <td><p>Duración estimada: <span>{{ $project->stimation }}</span></p></td>
+                        <td><p>Duración estimada: <span>{{ $project->estimation }} /hr</span></p></td>
                     </tr>
                     <tr>
                         <td><p>Responsable: <span>{{ $user->name }}</span></p></td>
@@ -117,7 +117,7 @@
             @endforeach
         </tbody>
     </table>
-    <table class="table_firmas">
+    {{-- <table class="table_firmas">
         @php
             $signatureAcept = $user->signature ? base64_encode(file_get_contents(public_path($user->signature))) : null;
             $signatureValid = $user->signature ? base64_encode(file_get_contents(public_path($user->signature))) : null;
@@ -150,7 +150,7 @@
                 <td>Realizado por</td>
             </tr>
         </tbody>
-    </table>
+    </table> --}}
     <footer>
         <p>Todos los derechos reservados: https://lagranjavilla.com | Sistema Mantenimiento </p>
     </footer>

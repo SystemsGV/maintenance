@@ -25,7 +25,7 @@ const KanbanIndex = () => {
   const { projectGroups, groupedProjects, openedProject } = usePage().props;
 
   const { groups, setGroups, reorderGroup } = useProjectGroupsStore();
-  const { projects, setProjects, addProject, reorderProject, moveProject } = useProjectsStore();
+  const { projects, setProjects, addProject, reorderProject, moveProject, clearSelectedProjects } = useProjectsStore();
   const { hasUrlParams } = useProjectFiltersStore();
   const { initProjectWebSocket } = useWebSockets();
   const { projectsView } = useProjectPreferences();
@@ -40,6 +40,7 @@ const KanbanIndex = () => {
 
   useEffect(() => {
     initProjectWebSocket(openedProject);
+    clearSelectedProjects();
     return initProjectWebSocket();
   }, []);
 
