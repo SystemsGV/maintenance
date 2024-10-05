@@ -80,7 +80,7 @@
                     </tr>
                     <tr>
                         <td><p>TIEMPO DE EJECUCIÓN:</p></td>
-                        <td><p>{{ count($project->timeLogs) > 0 ? $project->timeLogs[0] : 'No registrado' }}</p></td>
+                        <td><p>{{ count($project->timeLogs) > 0 ? $project->timeLogs[0]->minutes . '/hrs' : 'No registrado' }}</p></td>
                     </tr>
                     <tr>
                         <td><p>FECHA DE VENCIMIENTO:</p></td>

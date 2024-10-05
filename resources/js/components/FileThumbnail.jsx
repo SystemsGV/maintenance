@@ -30,9 +30,9 @@ export default function FileThumbnail({ file, remove, open, ...props }) {
   const alreadyUploaded = file.id != undefined;
 
   if (isImage(file)) {
-    const imageUrl = alreadyUploaded
-      ? file.thumb || file.path
-      : URL.createObjectURL(file);
+
+    const imageUrl = alreadyUploaded ? file.thumb || file.path : URL.createObjectURL(file);
+
     icon = (
       <Image
         radius="md"

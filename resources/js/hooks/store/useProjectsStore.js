@@ -173,7 +173,6 @@ const useProjectsStore = create((set, get) => ({
       if(project.default == 1 && accessUsers != null){
         const newProject = {
           ...project,
-          name: project.name.replace('001', ''),
           created_at: null,
           updated_at: null,
           default: 0,
@@ -184,7 +183,7 @@ const useProjectsStore = create((set, get) => ({
           order_column: null,
         }
         try {
-          const response = await axios.post(route("projects.kanban.moveSelectedProjects"), { newProject }, { progress: true });
+          const response = await axios.post(route("projects.kanban.moveSelectedProjects"), { newProject }, { progress: false });
           get().addProject(response.data);
         } catch {
             alert("Falló al crear la orden de trabajo");

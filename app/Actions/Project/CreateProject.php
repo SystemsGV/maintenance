@@ -35,7 +35,7 @@ class CreateProject
                 'default' => false,
             ]);
 
-            $project->update(['name' => $project->name . ' ' . $project->id . Carbon::now()->format('Y-m-d')]);
+            $project->update(['name' => $project->name . ' ' . $project->id . ' ' . '('.Carbon::now()->format('Y-m-d').')']);
             $project->moveToStart();
             $project->users()->attach($data['users'] ?? []);
             $project->labels()->attach($data['labels']);

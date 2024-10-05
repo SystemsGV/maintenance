@@ -90,7 +90,6 @@ class ProjectController extends Controller
                                         'attachments',
                                     ]);
                             },
-                            'users:id,name',
                         ])
                         ->withCount([
                             'tasks AS all_tasks_count',
@@ -273,7 +272,7 @@ class ProjectController extends Controller
         if($request->check && ($task->sent_archive != 1 || !$task->attachments->isEmpty())){
             $task->update([
                 'check' => $request->check,
-                'group_id' => 2,
+                'group_id' => $project->taskGroups()->pluck('id', 'name')['Proceso'],
                 'completed_at' => now(),
             ]);
             $task->labels()->sync(2);
