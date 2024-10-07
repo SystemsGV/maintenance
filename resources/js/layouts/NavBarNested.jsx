@@ -41,13 +41,13 @@ export default function Sidebar() {
           {
             label: "Plan de tareas",
             link: route("projects.index"),
-            active: route().current("projects.*"),
+            active: route().current("projects"),
             visible: can("ver proyectos"),
           },
           {
             label: "Ordenes de trabajo",
             link: route("projects.kanban"),
-            active: route().current("projects.kanban.*"),
+            active: route().current("projects.kanban"),
             visible: can("ver tareas"),
           },
         ]

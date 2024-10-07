@@ -15,7 +15,7 @@ class CheckList extends Model implements AuditableContract
 {
     use Archivable, Auditable, HasFactory, IsSearchable, IsSortable;
 
-    protected $fillable = ['name', 'period_id', 'game_id'];
+    protected $fillable = ['name', 'period_id', 'game_id', 'archive'];
     protected $searchable = ['name'];
     protected $sortable = ['name' => 'asc',];
 

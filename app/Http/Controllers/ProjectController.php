@@ -47,6 +47,7 @@ class ProjectController extends Controller
                             ->orWhereHas('users', fn ($query) => $query->where('id', auth()->id()));
                     })
                     ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
+                    ->where('default', '!=', 1)
                     ->with([
                         'clientCompany:id,name',
                         'clientCompany.clients:id,name,avatar',
@@ -98,6 +99,7 @@ class ProjectController extends Controller
                         ])
                         ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
                         ->withDefault()
+                        // ->orderBy('', 'desc')
                         ->get(),
                 ];
             });

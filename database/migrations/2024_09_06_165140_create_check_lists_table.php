@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('game_id');
             $table->unsignedBigInteger('period_id');
             $table->string('name');
+            $table->boolean('archive');
             $table->archivedAt();
             $table->timestamps();
         });

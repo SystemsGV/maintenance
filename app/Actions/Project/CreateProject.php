@@ -35,8 +35,8 @@ class CreateProject
                 'default' => false,
             ]);
 
-            $project->update(['name' => $project->name . ' ' . $project->id . ' ' . '('.Carbon::now()->format('Y-m-d').')']);
             $project->moveToStart();
+            $project->update(['name' => $project->name . ' ' . $project->id . ' ' . '('.Carbon::now()->format('Y-m-d').')']);
             $project->users()->attach($data['users'] ?? []);
             $project->labels()->attach($data['labels']);
             ProjectCreated::dispatch($project);
@@ -59,7 +59,7 @@ class CreateProject
                         'due_on' => Carbon::now(),
                         'hidden_from_clients' => 0,
                         'billable' => 1,
-                        'sent_archive' => $checklist->period_id != 1 ? true : false,
+                        'sent_archive' => $checklist->archive,
                         'completed_at' => null,
                     ]);
                     $task->labels()->attach([1]); // Pendiente

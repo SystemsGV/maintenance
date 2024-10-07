@@ -13,6 +13,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('auth:clear-resets')->everyFifteenMinutes();
+        // $schedule->command('backup:clean')->daily()->at('01:00');
+        $schedule->command('backup:run')->daily()->at('01:30');
 
         $schedule->command('project:prune-activities')->dailyAt('03:00');
         $schedule->command('user:prune-notifications')->dailyAt('03:05');
