@@ -59,7 +59,7 @@ class CreateProject
                         'due_on' => Carbon::now(),
                         'hidden_from_clients' => 0,
                         'billable' => 1,
-                        'sent_archive' => false,
+                        'sent_archive' => $checklist->period_id != 1 ? true : false,
                         'completed_at' => null,
                     ]);
                     $task->labels()->attach([1]); // Pendiente

@@ -7,9 +7,9 @@ import useWebSockets from "@/hooks/useWebSockets";
 import Layout from "@/layouts/MainLayout";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import { usePage } from "@inertiajs/react";
-import { Button, Grid } from "@mantine/core";
+import { Button, Grid, Loader, LoadingOverlay } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { CreateProjectDrawer } from "./Drawers/CreateProjectDrawer";
 import { EditProjectDrawer } from "./Drawers/EditProjectDrawer";
 import ArchivedItems from "./Index/Archive/ArchivedItems";
@@ -23,6 +23,7 @@ import classes from "./css/Index.module.css";
 
 const KanbanIndex = () => {
   const { projectGroups, groupedProjects, openedProject } = usePage().props;
+  const [loading, setLoading] = useState  (false);
 
   const { groups, setGroups, reorderGroup } = useProjectGroupsStore();
   const { projects, setProjects, addProject, reorderProject, moveProject, clearSelectedProjects } = useProjectsStore();
@@ -52,7 +53,7 @@ const KanbanIndex = () => {
       if (source.droppableId === destination.droppableId) {
         reorderProject(source, destination);
       } else {
-        moveProject(source, destination);
+        moveProject(source, destination, setLoading);
       }
     } else {
       reorderGroup(source.index, destination.index);
@@ -65,6 +66,8 @@ const KanbanIndex = () => {
 
       {can("crear proyecto") && <CreateProjectDrawer />}
       <EditProjectDrawer />
+
+      <LoadingOverlay visible={loading} loaderProps={{ children: <Loader size={40} /> }} />
 
       <Grid columns={12} gutter={50} mt="xl" className={`${projectsView}-view`}>
         {!route().params.archived ? (

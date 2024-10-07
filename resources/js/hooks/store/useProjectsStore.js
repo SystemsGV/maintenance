@@ -96,7 +96,8 @@ const useProjectsStore = create((set, get) => ({
 
     return set(produce(state => { state.projects[sourceGroupId] = result }));
   },
-  moveProject: (source, destination) => {
+  moveProject: async (source, destination, setLoading) => {
+    setLoading(true);
     const sourceGroupId = +source.droppableId.split("-")[1];
     const destinationGroupId = +destination.droppableId.split("-")[1];
 
@@ -112,6 +113,7 @@ const useProjectsStore = create((set, get) => ({
 
     const check = project.tasks.some(task => task.check == null);
     if (project && (destinationGroupId == 1 || project.tasks.length == 0 || check || project.completed_at != null || sourceGroupId == 4 || project.default == 1)) {
+      setLoading(false);
       return notifications.show({
         title: 'Acción denegada',
         message: 'No se puede mover esta orden de trabajo',
@@ -121,7 +123,7 @@ const useProjectsStore = create((set, get) => ({
       });
     }
 
-    axios
+    await axios
       .post(route("projects.kanban.move", [route().params.project]), data, { progress: false }) // revisar el params.proyect
       .then(response => {
         const label = response.data.find(item => item.id == project.group_id);
@@ -135,8 +137,11 @@ const useProjectsStore = create((set, get) => ({
       state.projects[destinationGroupId] = result[destinationGroupId];
     }));
 
-    if(destinationGroupId == 4) return get().complete(project, true)
-    return;
+    if(destinationGroupId == 4){
+      setLoading(false);
+      return get().complete(project, true);
+    }
+    return setLoading(false);
   },
 
   toggleProjectSelection: (project) => {
