@@ -30,6 +30,7 @@ class UpdateTaskRequest extends FormRequest
             'due_on' => ['nullable'],
             'hidden_from_clients' => ['boolean'],
             'billable' => ['boolean'],
+            'sent_archive' => ['boolean'],
             'check' => ['nullable'],
             'subscribed_users' => ['array'],
             'labels' => ['array'],

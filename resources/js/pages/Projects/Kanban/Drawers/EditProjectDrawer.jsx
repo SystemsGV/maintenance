@@ -194,7 +194,7 @@ export function EditProjectDrawer() {
                       onChange={(e) => updateValue("name", e.target.value)}
                       onBlur={() => onBlurUpdate("name")}
                       error={data.name.length === 0}
-                      readOnly={!can("editar proyecto")}
+                      disabled={!can("editar proyecto")}
                     />
 
                     <Textarea
@@ -207,6 +207,7 @@ export function EditProjectDrawer() {
                       onBlur={() => onBlurUpdate("description")}
                       value={data.description}
                       onChange={e => updateValue('description', e.target.value)}
+                      disabled={!can("editar proyecto")}
                     />
 
                     <MultiSelect
@@ -289,7 +290,7 @@ export function EditProjectDrawer() {
             )}
           </Tabs.Panel>
           <Tabs.Panel value="tasks">
-            {edit.opened && project.tasks.length ? (
+            {edit.opened && project.tasks.length && can('ver tareas') ? (
               <>
                 <LoadingOverlay visible={loading} loaderProps={{ children: <Loader size={40} /> }} />
 

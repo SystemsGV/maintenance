@@ -223,6 +223,8 @@ class ProjectController extends Controller
 
     public function reorder(Request $request): JsonResponse
     {
+        $this->authorize('reorder', Project::class);
+
         Project::setNewOrder($request->ids);
 
         ProjectOrderChanged::dispatch(
@@ -236,6 +238,7 @@ class ProjectController extends Controller
 
     public function move(Request $request): JsonResponse
     {
+        $this->authorize('reorder', Project::class);
 
         Project::setNewOrder($request->ids);
         Project::whereIn('id', $request->ids)->update(['group_id' => $request->to_group_id,]);
@@ -252,6 +255,7 @@ class ProjectController extends Controller
 
     public function complete(Request $request, Project $project): JsonResponse
     {
+        $this->authorize('complete', $project);
 
         $project->update([
             'completed_at' => ($request->completed == true) ? now() : null,
@@ -271,6 +275,8 @@ class ProjectController extends Controller
 
     public function checklist(Request $request, Project $project, Task $task): JsonResponse
     {
+        // $this->authorize('complete', [Task::class, $project]);
+
         if($request->check && ($task->sent_archive != 1 || !$task->attachments->isEmpty())){
             $task->update([
                 'check' => $request->check,
@@ -308,9 +314,11 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function moveSelectedProjects(Request $request): JsonResponse
+    public function moveSelectedProjects(StoreProjectRequest $request): JsonResponse
     {
-        $project = (new CreateProject)->create($request->newProject);
+        $this->authorize('reorder', Project::class);
+
+        $project = (new CreateProject)->create($request->validated());
         $user = auth()->user();
         $project = Project::find($project->id)
                     ->loadDefault()

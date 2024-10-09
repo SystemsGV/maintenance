@@ -6,6 +6,7 @@ import axios from 'axios';
 import { usePage } from '@inertiajs/react';
 import { hasRoles } from '@/utils/user';
 import useProjectsStore from '@/hooks/store/useProjectsStore';
+import { DateInput } from '@mantine/dates';
 
 function ModalForm({setLoading}) {
   const [requestPending, setRequestPending] = useState(true);
@@ -17,9 +18,12 @@ function ModalForm({setLoading}) {
 
   const submitModal = (event) => {
     event.preventDefault();
-    const formData = {users: form.data.users.map((i) => i.toString())};
+    const formData = {
+      users: form.data.users.map((i) => i.toString()),
+      due_on: form.data.due_on.toISOString().split('T')[0] || '',
+    };
     modals.closeAll();
-    moveSelectedProjects(selectedProjects, setLoading, formData.users)
+    moveSelectedProjects(selectedProjects, setLoading, formData)
   };
 
   useEffect(() => {
@@ -43,6 +47,9 @@ function ModalForm({setLoading}) {
 
           <Skeleton height={10} width={50} mt={25} radius="xl" />
           <Skeleton height={25} mt={10} radius="xl" />
+
+          <Skeleton height={10} width={50} mt={25} radius="xl" />
+          <Skeleton height={25} mt={10} radius="xl" />
         </>
       ) : (
         <>
@@ -55,6 +62,16 @@ function ModalForm({setLoading}) {
             onChange={(values) => updateValue("users", values)}
             data={users}
             error={form.errors.users}
+          />
+          <DateInput
+            clearable
+            valueFormat='DD MMM YYYY'
+            minDate={new Date()}
+            mt='md'
+            label='Fecha de vencimiento'
+            placeholder='Elija la fecha de vencimiento de la OT'
+            value={form.data.due_on ? new Date(form.data.due_on) : null}
+            onChange={value => updateValue('due_on', value)}
           />
         </>
       )}

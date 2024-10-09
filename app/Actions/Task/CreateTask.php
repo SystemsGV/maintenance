@@ -30,6 +30,7 @@ class CreateTask
                 'estimation' => $data['estimation'],
                 'hidden_from_clients' => $data['hidden_from_clients'],
                 'billable' => $data['billable'],
+                'sent_archive' => $data['sent_archive'],
                 'completed_at' => null,
             ]);
 

@@ -54,7 +54,7 @@ export default function ProjectGroup({ group, projects, ...props }) {
               </Text>
               {/* <ProjectGroupActions group={group} className={classes.actions} /> */}
             </Group>
-            {!route().params.archived && group.id != 4 && can("reordenar tarea") && (
+            {!route().params.archived && group.id != 4 && can("reordenar proyecto") && (
               <Tooltip label="Mover tareas" openDelay={1000} withArrow>
                 <ActionIcon
                   variant="filled"

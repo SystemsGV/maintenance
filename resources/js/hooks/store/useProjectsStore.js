@@ -178,26 +178,29 @@ const useProjectsStore = create((set, get) => ({
       if(project.default == 1 && accessUsers != null){
         const newProject = {
           ...project,
+          name: project.name + ' ' + '('+accessUsers.due_on+')',
           created_at: null,
           updated_at: null,
           default: 0,
           id: null,
           labels: [],
-          users: accessUsers,
+          users: accessUsers.users,
+          due_on: accessUsers.due_on,
           number: null,
           order_column: null,
         }
+
         try {
-          const response = await axios.post(route("projects.kanban.moveSelectedProjects"), { newProject }, { progress: false });
+          const response = await axios.post(route("projects.kanban.moveSelectedProjects"), newProject , { progress: false });
           get().addProject(response.data);
         } catch {
-            alert("Falló al crear la orden de trabajo");
+            alert("No se puede crear la orden de trabajo");
         }
         continue;
       }
 
       const sourceGroupId = project.group_id;
-      const destinationGroupId = project.group_id + 1;
+      const destinationGroupId = Number(project.group_id) + 1;
       const sourceIndex = Object.values(get().projects[sourceGroupId]).findIndex(p => p.id == project.id);
       const destinationIndex = get().projects[destinationGroupId].length;
 

@@ -1,8 +1,9 @@
 import { openConfirmModal } from "@/components/ConfirmModal";
 import { ActionIcon, Group, Menu, rem } from "@mantine/core";
-import { IconArchive, IconArchiveOff, IconDots, IconFileDownload } from "@tabler/icons-react";
+import { IconArchive, IconArchiveOff, IconDots, IconFileDownload, IconSubtask } from "@tabler/icons-react";
 import { useForm } from "laravel-precognition-react-inertia";
 import axios from "axios";
+import { router } from "@inertiajs/react";
 
 export default function ProjectActions({ project, ...props }) {
   const archiveForm = useForm(
@@ -86,6 +87,17 @@ export default function ProjectActions({ project, ...props }) {
                 onClick={openArchiveModal}
               >
                 Archivar
+              </Menu.Item>
+            )}
+            {can("crear tarea") && !route().params.archived && (
+              <Menu.Item
+                leftSection={
+                  <IconSubtask style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
+                }
+                color="cyan"
+                onClick={() => router.visit(route("projects.tasks", project.id))}
+              >
+                Tareas
               </Menu.Item>
             )}
           </Menu.Dropdown>

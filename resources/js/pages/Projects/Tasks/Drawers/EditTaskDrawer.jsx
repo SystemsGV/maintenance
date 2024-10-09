@@ -56,6 +56,7 @@ export function EditTaskDrawer() {
     estimation: 0,
     due_on: "",
     hidden_from_clients: false,
+    sent_archive: false,
     billable: true,
     subscribed_users: [],
     labels: [],
@@ -80,6 +81,7 @@ export function EditTaskDrawer() {
         hidden_from_clients:
           task?.hidden_from_clients !== undefined ? task.hidden_from_clients : false,
         billable: task?.billable !== undefined ? task.billable : true,
+        sent_archive: task?.sent_archive !== undefined ? task.sent_archive : true,
         subscribed_users: (task?.subscribed_users || []).map((i) => i.id.toString()),
         labels: (task?.labels || []).map((i) => i.id),
       });
@@ -269,13 +271,21 @@ export function EditTaskDrawer() {
               {/* {(can("ver registros de tiempo") || can("agregar registro de tiempo")) && <Timer mt="xl" task={task} />} */}
 
               <Checkbox
-                label="Billable"
+                label="Subir imagen"
+                description="Habilitar para que sea obligatorio"
                 mt="xl"
-                display="none"
-                checked={data.billable}
-                onChange={(event) => updateValue("billable", event.currentTarget.checked)}
+                checked={data.sent_archive}
+                onChange={(event) => updateValue("sent_archive", event.currentTarget.checked)}
                 disabled={!can("editar tarea")}
               />
+
+                <Checkbox
+                  label="billable"
+                  mt="xl"
+                  display="none"
+                  checked={data.billable}
+                  onChange={(event) => updateValue("billable", event.currentTarget.checked)}
+                />
 
               {!hasRoles(user, ["client"]) && (
                 <Checkbox

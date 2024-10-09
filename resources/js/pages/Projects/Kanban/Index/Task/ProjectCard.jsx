@@ -31,34 +31,34 @@ export default function   ProjectCard({ project, index }) {
           }`}
         >
 
-          <div {...(can("reordenar tarea") && provided.dragHandleProps)}>
-
+          <div {...(can("reordenar proyecto") && provided.dragHandleProps)}>
           <Group wrap="nowrap">
 
             <LoadingOverlay visible={isClicked} loaderProps={{ children: <Loader size={40} /> }} />
 
-            <Checkbox
-              checked={selectedProjects.some(p => p.id === project.id)}
-              key={project.id}
-              display={project.completed_at != null ? 'none' : 'inline'}
-              color="rgba(79, 79, 79, 79)"
-              onChange={handleCheckboxChange}
-            />
+            {(can("reordenar proyecto")) && (
+              <Checkbox
+                checked={selectedProjects.some(p => p.id === project.id)}
+                key={project.id}
+                display={project.completed_at != null ? 'none' : 'inline'}
+                color="rgba(79, 79, 79, 79)"
+                onChange={handleCheckboxChange}
+              />
+            )}
 
             <Text
               className={classes.name}
               size="xs"
               fw={500}
               c={isOverdue(project) && project.completed_at == null ? "red.7" : ""}
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 if(project.default != 1){
                   setIsClicked(true);
                   openEditProject(project);
                   setTimeout(() => setIsClicked(false), 300);
                 }
-              }
-
-              }
+              }}
             >
               #{project.number + ": " + project.name}
             </Text>

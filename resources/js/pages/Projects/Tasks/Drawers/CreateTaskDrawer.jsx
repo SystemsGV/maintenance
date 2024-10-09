@@ -39,6 +39,7 @@ export function CreateTaskDrawer() {
     estimation: "",
     due_on: "",
     hidden_from_clients: false,
+    sent_archive: false,
     billable: true,
     subscribed_users: [user.id.toString()],
     labels: [],
@@ -215,7 +216,15 @@ export function CreateTaskDrawer() {
           />
 
           <Checkbox
-            label="Facturable"
+            label="Subir imagen"
+            description="Habilitar para que sea obligatorio"
+            mt="xl"
+            checked={form.data.sent_archive}
+            onChange={(event) => updateValue("sent_archive", event.currentTarget.checked)}
+          />
+
+          <Checkbox
+            label="billable"
             mt="xl"
             display="none"
             checked={form.data.billable}

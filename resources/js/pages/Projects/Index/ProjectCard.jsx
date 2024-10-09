@@ -12,7 +12,7 @@ export default function ProjectCard({ item }) {
 
   return (
     <Link
-      href={item.default != 1 ? route("projects.tasks", item.id) : undefined}
+      href={item.default != 1 && can("ver proyecto") ? route("projects.tasks", item.id) : undefined}
       className={classes.link}
       onClick={stopOnIgnoreLink}
     >

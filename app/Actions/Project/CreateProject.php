@@ -27,7 +27,7 @@ class CreateProject
                 'period_id' => $data['period_id'] ?? null,
                 'type_id' => $data['type_id'] ?? null,
                 'name' => $data['name'],
-                'due_on' => $data['due_on'] ?? now(), // validar segun periodo
+                'due_on' => $data['due_on'] ?? now(),
                 'estimation' => 0,
                 'rate' => $data['rate'],
                 'number' => $data['number'],
@@ -36,7 +36,6 @@ class CreateProject
             ]);
 
             $project->moveToStart();
-            $project->update(['name' => $project->name . ' ' . $project->id . ' ' . '('.Carbon::now()->format('Y-m-d').')']);
             $project->users()->attach($data['users'] ?? []);
             $project->labels()->attach($data['labels']);
             ProjectCreated::dispatch($project);

@@ -30,6 +30,7 @@ class StoreTaskRequest extends FormRequest
             'due_on' => ['nullable'],
             'hidden_from_clients' => ['required', 'boolean'],
             'billable' => ['required', 'boolean'],
+            'sent_archive' => ['required', 'boolean'],
             'check' => ['nullable'],
             'subscribed_users' => ['array'],
             'labels' => ['array'],

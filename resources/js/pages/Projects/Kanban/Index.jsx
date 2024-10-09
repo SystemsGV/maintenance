@@ -97,7 +97,7 @@ const KanbanIndex = () => {
                               />
                             ))}
                           {provided.placeholder}
-                          {!route().params.archived && can("crear grupo de proyecto") && (
+                          {/* {!route().params.archived && can("crear grupo de proyecto") && (
                             <Button
                               leftSection={<IconPlus size={14} />}
                               variant="transparent"
@@ -110,7 +110,7 @@ const KanbanIndex = () => {
                             >
                               Agregar {projectsView === "list" ? "grupo de OTs" : "grupo"}
                             </Button>
-                          )}
+                          )} */}
                         </div>
                       </div>
                     )}

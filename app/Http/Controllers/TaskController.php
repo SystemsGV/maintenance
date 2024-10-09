@@ -158,7 +158,7 @@ class TaskController extends Controller
     public function grouped(Request $request, Project $project): JsonResponse
     {
 
-        $this->authorize('reorder', [Task::class, $project]);
+        $this->authorize('viewAny', [Task::class, $project]);
 
         $groupedTasks = $project
             ->taskGroups()

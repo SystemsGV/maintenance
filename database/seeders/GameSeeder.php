@@ -43,6 +43,7 @@ class GameSeeder extends Seeder
             ['name' => 'Sillas Voladoras Niños', 'asset_id' => 1],
             ['name' => 'Carros Chocones Niños', 'asset_id' => 1],
             ['name' => 'Feriales', 'asset_id' => 1],
+            ['name' => 'La torre', 'asset_id' => 1],
         ]);
 
     }

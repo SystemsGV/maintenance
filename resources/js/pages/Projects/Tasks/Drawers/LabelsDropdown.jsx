@@ -24,7 +24,7 @@ export default function LabelsDropdown({ items, selected, onChange, ...props }) 
 
   return (
     <Box {...props}>
-      <Input.Label>Labels</Input.Label>
+      <Input.Label>Etiquetas</Input.Label>
       <Combobox
         store={combobox}
         onOptionSubmit={handleValueSelect}

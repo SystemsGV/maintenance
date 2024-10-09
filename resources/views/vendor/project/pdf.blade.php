@@ -11,12 +11,6 @@
     <!--HEADER-->
     <table class="div-1Header">
         <tr>
-            <td class="logotd">
-                @php
-                    $imageData = $ownerCompany->logo ? base64_encode(file_get_contents(public_path($ownerCompany->logo))) : null;
-                @endphp
-                <img  src="data:image/png;base64, {{ $imageData }}" height="150" style="text-align:center" border="0">
-            </td>
             <td class="datos-grales-td">
                 <table class="table_h_factura">
                     <thead>

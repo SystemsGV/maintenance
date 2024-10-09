@@ -1364,5 +1364,60 @@ class CheckListSeeder extends Seeder
             ['name' => 'Pintura en general', 'period_id' => 5, 'game_id' => 28, 'archive' => 1],
         ]);
 
+        // La torre
+        CheckList::insert([
+            // Diario
+            ['name' => 'Revisar visualmente estructura y anclaje de la maquina', 'period_id' => 1, 'game_id' => 29, 'archive' => 0],
+            ['name' => 'Revisar ruedsa guias entre los asientos y estructura', 'period_id' => 1, 'game_id' => 29, 'archive' => 0],
+            ['name' => 'Revisar el correcto funcionamiento y cierre de las barras de seguridad', 'period_id' => 1, 'game_id' => 29, 'archive' => 0],
+            ['name' => 'Revisar ganchos y cinturones de seguridad de cada asiento', 'period_id' => 1, 'game_id' => 29, 'archive' => 0],
+            ['name' => 'Revisar los pernos que unen los dos bloques de asientos', 'period_id' => 1, 'game_id' => 29, 'archive' => 0],
+            ['name' => 'Revisar los pines y seguros donde se sujetan los cables de acero', 'period_id' => 1, 'game_id' => 29, 'archive' => 0],
+            ['name' => 'Revisar visualmente los cables de acero', 'period_id' => 1, 'game_id' => 29, 'archive' => 0],
+            ['name' => 'Purgar tanque de aire', 'period_id' => 1, 'game_id' => 29, 'archive' => 0],
+            ['name' => 'Revision de manguera de aire', 'period_id' => 1, 'game_id' => 29, 'archive' => 0],
+            ['name' => 'Revisar contenedor de aceite lubricante', 'period_id' => 1, 'game_id' => 29, 'archive' => 0],
+            ['name' => 'Revisar la presión de aire 7.5 A 8 BAR', 'period_id' => 1, 'game_id' => 29, 'archive' => 0],
+            ['name' => 'Revisar visualmente el tablero eléctrico', 'period_id' => 1, 'game_id' => 29, 'archive' => 0],
+            ['name' => 'Revisar perímetro del juego, ingreso y salida', 'period_id' => 1, 'game_id' => 29, 'archive' => 0],
+            ['name' => 'Revisar fibra y pintura del juego', 'period_id' => 1, 'game_id' => 29, 'archive' => 0],
+            ['name' => 'Probar el correcto funcionamiento del juego', 'period_id' => 1, 'game_id' => 29, 'archive' => 0],
+
+            // Semanal
+            ['name' => 'Revisar, limpiar y lubricar cuerdas de acero', 'period_id' => 2, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Revisar, limpiar y engrasar poleas', 'period_id' => 2, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Chequear ruedas de deslizamiento', 'period_id' => 2, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Chequear carbones y rifles de cobre, limpiar (lija fina)', 'period_id' => 2, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Chequear pines y seguros de sujeccion de cuerdas de acero', 'period_id' => 2, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Chequear electrovalvulas y fines de carrera', 'period_id' => 2, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Chequear ajustes de pernos en los asientos', 'period_id' => 2, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Chequear ajuste de pernos de la base de la estructura 4.5N', 'period_id' => 2, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Chequear seguro de las barras de abrir y cerrar', 'period_id' => 2, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Chequear amortiguadores de las barras', 'period_id' => 2, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Chequear fugas de aceite en cañeria y piston', 'period_id' => 2, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Revisar aceite en unidad de mantenimiento', 'period_id' => 2, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Revisión de madera estructural y techo', 'period_id' => 2, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Repintado de franja amarilla de seguridad', 'period_id' => 2, 'game_id' => 29, 'archive' => 1],
+
+            // Semestral
+            ['name' => 'Tomar lecturas de amperaje y voltaje de los 10 motores', 'period_id' => 4, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Revisar nivelación de juego', 'period_id' => 4, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Lubricar engranes de dirección', 'period_id' => 4, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Cambio de cinturones de seguridad', 'period_id' => 4, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Cambio rodamientos de rueda', 'period_id' => 4, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Revisar carbones y contactos', 'period_id' => 4, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Servicio general a tablero de control', 'period_id' => 4, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Revisar conexiones eléctricas generales', 'period_id' => 4, 'game_id' => 29, 'archive' => 1],
+
+            // Anual
+            ['name' => 'Revisar calzas', 'period_id' => 5, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Cambio de tornilleria', 'period_id' => 5, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Revisión al reductor', 'period_id' => 5, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Cambio de ruedas traseras de nylon', 'period_id' => 5, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Cambio de discos embrague en motor', 'period_id' => 5, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Pintado, revisión de bobinado y/o rebobina de motor', 'period_id' => 5, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Pintura en general de juego', 'period_id' => 5, 'game_id' => 29, 'archive' => 1],
+        ]);
+
     }
 }

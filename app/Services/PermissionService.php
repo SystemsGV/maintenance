@@ -22,7 +22,8 @@ class PermissionService
             'Usuario Cliente' => ['ver usuarios cliente', 'crear usuario cliente', 'editar usuario cliente', 'archivar usuario cliente', 'restaurar usuario cliente'],
             'Empresa Cliente' => ['ver empresas cliente', 'crear empresa cliente', 'editar empresa cliente', 'archivar empresa cliente', 'restaurar empresa cliente'],
             'Proyecto' => [
-                'ver proyectos', 'ver proyecto', 'crear proyecto', 'editar proyecto', 'archivar proyecto', 'restaurar proyecto', 'editar acceso usuario al proyecto'
+                'ver proyectos', 'ver proyecto', 'crear proyecto', 'editar proyecto', 'archivar proyecto', 'restaurar proyecto', 'reordenar proyecto', 'completar proyecto',
+                'editar acceso usuario al proyecto'
             ],
             'Grupo de tareas' => ['crear grupo de tarea', 'editar grupo de tarea', 'archivar grupo de tarea', 'restaurar grupo de tarea', 'reordenar grupo de tarea'],
             'Grupo de proyectos' => ['crear grupo de proyecto', 'editar grupo de proyecto', 'archivar grupo de proyecto', 'restaurar grupo de proyecto', 'reordenar grupo de proyecto'],
@@ -44,7 +45,8 @@ class PermissionService
             'Check List' => ['ver checklists', 'crear checklist', 'editar checklist', 'archivar checklist', 'restaurar checklist'],
             'Mi Empresa' => ['ver mi empresa', 'editar mi empresa'],
             'Proyecto' => [
-                'ver proyectos', 'ver proyecto', 'crear proyecto', 'editar proyecto', 'archivar proyecto', 'restaurar proyecto', 'editar acceso usuario al proyecto'
+                'ver proyectos', 'ver proyecto', 'crear proyecto', 'editar proyecto', 'archivar proyecto', 'restaurar proyecto', 'reordenar proyecto', 'completar proyecto',
+                'editar acceso usuario al proyecto'
             ],
             'Grupo de tareas' => ['crear grupo de tarea', 'editar grupo de tarea', 'archivar grupo de tarea', 'restaurar grupo de tarea', 'reordenar grupo de tarea'],
             'Grupo de proyectos' => ['crear grupo de proyecto', 'editar grupo de proyecto', 'archivar grupo de proyecto', 'restaurar grupo de proyecto', 'reordenar grupo de proyecto'],
@@ -55,16 +57,14 @@ class PermissionService
             'Reportes' => ['ver informe de suma de tiempo registrado', 'ver informe diario de tiempo registrado'],
         ],
         'mantenimiento' => [
-            'Ubicación' => ['ver ubicaciones', 'crear ubicacion', 'editar ubicacion', 'archivar ubicacion', 'restaurar ubicacion'],
-            'Juego' => ['ver juegos', 'crear juego', 'editar juego', 'archivar juego', 'restaurar juego'],
-            'Check List' => ['ver checklists', 'crear checklist', 'editar checklist', 'archivar checklist', 'restaurar checklist'],
-            'Proyecto' => ['ver proyectos', 'editar proyecto'],
+            'Ubicación' => ['ver ubicaciones', 'crear ubicacion', 'editar ubicacion'],
+            'Juego' => ['ver juegos', 'crear juego', 'editar juego'],
+            'Check List' => ['ver checklists', 'crear checklist'],
+            'Proyecto' => ['ver proyectos', 'ver proyecto'],
             'Tareas' => [
-                'ver tareas', 'crear tarea', 'ver registros de tiempo', 'ver comentarios', 'reordenar tarea', 'completar tarea', 'agregar registro de tiempo', 'editar tarea',
+                'ver tareas', 'ver registros de tiempo', 'ver comentarios', 'completar tarea', 'agregar registro de tiempo',
             ],
-            'Reports' => ['ver informe de suma de tiempo registrado', 'ver informe diario de tiempo registrado'],
         ],
-
         'cliente' => [
             'Proyecto' => ['ver proyectos', 'ver proyecto'],
             'Tareas' => [

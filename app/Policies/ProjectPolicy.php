@@ -36,7 +36,7 @@ class ProjectPolicy
      */
     public function update(User $user, Project $project): bool
     {
-        return $user->hasPermissionTo('editar proyecto') && $user->hasProjectAccess($project);
+        return $user->hasPermissionTo('editar proyecto') || $user->hasPermissionTo('completar tarea') && $user->hasProjectAccess($project);
     }
 
     /**
@@ -55,6 +55,19 @@ class ProjectPolicy
         return $user->hasPermissionTo('restaurar proyecto') && $user->hasProjectAccess($project);
     }
 
+    public function reorder(User $user): bool
+    {
+        return $user->hasPermissionTo('reordenar proyecto');
+    }
+
+    /**
+     * Determine whether the user can complete the model.
+     */
+    public function complete(User $user, Project $project): bool
+    {
+        return $user->hasPermissionTo('completar proyecto') && $user->hasProjectAccess($project);
+    }
+
     /**
      * Determine whether the user can edit the model user access.
      */
@@ -62,4 +75,5 @@ class ProjectPolicy
     {
         return $user->hasPermissionTo('editar acceso usuario al proyecto') && $user->hasProjectAccess($project);
     }
+
 }
