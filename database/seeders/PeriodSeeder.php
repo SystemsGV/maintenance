@@ -18,6 +18,8 @@ class PeriodSeeder extends Seeder
             ['name' => 'Mensual'],
             ['name' => 'Semestral'],
             ['name' => 'Anual'],
+            ['name' => 'Compresor'],
+            ['name' => 'Sistema eléctrico'],
         ]);
     }
 }

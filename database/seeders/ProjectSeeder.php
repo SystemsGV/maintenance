@@ -24,23 +24,26 @@ class ProjectSeeder extends Seeder
 
         foreach ($games as $game) {
             foreach ($periods as $period) {
-                $project = Project::create([
-                    'client_company_id' => ClientCompany::first()->id,
-                    'game_id' => $game->id,
-                    'group_id' => 1, // Pendiente
-                    'period_id' => $period->id, // Diario, semanal, mensual ...
-                    'type_id' => null, // Corectivo, preventivo ..
-                    'name' => "OT " . $period->name ." de " . $game->name,
-                    'due_on' => null,
-                    'estimation' => 0,
-                    'rate' => 0,
-                    'number' => $number++,
-                    'description' => null,
-                    'completed_at' => null,
-                    'default' => true,
-                ]);
-                $project->users()->attach([]);
-                $project->labels()->attach(1);
+                $checklist = CheckList::where('game_id', $game->id)->where('period_id', $period->id)->exists();
+                if ($checklist) {
+                    $project = Project::create([
+                        'client_company_id' => ClientCompany::first()->id,
+                        'game_id' => $game->id,
+                        'group_id' => 1, // Pendiente
+                        'period_id' => $period->id, // Diario, semanal, mensual ...
+                        'type_id' => null, // Corectivo, preventivo ..
+                        'name' => "OT " . $period->name ." de " . $game->name,
+                        'due_on' => null,
+                        'estimation' => 0,
+                        'rate' => 0,
+                        'number' => $number++,
+                        'description' => null,
+                        'completed_at' => null,
+                        'default' => true,
+                    ]);
+                    $project->users()->attach([]);
+                    $project->labels()->attach(1);
+                }
             }
 
         }

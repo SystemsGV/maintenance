@@ -1124,6 +1124,21 @@ class CheckListSeeder extends Seeder
 
         // Water rice
         CheckList::insert([
+            // Diario
+            ['name' => 'Revisar las pistolas (boquillas, protectores)', 'period_id' => 1, 'game_id' => 23, 'archive' => 0],
+            ['name' => 'Revisar estado y nivel de agua', 'period_id' => 1, 'game_id' => 23, 'archive' => 0],
+            ['name' => 'Revisar funcionamiento de microfono y audio', 'period_id' => 1, 'game_id' => 23, 'archive' => 1],
+            ['name' => 'Revisar el buen funcionamiento de los pistones de la puerta', 'period_id' => 1, 'game_id' => 23, 'archive' => 0],
+            ['name' => 'Revisar el estado de fibra de vidrio de estructura', 'period_id' => 1, 'game_id' => 23, 'archive' => 1],
+            ['name' => 'Revisar los sensores de cada pistola', 'period_id' => 1, 'game_id' => 23, 'archive' => 0],
+            ['name' => 'Revisar estado de los muñecos de los juegos', 'period_id' => 1, 'game_id' => 23, 'archive' => 0],
+            ['name' => 'Revisar el sistema de servomotor de los muñecos', 'period_id' => 1, 'game_id' => 23, 'archive' => 1],
+            ['name' => 'Revisar y/o lubricar bisagras de las puertas del juego', 'period_id' => 1, 'game_id' => 23, 'archive' => 0],
+            ['name' => 'Revisar iluminacion del juego', 'period_id' => 1, 'game_id' => 23, 'archive' => 0],
+            ['name' => 'Realizar pruebas de estadisticas e imprimir (ticketera)', 'period_id' => 1, 'game_id' => 23, 'archive' => 0],
+            ['name' => 'Realizar pruebas de funcionamiento', 'period_id' => 1, 'game_id' => 23, 'archive' => 0],
+            ['name' => '¿Completó la limpiza de las zonas insperccionadas?', 'period_id' => 1, 'game_id' => 23, 'archive' => 0],
+
             // Semenal
             ['name' => 'Revisar las pistolas (boquillas, protectores)', 'period_id' => 2, 'game_id' => 23, 'archive' => 0],
             ['name' => 'Revisar estado y nivel de agua', 'period_id' => 2, 'game_id' => 23, 'archive' => 0],
@@ -1396,27 +1411,37 @@ class CheckListSeeder extends Seeder
             ['name' => 'Chequear amortiguadores de las barras', 'period_id' => 2, 'game_id' => 29, 'archive' => 1],
             ['name' => 'Chequear fugas de aceite en cañeria y piston', 'period_id' => 2, 'game_id' => 29, 'archive' => 1],
             ['name' => 'Revisar aceite en unidad de mantenimiento', 'period_id' => 2, 'game_id' => 29, 'archive' => 1],
-            ['name' => 'Revisión de madera estructural y techo', 'period_id' => 2, 'game_id' => 29, 'archive' => 1],
-            ['name' => 'Repintado de franja amarilla de seguridad', 'period_id' => 2, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Chequear estructura y pintura', 'period_id' => 2, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Chequear limpiza del juego', 'period_id' => 2, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Chequear ingreso y salida del juego', 'period_id' => 2, 'game_id' => 29, 'archive' => 1],
 
             // Semestral
-            ['name' => 'Tomar lecturas de amperaje y voltaje de los 10 motores', 'period_id' => 4, 'game_id' => 29, 'archive' => 1],
-            ['name' => 'Revisar nivelación de juego', 'period_id' => 4, 'game_id' => 29, 'archive' => 1],
-            ['name' => 'Lubricar engranes de dirección', 'period_id' => 4, 'game_id' => 29, 'archive' => 1],
-            ['name' => 'Cambio de cinturones de seguridad', 'period_id' => 4, 'game_id' => 29, 'archive' => 1],
-            ['name' => 'Cambio rodamientos de rueda', 'period_id' => 4, 'game_id' => 29, 'archive' => 1],
-            ['name' => 'Revisar carbones y contactos', 'period_id' => 4, 'game_id' => 29, 'archive' => 1],
-            ['name' => 'Servicio general a tablero de control', 'period_id' => 4, 'game_id' => 29, 'archive' => 1],
-            ['name' => 'Revisar conexiones eléctricas generales', 'period_id' => 4, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Revisar - cambiar faja del compresor', 'period_id' => 4, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Cambiar cable acerado', 'period_id' => 4, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Revisar los pistones principales', 'period_id' => 4, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Revisar mangueras neumáticas', 'period_id' => 4, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Revisar valvulas neumaticas y pistones', 'period_id' => 4, 'game_id' => 29, 'archive' => 1],
 
             // Anual
-            ['name' => 'Revisar calzas', 'period_id' => 5, 'game_id' => 29, 'archive' => 1],
-            ['name' => 'Cambio de tornilleria', 'period_id' => 5, 'game_id' => 29, 'archive' => 1],
-            ['name' => 'Revisión al reductor', 'period_id' => 5, 'game_id' => 29, 'archive' => 1],
-            ['name' => 'Cambio de ruedas traseras de nylon', 'period_id' => 5, 'game_id' => 29, 'archive' => 1],
-            ['name' => 'Cambio de discos embrague en motor', 'period_id' => 5, 'game_id' => 29, 'archive' => 1],
-            ['name' => 'Pintado, revisión de bobinado y/o rebobina de motor', 'period_id' => 5, 'game_id' => 29, 'archive' => 1],
-            ['name' => 'Pintura en general de juego', 'period_id' => 5, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Cambiar filtros tubulares (piston principal)', 'period_id' => 5, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Revisar iluminación del juego', 'period_id' => 5, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Cambiar switch (final de carrera)', 'period_id' => 5, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Revisar al detalle de anclaje del juego', 'period_id' => 5, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Pintado general', 'period_id' => 5, 'game_id' => 29, 'archive' => 1],
+
+            // Compresor
+            ['name' => 'Purgado de aire del compresor y limpieza', 'period_id' => 6, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Revisar aceite del compresor y filtros', 'period_id' => 6, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Revisar del motor tornillo', 'period_id' => 6, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Revisar presion de aire carga y descarga automatico', 'period_id' => 6, 'game_id' => 29, 'archive' => 1],
+
+            // Sistema electrico
+            ['name' => 'Chequear tablero electrico y control', 'period_id' => 7, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Medir voltaje de ingreso 380V', 'period_id' => 7, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Medir amperaje del motor', 'period_id' => 7, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Chequear cableado eléctrico', 'period_id' => 7, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Chequear linea a tierra', 'period_id' => 7, 'game_id' => 29, 'archive' => 1],
+            ['name' => 'Limpieza general de todo el juego', 'period_id' => 7, 'game_id' => 29, 'archive' => 1],
         ]);
 
     }

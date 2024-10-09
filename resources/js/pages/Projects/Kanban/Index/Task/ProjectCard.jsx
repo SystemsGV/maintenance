@@ -38,7 +38,7 @@ export default function   ProjectCard({ project, index }) {
 
             {(can("reordenar proyecto")) && (
               <Checkbox
-                checked={selectedProjects.some(p => p.id === project.id)}
+                checked={selectedProjects.some(p => p.id == project.id)}
                 key={project.id}
                 display={project.completed_at != null ? 'none' : 'inline'}
                 color="rgba(79, 79, 79, 79)"
@@ -76,24 +76,6 @@ export default function   ProjectCard({ project, index }) {
                   />
                 ))}
               </Group>
-
-              {/* {project.users && (
-                <Tooltip label={project.users.name} openDelay={1000} withArrow>
-                  <Link
-                    // href={route("users.edit", project.users.id)}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <Avatar
-                      src={project.users.avatar}
-                      radius="xl"
-                      size={20}
-                      color={computedColorScheme === "light" ? "white" : "blue"}
-                    >
-                      {getInitials(project.users.name)}
-                    </Avatar>
-                  </Link>
-                </Tooltip>
-              )} */}
 
               {(can("archivar proyecto") || can("restaurar proyecto")) && (
                 <ProjectActions project={project} className={classes.actions} />
