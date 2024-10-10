@@ -101,9 +101,10 @@
                         @foreach ($task->attachments as $attachment)
                             @if(count($task->attachments) > 0)
                                 @php
+                                    echo(public_path($attachment->path));
                                     $imageData = base64_encode(file_get_contents(public_path($attachment->path)));
                                 @endphp
-                                <img  src="data:image/png;base64, {{ $imageData }}" height="200" style="text-align:center" border="0">
+                                <img  src="data:image/png;base64, {{ $imageData }}" width="35%" style="text-align:center" border="0">
                             @endif
                         @endforeach
                     </td>

@@ -18,6 +18,7 @@ class DashboardController extends Controller
         return Inertia::render('Dashboard/Index', [
             'projects' => Project::whereIn('id', $projectIds)
                 ->where('default', '!=', 1)
+                ->whereDate('created_at', now()->toDateString())
                 ->with([
                     'clientCompany:id,name',
                 ])

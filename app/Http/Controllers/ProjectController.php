@@ -345,7 +345,6 @@ class ProjectController extends Controller
 
     public function pdf(Request $request, Project $project)
     {
-
         $data = [
             'ownerCompany' => OwnerCompany::first(),
             'user' => User::find(auth()->id()),
@@ -353,6 +352,7 @@ class ProjectController extends Controller
             'asset' => Asset::find($project->game()->get('asset_id')),
             'tasks' => Task::where('project_id', $project->id)->withDefault()->get(),
         ];
+
         $pdf = Pdf::loadView('vendor.project.pdf', $data);
         return $pdf->stream();
     }

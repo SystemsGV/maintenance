@@ -67,7 +67,7 @@ export default function ProjectActions({ project, ...props }) {
                 Descargar
               </Menu.Item>
             )}
-            {can("restaurar proyecto") && route().params.archived && (
+            {can("restaurar proyecto") && project.completed_at == null && route().params.archived && (
               <Menu.Item
                 leftSection={
                   <IconArchiveOff style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
@@ -78,7 +78,7 @@ export default function ProjectActions({ project, ...props }) {
                 Restaurar
               </Menu.Item>
             )}
-            {can("archivar proyecto") && !route().params.archived && (
+            {can("archivar proyecto") && project.completed_at == null && !route().params.archived && (
               <Menu.Item
                 leftSection={
                   <IconArchive style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
