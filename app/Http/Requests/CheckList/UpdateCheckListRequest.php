@@ -23,6 +23,7 @@ class UpdateCheckListRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
+            'archive' => 'boolean',
             'game_id' => ['required', 'exists:games,id'],
             'period_id' => ['required', 'exists:periods,id'],
         ];

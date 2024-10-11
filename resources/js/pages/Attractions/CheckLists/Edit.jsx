@@ -8,6 +8,7 @@ import { usePage } from '@inertiajs/react';
 import {
   Anchor,
   Breadcrumbs,
+  Checkbox,
   Fieldset,
   Grid,
   Group,
@@ -21,6 +22,7 @@ const CheckListEdit = () => {
   const [form, submit, updateValue] = useForm('post', route('attractions.checklists.update', item.id), {
     _method: 'put',
     name: item.name,
+    archive: item.archive,
     period_id: item.period_id.id.toString(),
     game_id: item.game_id.id.toString(),
   });
@@ -74,7 +76,7 @@ const CheckListEdit = () => {
             value={form.data.period_id}
             onChange={value => updateValue('period_id', value)}
             data={periods}
-            erro_id={form.errors.period_id}
+            error={form.errors.period_id}
           />
 
           <Select
@@ -87,6 +89,14 @@ const CheckListEdit = () => {
             onChange={value => updateValue('game_id', value)}
             data={games}
             error={form.errors.game_id}
+          />
+
+          <Checkbox
+            label="Subir imagen"
+            description="Seleccionar para que sea obligatorio"
+            mt="xl"
+            checked={form.data.archive}
+            onChange={(event) => updateValue("archive", event.currentTarget.checked)}
           />
 
           <Group

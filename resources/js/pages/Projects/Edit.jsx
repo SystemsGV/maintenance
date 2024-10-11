@@ -36,7 +36,7 @@ const ProjectEdit = ({ dropdowns: { companies, users, currencies, games, types }
 
   useEffect(() => {
     let symbol = currencies.find(i =>
-      i.client_companies.find(c => c.id.toString() === form.data.client_company_id)
+      i.client_companies.find(c => c.id.toString() == form.data.client_company_id)
     )?.symbol;
 
     if (symbol) {
@@ -110,7 +110,7 @@ const ProjectEdit = ({ dropdowns: { companies, users, currencies, games, types }
           <Select
             label="Atracción que requiere mantenimiento"
             placeholder="Seleccionar atracción"
-            searchable
+            readOnly
             mt="md"
             value={form.data.game_id?.toString()}
             onChange={(value) => updateValue("game_id", value)}

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Project\CreateProject;
+use App\Actions\Project\UpdateProject;
 use App\Events\Project\ProjectDeleted;
 use App\Events\Project\ProjectGroupChanged;
 use App\Events\Project\ProjectOrderChanged;
@@ -133,13 +134,13 @@ class ProjectController extends Controller
     {
         (new CreateProject)->create($request->validated());
 
-        return redirect()->route('projects.kanban')->success('Project created', 'A new project was successfully created.');
+        return redirect()->route('projects.kanban')->success('Orden de trabajo creado', 'La orden de trabajo se creó exitosamente.');
     }
 
     public function edit(Project $project)
     {
         return Inertia::render('Projects/Edit', [
-            'item' => $project,
+            'item' => $project->loadDefault(),
             'dropdowns' => [
                 'companies' => ClientCompany::dropdownValues(),
                 'users' => User::userDropdownValues(),
@@ -150,8 +151,14 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function update(UpdateProjectRequest $request, Project $project): JsonResponse
+    public function update(UpdateProjectRequest $request, Project $project): JsonResponse|RedirectResponse
     {
+
+        if($request['_method']){
+            $project->update($request->validated());
+            return redirect()->route('projects.kanban')->success('Orden de trabajo actualizado', 'La orden de trabajo se actualizó exitosamente..');
+        }
+
         $data = $request->validated();
         $updateField = key($data);
 
@@ -195,10 +202,11 @@ class ProjectController extends Controller
 
         $this->authorize('restore', $project);
 
+        $project->update(['motive_archived' => null]);
         $project->unArchive();
         ProjectRestored::dispatch($project);
 
-        return redirect()->back()->success('Project restored', 'The restoring of the project was completed successfully.');
+        return redirect()->back()->success('Orden de trabajo restaurado', 'La restauración de la orden se completó con éxito.');
     }
 
     public function favoriteToggle(Project $project)

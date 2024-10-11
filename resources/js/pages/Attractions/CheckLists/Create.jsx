@@ -8,6 +8,7 @@ import { usePage } from '@inertiajs/react';
 import {
   Anchor,
   Breadcrumbs,
+  Checkbox,
   Fieldset,
   Grid,
   Group,
@@ -20,6 +21,7 @@ const CheckListCreate = () => {
   const { dropdowns: { games, periods } } = usePage().props;
   const [form, submit, updateValue] = useForm('post', route('attractions.checklists.store'), {
     name: '',
+    archive: false,
     period_id: '',
     game_id: '',
   });
@@ -86,6 +88,14 @@ const CheckListCreate = () => {
             onChange={value => updateValue('game_id', value)}
             data={games}
             error={form.errors.game_id}
+          />
+
+          <Checkbox
+            label="Subir imagen"
+            description="Seleccionar para que sea obligatorio"
+            mt="xl"
+            checked={form.data.archive}
+            onChange={(event) => updateValue("archive", event.currentTarget.checked)}
           />
 
           <Group

@@ -58,7 +58,7 @@ function ModalForm(task) {
         onChange={e => updateValue('name', e.target.value)}
         onBlur={() => onBlurUpdate('name')}
         error={data.name.length == 0}
-        readOnly={!can('ediar tarea')}
+        readOnly={!can('editar tarea')}
       />
 
       <RichTextEditor
@@ -69,7 +69,7 @@ function ModalForm(task) {
         height={260}
         onChange={content => updateValue('description', content)}
         onBlur={() => onBlurUpdate('description')}
-        readOnly={!can('ediar tarea')}
+        readOnly={!can('editar tarea')}
       />
 
       {can('completar tarea') && (

@@ -15,12 +15,12 @@ function ModalForm({ item }) {
     route("projects.user_access", item.id),
     {
       users: item.users_with_access
-        .filter((user) => !hasRoles(user, ["admin", "cliente"]))
+        .filter((user) => !hasRoles(user, ["admin", "admin mantenimiento", "cliente"]))
         .map((i) => i.id.toString()),
       clients: item.users_with_access
         .filter(
           (user) =>
-            hasRoles(user, ["cliente"]) && user.reason !== "company owner",
+            hasRoles(user, ["cliente"]) && user.reason != "company owner",
         )
         .map((i) => i.id.toString()),
     },

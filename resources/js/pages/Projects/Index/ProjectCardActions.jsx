@@ -4,20 +4,12 @@ import { router } from "@inertiajs/react";
 import { ActionIcon, Menu, rem } from "@mantine/core";
 import { IconArchive, IconArchiveOff, IconDots, IconPencil, IconUsers } from "@tabler/icons-react";
 import UserAccessModal from "./Modals/UserAccessModal.jsx";
+import ConfirmArchivedModal from "../Kanban/Index/Modals/ConfirmArchivedModal.jsx";
 
 export default function ProjectCardActions({ item }) {
-  const [archiveForm] = useForm("delete", route("projects.destroy", item.id));
   const [restoreForm] = useForm("post", route("projects.restore", item.id));
 
-  const openArchiveModal = () =>
-    openConfirmModal({
-      type: "danger",
-      title: "Archivar OT",
-      content: `¿Estás seguro de que deseas archivar esta OT? Esta acción impedirá que los usuarios accedan a él.`,
-      confirmLabel: "Archivar",
-      confirmProps: { color: "red" },
-      onConfirm: () => archiveForm.submit({ preserveScroll: true }),
-    });
+  const openArchiveModal = () => ConfirmArchivedModal(item.id);
 
   const openRestoreModal = () =>
     openConfirmModal({

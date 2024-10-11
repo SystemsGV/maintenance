@@ -81,7 +81,7 @@ export function EditTaskDrawer() {
         hidden_from_clients:
           task?.hidden_from_clients !== undefined ? task.hidden_from_clients : false,
         billable: task?.billable !== undefined ? task.billable : true,
-        sent_archive: task?.sent_archive !== undefined ? task.sent_archive : true,
+        sent_archive: task?.sent_archive !== undefined ? task.sent_archive : false,
         subscribed_users: (task?.subscribed_users || []).map((i) => i.id.toString()),
         labels: (task?.labels || []).map((i) => i.id),
       });
