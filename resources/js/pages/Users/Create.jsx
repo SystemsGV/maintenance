@@ -27,6 +27,7 @@ const UserCreate = () => {
 
   const [form, submit, updateValue] = useForm("post", route("users.store"), {
     avatar: null,
+    signature: null,
     job_title: "",
     name: "",
     phone: "",

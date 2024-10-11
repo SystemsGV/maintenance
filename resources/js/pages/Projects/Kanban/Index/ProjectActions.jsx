@@ -4,23 +4,12 @@ import { IconArchive, IconArchiveOff, IconDots, IconFileDownload, IconSubtask } 
 import { useForm } from "laravel-precognition-react-inertia";
 import axios from "axios";
 import { router } from "@inertiajs/react";
+import ConfirmArchivedModal from "./Modals/ConfirmArchivedModal";
 
 export default function ProjectActions({ project, ...props }) {
-  const archiveForm = useForm(
-    "delete",
-    route("projects.kanban.destroy", [project.id]),
-  );
   const restoreForm = useForm("post", route("projects.kanban.restore", [project.id]));
 
-  const openArchiveModal = () =>
-    openConfirmModal({
-      type: "danger",
-      title: "Archivar OT",
-      content: `¿Estás seguro de que deseas archivar esta OT?`,
-      confirmLabel: "Archivear",
-      confirmProps: { color: "red" },
-      onConfirm: () => archiveForm.submit({ preserveScroll: true }),
-    });
+  const openArchiveModal = () => ConfirmArchivedModal(project.id);
 
   const openRestoreModal = () =>
     openConfirmModal({

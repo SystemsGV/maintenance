@@ -42,6 +42,7 @@ class Project extends Model implements AuditableContract, Sortable
         'estimation',
         'order_column',
         'default',
+        'motive_archived',
         'completed_at',
     ];
 

@@ -6,7 +6,7 @@ export const openConfirmModal = ({
   title,
   content,
   confirmLabel,
-  cancelLabel = "Cancel",
+  cancelLabel = "Cancelar",
   ...props
 }) => {
   const typeColors = {

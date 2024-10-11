@@ -30,6 +30,7 @@ const UserEdit = () => {
   const [form, submit, updateValue] = useForm("post", route("users.update", item.id), {
     _method: "put",
     avatar: null,
+    signature: null,
     job_title: item.job_title,
     name: item.name,
     phone: item.phone || "",

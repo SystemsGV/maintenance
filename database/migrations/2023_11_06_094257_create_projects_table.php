@@ -24,6 +24,7 @@ return new class extends Migration
             $table->date('due_on')->nullable();
             $table->decimal('estimation', 6, 2)->nullable();
             $table->unsignedInteger('order_column');
+            $table->string('motive_archived')->nullable();
             $table->boolean('default')->default(false);
             $table->timestamps();
             $table->timestamp('completed_at')->nullable();

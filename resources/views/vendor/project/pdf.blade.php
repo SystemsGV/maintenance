@@ -60,6 +60,11 @@
                     <tr>
                         <td><p>Tipo: <span>{{ $project->type ? $project->type->name : '' }}</span></p></td>
                     </tr>
+                    @if ($project->archived_at != null)
+                        <tr>
+                            <td><p>Motivo de cancelación: <span>{{ $project->motive_archived }}</span></p></td>
+                        </tr>
+                    @endif
                 </table>
             </td>
             <td class="datosGral">
@@ -101,10 +106,11 @@
                         @foreach ($task->attachments as $attachment)
                             @if(count($task->attachments) > 0)
                                 @php
-                                    echo(public_path($attachment->path));
                                     $imageData = base64_encode(file_get_contents(public_path($attachment->path)));
                                 @endphp
-                                <img  src="data:image/png;base64, {{ $imageData }}" width="35%" style="text-align:center" border="0">
+                                <div>
+                                    <img  src="data:image/png;base64, {{ $imageData }}" width="35%">
+                                </div>
                             @endif
                         @endforeach
                     </td>
@@ -112,7 +118,7 @@
             @endforeach
         </tbody>
     </table>
-    {{-- <table class="table_firmas">
+    <table class="table_firmas">
         @php
             $signatureAcept = $user->signature ? base64_encode(file_get_contents(public_path($user->signature))) : null;
             $signatureValid = $user->signature ? base64_encode(file_get_contents(public_path($user->signature))) : null;
@@ -123,17 +129,17 @@
             <tr>
                 <td>
                     @if($project->group_id == 4 && $signatureAcept)
-                        <img  src="data:image/png;base64, {{ $signatureAcept }}" height="100" style="text-align:center" border="0">
+                        <img  src="data:image;base64, {{ $signatureAcept }}" height="100" >
                     @endif
                 </td>
                 <td>
                     @if($project->group_id == 3 && $signatureValid)
-                        <img  src="data:image/png;base64, {{ $signatureValid }}" height="100" style="text-align:center" border="0">
+                        <img  src="data:image;base64, {{ $signatureValid }}" height="100" >
                     @endif
                 </td>
                 <td>
                     @if($signatureDo)
-                        <img  src="data:image/png;base64, {{ $signatureDo }}" height="100" style="text-align:center" border="0">
+                        <img  src="data:image;base64, {{ $signatureDo }}" height="100" >
                     @endif
                 </td>
             </tr>
@@ -145,7 +151,7 @@
                 <td>Realizado por</td>
             </tr>
         </tbody>
-    </table> --}}
+    </table>
     <footer>
         <p>Todos los derechos reservados: https://lagranjavilla.com | Sistema Mantenimiento </p>
     </footer>
@@ -254,6 +260,11 @@
         border-bottom: 1px solid rgba(20, 20, 20, 0.096);
     }
 
+    .table_materiales tbody img {
+        margin: 3px;
+        border-radius: 5px; /* Bordes redondeados para un mejor aspecto */
+    }
+
     /*FIRMA*/
     .table_firmas {
         width: 100%;
@@ -262,7 +273,7 @@
     }
 
     .table_firmas thead tr {
-        background-color: rgba(95, 95, 95, 0.452);
+        /* background-color: rgba(95, 95, 95, 0.452); */
         color: #FFF;
     }
 

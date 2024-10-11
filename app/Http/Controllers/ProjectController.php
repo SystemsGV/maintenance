@@ -180,12 +180,13 @@ class ProjectController extends Controller
         return response()->json();
     }
 
-    public function destroy(Project $project): RedirectResponse
+    public function destroy(Request $request, Project $project)
     {
+        $project->update(['motive_archived' => $request->motive_archived]);
         $project->archive();
         ProjectDeleted::dispatch($project->id);
 
-        return redirect()->back()->success('Project archived', 'The project was successfully archived.');
+        return redirect()->back()->success('Orden de trabajo archivado', 'La orden de trabajo fue archivado exitosamente.');
     }
 
     public function restore(int $projectId): RedirectResponse
@@ -343,7 +344,7 @@ class ProjectController extends Controller
         return response()->json($project);
     }
 
-    public function pdf(Request $request, Project $project)
+    public function pdf(Project $project)
     {
         $data = [
             'ownerCompany' => OwnerCompany::first(),

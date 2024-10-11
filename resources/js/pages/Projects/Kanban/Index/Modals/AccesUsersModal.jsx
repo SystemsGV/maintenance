@@ -67,6 +67,7 @@ function ModalForm({setLoading}) {
             clearable
             valueFormat='DD MMM YYYY'
             minDate={new Date()}
+            required
             mt='md'
             label='Fecha de vencimiento'
             placeholder='Elija la fecha de vencimiento de la OT'

@@ -50,7 +50,7 @@ class UserController extends Controller
         return Inertia::render('Users/Edit', ['item' => new UserResource($user)]);
     }
 
-    public function update(User $user, UpdateUserRequest $request)
+    public function update(UpdateUserRequest $request, User $user)
     {
         (new UpdateUser)->update($user, $request->validated());
 

@@ -11,9 +11,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
 use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Imagick\Driver;
+use Intervention\Image\Drivers\Gd\Driver;
 use Throwable;
 
 class CreateTask
@@ -61,6 +60,11 @@ class CreateTask
 
                 $item->storeAs('public', $filepath);
 
+                $manager = new ImageManager(new Driver());
+                $manager->read(storage_path("app/public/{$filepath}"))
+                    ->resize(800, 500)
+                    ->save(storage_path("app/public/{$filepath}"));
+
                 $thumbFilepath = $this->generateThumb($item, $task, $filename);
 
                 return [
@@ -95,9 +99,11 @@ class CreateTask
             try {
                 $thumbFilepath = "tasks/{$task->id}/thumbs/{$filename}";
 
-                $image = Image::make($file->get())
-                    ->fit(100, 100)
-                    ->encode(null, 75);
+                $image = new ImageManager(new Driver());
+                $image->read(storage_path("app/public/{$thumbFilepath}"))
+                    ->resize(100, 100)
+                    ->save(storage_path("app/public/{$thumbFilepath}"));
+
 
                 Storage::put("public/$thumbFilepath", $image);
 
@@ -106,7 +112,6 @@ class CreateTask
                 return null;
             }
         }
-
         return null;
     }
 }

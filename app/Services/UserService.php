@@ -7,7 +7,8 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class UserService
 {
@@ -48,8 +49,12 @@ class UserService
         if ($signature) {
             $filename = strtolower(Str::ulid()).'.'.$signature->getClientOriginalExtension();
             $filepath = "signatures/{$user->id}/{$filename}";
-
             $signature->storeAs('public', $filepath);
+            $manager = new ImageManager(new Driver());
+            $manager->read(storage_path("app/public/{$filepath}"))
+                ->resize(250, 250)
+                ->save(storage_path("app/public/{$filepath}"));
+
             return "/storage/$filepath";
         } else {
             return null;
