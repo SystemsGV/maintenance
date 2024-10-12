@@ -22,6 +22,8 @@ return new class extends Migration
             $table->unsignedInteger('number');
             $table->text('description')->nullable();
             $table->date('due_on')->nullable();
+            $table->dateTime('fault_date')->nullable();
+            $table->dateTime('start_date')->nullable();
             $table->decimal('estimation', 6, 2)->nullable();
             $table->unsignedInteger('order_column');
             $table->string('motive_archived')->nullable();

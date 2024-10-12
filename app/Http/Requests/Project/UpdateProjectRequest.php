@@ -31,6 +31,8 @@ class UpdateProjectRequest extends FormRequest
             'group_id' => ['nullable', 'exists:project_groups,id'],
             'period_id' => ['nullable', 'exists:periods,id'],
             'due_on' => ['nullable'],
+            'fault_date' => ['nullable'],
+            'start_date' => ['nullable'],
             'estimation' => ['nullable'],
             'rate' => ['nullable'],
             'default' => ['boolean'],

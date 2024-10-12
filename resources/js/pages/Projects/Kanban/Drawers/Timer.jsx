@@ -114,7 +114,7 @@ export default function Timer({ project, ...props }) {
                       )}
                       <Tooltip label={dateTime(timeLog.created_at)} openDelay={250} withArrow>
                         <Text fz={14} c="dimmed">
-                          {humanReadableTime(timeLog.minutes)}h
+                          {humanReadableTime(timeLog.minutes)}
                         </Text>
                       </Tooltip>
                     </Group>
@@ -127,7 +127,7 @@ export default function Timer({ project, ...props }) {
               <Text fz={15} fw={500}>
                 Total:
               </Text>
-              <Text fw={600}>{humanReadableTime(totalMinutes)}h</Text>
+              <Text fw={600}>{humanReadableTime(totalMinutes)}</Text>
             </Group>
           </>
         )}

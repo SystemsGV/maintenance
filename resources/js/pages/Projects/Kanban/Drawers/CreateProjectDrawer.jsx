@@ -2,6 +2,7 @@ import { openConfirmModal } from '@/components/ConfirmModal';
 import useProjectDrawerStore from '@/hooks/store/useProjectDrawerStore';
 import useForm from '@/hooks/useForm';
 import { usePage } from '@inertiajs/react';
+import dayjs from "dayjs";
 import {
   Button,
   Checkbox,
@@ -15,8 +16,8 @@ import {
   Textarea,
   rem,
 } from '@mantine/core';
-import { DateInput } from '@mantine/dates';
-import { useEffect } from 'react';
+import { DateInput, DateTimePicker } from '@mantine/dates';
+import { useEffect, useState } from 'react';
 import LabelsDropdown from './LabelsDropdown';
 import classes from './css/ProjectDrawer.module.css';
 
@@ -31,6 +32,7 @@ export function CreateProjectDrawer() {
     auth: { user },
   } = usePage().props;
 
+  const [isFaultSheet, setIsFaultSheet] = useState(false);
   const initial = {
     client_company_id: 1,
     group_id: create.group_id ? create.group_id.toString() : 1,
@@ -42,6 +44,8 @@ export function CreateProjectDrawer() {
     rate: 0,
     estimation: '',
     due_on: '',
+    start_date: '',
+    fault_date: '',
     default: false,
     labels: [],
     users: [],
@@ -54,6 +58,10 @@ export function CreateProjectDrawer() {
       ...initial,
     }
   );
+
+  const handleFaulSheetChange = (event) => {
+    setIsFaultSheet(event.currentTarget.checked);
+  };
 
   useEffect(() => {
     updateValue({ ...initial });
@@ -85,7 +93,7 @@ export function CreateProjectDrawer() {
           ml={25}
           my='sm'
         >
-          Agregar nueva OT
+          Agregar {!isFaultSheet ? 'orden de trabajo' : 'hoja de falla'}
         </Text>
       }
       position='right'
@@ -135,9 +143,9 @@ export function CreateProjectDrawer() {
             mt='md'
             value={form.data.users}
             onChange={values => updateValue('users', values)}
-            data={users_access.map((i) => ({
-              value: i.id.toString(),
-              label: i.name,
+            data={users_access.map(i => ({
+            value: i.id.toString(),
+            label: i.name,
             }))}
             error={form.errors.users}
           />
@@ -160,7 +168,7 @@ export function CreateProjectDrawer() {
               w={120}
               loading={form.processing}
             >
-              Agregar OT
+              Agregar
             </Button>
           </Flex>
         </div>
@@ -175,16 +183,18 @@ export function CreateProjectDrawer() {
             error={form.errors.game_id}
           />
 
-          <Select
-            label='Tipo de mantenimiento'
-            placeholder='Seleccionar tipo de mantenimiento'
-            searchable
-            mt='md'
-            value={form.data.type_id}
-            onChange={value => updateValue('type_id', value)}
-            data={types}
-            error={form.errors.type_id}
-          />
+          { !isFaultSheet && (
+            <Select
+              label='Tipo de mantenimiento'
+              placeholder='Seleccionar tipo de mantenimiento'
+              searchable
+              mt='md'
+              value={form.data.type_id}
+              onChange={value => updateValue('type_id', value)}
+              data={types}
+              error={form.errors.type_id}
+            />
+          )}
 
           <DateInput
             clearable
@@ -193,9 +203,41 @@ export function CreateProjectDrawer() {
             mt='md'
             label='Fecha de vencimiento'
             placeholder='Elija la fecha de vencimiento de la OT'
-            value={form.data.due_on}
-            onChange={value => updateValue('due_on', value)}
+            value={form.data.due_on ? new Date(form.data.due_on) : null}
+            onChange={value => {
+              const formattedDate = value ? dayjs.tz(value, 'America/Lima').format() : null;
+              updateValue('due_on', formattedDate);
+            }}
           />
+
+          {isFaultSheet && (
+            <>
+              <DateTimePicker
+                clearable
+                valueFormat="DD MMM YYYY hh:mm A"
+                label="Hora de falla"
+                placeholder="Elija la fecha y hora de la falla"
+                mt='md'
+                value={form.data.fault_date ? new Date(form.data.fault_date) : null}
+                onChange={value => {
+                  const formattedDate = value ? dayjs.tz(value, 'America/Lima').format() : null;
+                  updateValue('fault_date', formattedDate);
+                }}
+              />
+              <DateTimePicker
+                clearable
+                valueFormat="DD MMM YYYY hh:mm A"
+                label="Hora de inicio"
+                placeholder="Elija la fecha y hora de inicio"
+                mt='md'
+                value={form.data.start_date ? new Date(form.data.start_date) : null}
+                onChange={value => {
+                  const formattedDate = value ? dayjs.tz(value, 'America/Lima').format() : null;
+                  updateValue('start_date', formattedDate);
+                }}
+              />
+            </>
+          )}
 
           <LabelsDropdown
             items={labels}
@@ -205,17 +247,26 @@ export function CreateProjectDrawer() {
           />
 
           <NumberInput
-            label='Estimación de tiempo'
+            label={ !isFaultSheet ? 'Estimación de tiempo' : 'Tiempo fuera de servicio'}
             mt='md'
             decimalScale={2}
             fixedDecimalScale
             defaultValue={0}
             min={0}
             allowNegative={false}
-            step={0.5}
+            step={0.1}
             suffix=' hours'
             onChange={value => updateValue('estimation', value)}
           />
+
+          <Checkbox
+            label="¿Es una hoja de falla?"
+            description="Seleccione si desea agregar una hoja de falla"
+            mt="xl"
+            checked={isFaultSheet}
+            onChange={handleFaulSheetChange}
+          />
+
         </div>
       </form>
     </Drawer>

@@ -14,7 +14,7 @@
             <td class="datos-grales-td">
                 <table class="table_h_factura">
                     <thead>
-                        <th class="headerDatosh titulos">Orden de trabajo</th>
+                        <th class="headerDatosh titulos">{{ $project->fault_date ? 'Hoja de falla' : 'Orden de trabajo' }}</th>
                     </thead>
                     <tr>
                         <td class="titulos"><p class="titulos">{{ $ownerCompany->name }}</p></td>
@@ -43,13 +43,17 @@
                         <td><p>Generó: <span>{{ $user->name }}</span></p></td>
                     </tr>
                     <tr>
-                        <td><p>Duración estimada: <span>{{ $project->estimation }} /hr</span></p></td>
+                        @if ($project->fault_date)
+                            <td><p>Duración estimada: <span>{{ $project->estimation }} /hr</span></p></td>
+                        @else
+                            <td><p>Tiempo fuera de servicio: <span>{{ $project->estimation }} /hr</span></p></td>
+                        @endif
                     </tr>
                     <tr>
                         <td><p>Responsable: <span>{{ $user->name }}</span></p></td>
                     </tr>
                     <tr>
-                        <td><p>Orden de trabajo: <span>{{ $project->name }}</span></p></td>
+                        <td><p>{{$project->fault_date ? 'Hoja de falla' : 'Orden de trabajo'}}: <span>{{ $project->name }}</span></p></td>
                     </tr>
                     <tr>
                         <td><p>Atracción: <span>{{ $project->game ? $project->game->name : '' }}</span></p></td>
@@ -69,8 +73,18 @@
             </td>
             <td class="datosGral">
                 <table class="table_datos">
+                    @if ($project->fault_date)
+                        <tr>
+                            <td><p>FECHA DE FALLA:</p></td>
+                            <td><p>{{ $project->fault_date }}</p></td>
+                        </tr>
+                        <tr>
+                            <td><p>FECHA DE INICIO:</p></td>
+                            <td><p>{{ $project->fault_date ? $project->start_date : $project->created_at }}</p></td>
+                        </tr>
+                    @endif
                     <tr>
-                        <td><p>FECHA DE INICIO:</p></td>
+                        <td><p>FECHA DE CREACIÓN:</p></td>
                         <td><p>{{ $project->created_at }}</p></td>
                     </tr>
                     <tr>

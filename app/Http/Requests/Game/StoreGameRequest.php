@@ -23,6 +23,7 @@ class StoreGameRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
+            'periods' => 'array',
             'asset_id' => ['required', 'exists:assets,id'],
         ];
     }

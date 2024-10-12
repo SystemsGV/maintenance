@@ -18,7 +18,7 @@ import {
   Textarea,
   rem,
 } from "@mantine/core";
-import { DateInput } from "@mantine/dates";
+import { DateInput, DateTimePicker } from "@mantine/dates";
 import dayjs from "dayjs";
 import { useEffect, useRef, useState } from "react";
 import LabelsDropdown from "./LabelsDropdown";
@@ -50,6 +50,8 @@ export function EditProjectDrawer() {
     rate: 0,
     estimation: 0,
     due_on: "",
+    start_date: "",
+    fault_date: "",
     default: false,
     users: [],
     labels: [],
@@ -98,6 +100,8 @@ export function EditProjectDrawer() {
         rate: project?.rate || "",
         estimation: project?.estimation || 0,
         due_on: project?.due_on ? dayjs(project?.due_on).toDate() : "",
+        start_date: project?.start_date ? dayjs(project?.start_date).toDate() : null,
+        fault_date: project?.fault_date ? dayjs(project?.fault_date).toDate() : null,
         default: project?.default !== undefined ? project.default : false,
         users: (project?.users || []).map((i) => i.id.toString()),
         labels: (project?.labels || []).map((i) => i.id),
@@ -134,6 +138,7 @@ export function EditProjectDrawer() {
   };
 
   return (
+
     <Drawer
       opened={edit.opened}
       onClose={closeEditProject}
@@ -166,6 +171,9 @@ export function EditProjectDrawer() {
         timingFunction: "ease",
       }}
     >
+
+      <LoadingOverlay visible={loading} loaderProps={{ children: <Loader size={40} /> }} />
+
       <Tabs defaultValue="info">
         <Tabs.List grow>
           <Tabs.Tab value="info">Información</Tabs.Tab>
@@ -254,10 +262,44 @@ export function EditProjectDrawer() {
                       mt="md"
                       label="Fecha de vencimiento"
                       placeholder="Elija la fecha de vencimiento de la OT"
-                      value={data.due_on}
-                      onChange={(value) => updateValue("due_on", value)}
+                      value={data.due_on ? new Date(data.due_on) : null}
+                      onChange={value => {
+                        const formattedDate = value ? dayjs.tz(value, 'America/Lima').format() : null;
+                        updateValue('due_on', formattedDate);
+                      }}
                       readOnly={!can("editar proyecto")}
                     />
+
+                    {(project.start_date || project.fault_date) && (
+                      <>
+                        <DateTimePicker
+                          clearable
+                          valueFormat="DD MMM YYYY hh:mm A"
+                          label="Hora de falla"
+                          placeholder="Elija la fecha y hora de la falla"
+                          mt='md'
+                          value={data.fault_date ? new Date(data.fault_date) : null}
+                          onChange={value => {
+                            const formattedDate = value ? dayjs.tz(value, 'America/Lima').format() : null;
+                            updateValue('fault_date', formattedDate);
+                          }}
+                          readOnly={!can("editar proyecto")}
+                        />
+                        <DateTimePicker
+                          clearable
+                          valueFormat="DD MMM YYYY hh:mm A"
+                          label="Hora de inicio"
+                          placeholder="Elija la fecha y hora de inicio"
+                          mt='md'
+                          value={data.start_date ? new Date(data.start_date) : null}
+                          onChange={value => {
+                            const formattedDate = value ? dayjs.tz(value, 'America/Lima').format() : null;
+                            updateValue('start_date', formattedDate);
+                          }}
+                          readOnly={!can("editar proyecto")}
+                        />
+                      </>
+                    )}
 
                     <LabelsDropdown
                       items={labels}
@@ -274,7 +316,7 @@ export function EditProjectDrawer() {
                       value={data.estimation}
                       min={0}
                       allowNegative={false}
-                      step={0.5}
+                      step={0.1}
                       suffix=" hours"
                       onChange={(value) => updateValue("estimation", value)}
                       readOnly={!can("editar proyecto")}
@@ -292,8 +334,6 @@ export function EditProjectDrawer() {
           <Tabs.Panel value="tasks">
             {edit.opened && project.tasks.length && can('ver tareas') ? (
               <>
-                <LoadingOverlay visible={loading} loaderProps={{ children: <Loader size={40} /> }} />
-
                 <Breadcrumbs
                   c="dark.3"
                   ml={24}

@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Attraction;
 
+use App\Actions\Project\CreateProject;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Game\StoreGameRequest;
 use App\Http\Requests\Game\UpdateGameRequest;
 use App\Http\Resources\Game\GameResource;
 use App\Models\Asset;
 use App\Models\Game;
+use App\Models\Period;
+use App\Models\Project;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -40,6 +43,7 @@ class GameController extends Controller
         return Inertia::render('Attractions/Games/Create', [
             'dropdowns' => [
                 'assets' => Asset::dropdownValues(),
+                'periods' => Period::dropdownValues(),
             ],
 
         ]);
@@ -47,7 +51,23 @@ class GameController extends Controller
 
     public function store(StoreGameRequest $request)
     {
-        Game::create($request->validated());
+        $game = Game::create($request->validated());
+        if($request->periods){
+            foreach ($request->periods as $period) {
+                $period = Period::find($period);
+                $project = Project::create([
+                    'client_company_id' => 1,
+                    'group_id' => 1, // Pendiente
+                    'game_id' => $game->id,
+                    'period_id' => $period->id,
+                    'name' => 'OT ' . $period->name . ' de ' . $game->name,
+                    'due_on' => null,
+                    'number' => Project::withArchived()->count() + 1,
+                    'default' => true,
+                ]);
+                $project->labels()->attach([1]);
+            }
+        }
         return redirect()->route('attractions.games.index')->success('Juego creado', 'Se creó exitosamente una nuevo juego.');
     }
 

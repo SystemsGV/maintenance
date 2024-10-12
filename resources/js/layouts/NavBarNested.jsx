@@ -81,7 +81,7 @@ export default function Sidebar() {
         visible: can("ver juegos") || can('ver ubicaciones') || can('ver check lists'), // Modificar segun rol del usuario
         links: [
           {
-            label: "Juegos",
+            label: "Atracción",
             link: route("attractions.games.index"),
             active: route().current("attractions.games.*"),
             visible: can("ver juegos"), // Verificar roles

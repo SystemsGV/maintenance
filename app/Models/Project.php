@@ -39,6 +39,8 @@ class Project extends Model implements AuditableContract, Sortable
         'description',
         'rate',
         'due_on',
+        'fault_date',
+        'start_date',
         'estimation',
         'order_column',
         'default',
@@ -53,6 +55,8 @@ class Project extends Model implements AuditableContract, Sortable
 
     protected $casts = [
         'due_on' => 'date',
+        'start_date' => 'datetime',
+        'fault_date' => 'datetime',
         'completed_at' => 'datetime',
         'estimation' => 'float',
     ];

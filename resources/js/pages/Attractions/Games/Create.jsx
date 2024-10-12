@@ -10,6 +10,7 @@ import {
   Breadcrumbs,
   Grid,
   Group,
+  MultiSelect,
   Select,
   TextInput,
   Title,
@@ -17,11 +18,12 @@ import {
 
 const AttractionsGamesCreate = () => {
   const {
-    dropdowns: { assets },
+    dropdowns: { assets, periods },
   } = usePage().props;
   const [form, submit, updateValue] = useForm('post', route('attractions.games.store'), {
     name: '',
     asset_id: '',
+    periods: [],
   });
 
   return (
@@ -73,6 +75,17 @@ const AttractionsGamesCreate = () => {
             onChange={value => updateValue('asset_id', value)}
             data={assets}
             error={form.errors.asset_id}
+          />
+
+          <MultiSelect
+            label="Periodos"
+            placeholder="Seleccionar los periodos que se requiere en la atraccion"
+            required
+            mt='md'
+            searchable
+            value={form.data.periods}
+            onChange={(values) => updateValue("periods", values)}
+            data={periods}
           />
 
           <Group

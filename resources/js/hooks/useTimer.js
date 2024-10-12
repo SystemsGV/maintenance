@@ -14,10 +14,10 @@ export default function useTimer(task) {
 
   const timerTick = () => {
     if(runningTimer) {
-      const minutes = Math.round(
-        (dayjs().unix() - runningTimer.timer_start) / 60,
-      );
-      setTimerValue(humanReadableTime(minutes));
+    const elapsedSeconds = Math.round(dayjs().unix() - runningTimer.timer_start);
+    const minutes = Math.floor(elapsedSeconds / 60);
+    const seconds = elapsedSeconds % 60;
+    setTimerValue(`${minutes}m ${seconds}s`);
     }
   };
 

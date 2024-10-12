@@ -4,9 +4,11 @@ import useForm from '@/hooks/useForm';
 import ContainerBox from '@/layouts/ContainerBox';
 import Layout from '@/layouts/MainLayout';
 import { redirectTo } from '@/utils/route';
+import dayjs from "dayjs";
 import {
   Anchor,
   Breadcrumbs,
+  Checkbox,
   Grid,
   Group,
   MultiSelect,
@@ -16,10 +18,12 @@ import {
   Textarea,
   Title,
 } from '@mantine/core';
+import { DateInput, DateTimePicker } from '@mantine/dates';
 import { useEffect, useState } from 'react';
 
 const ProjectCreate = ({ dropdowns: { companies, users, currencies, games, types } }) => {
   const [currencySymbol, setCurrencySymbol] = useState();
+  const [isFaultSheet, setIsFaultSheet] = useState(false);
 
   const [form, submit, updateValue] = useForm('post', route('projects.store'), {
     name: '',
@@ -27,7 +31,11 @@ const ProjectCreate = ({ dropdowns: { companies, users, currencies, games, types
     rate: 0,
     client_company_id: '',
     game_id: '',
+    due_on: '',
+    start_date: '',
+    fault_date: '',
     type_id: '',
+    default: false,
     users: [],
   });
 
@@ -40,6 +48,10 @@ const ProjectCreate = ({ dropdowns: { companies, users, currencies, games, types
       setCurrencySymbol(symbol);
     }
   }, [form.data.client_company_id]);
+
+  const handleFaulSheetChange = (event) => {
+    setIsFaultSheet(event.currentTarget.checked);
+  };
 
   return (
     <>
@@ -115,6 +127,49 @@ const ProjectCreate = ({ dropdowns: { companies, users, currencies, games, types
             error={form.errors.game_id}
           />
 
+          <DateInput
+            clearable
+            valueFormat='DD MMM YYYY'
+            minDate={new Date()}
+            mt='md'
+            label='Fecha de vencimiento'
+            placeholder='Elija la fecha de vencimiento de la OT'
+            value={form.data.due_on ? new Date(form.data.due_on) : null}
+            onChange={value => {
+              const formattedDate = value ? dayjs.tz(value, 'America/Lima').format() : null; // Formatear la fecha
+              updateValue('due_on', formattedDate); // Actualizar el valor formateado
+            }}
+          />
+
+          {isFaultSheet && (
+            <>
+              <DateTimePicker
+                clearable
+                valueFormat="DD MMM YYYY hh:mm A"
+                label="Hora de falla"
+                placeholder="Elija la fecha y hora de la falla"
+                mt='md'
+                value={form.data.fault_date ? new Date(form.data.fault_date) : null}
+                onChange={value => {
+                  const formattedDate = value ? dayjs.tz(value, 'America/Lima').format() : null;
+                  updateValue('fault_date', formattedDate);
+                }}
+              />
+              <DateTimePicker
+                clearable
+                valueFormat="DD MMM YYYY hh:mm A"
+                label="Hora de inicio"
+                placeholder="Elija la fecha y hora de inicio"
+                mt='md'
+                value={form.data.start_date ? new Date(form.data.start_date) : null}
+                onChange={value => {
+                  const formattedDate = value ? dayjs.tz(value, 'America/Lima').format() : null;
+                  updateValue('start_date', formattedDate);
+                }}
+              />
+            </>
+          )}
+
           <Select
             label="Tipo de mantenimiento"
             placeholder="Seleccionar tipo de mantenimiento"
@@ -149,6 +204,14 @@ const ProjectCreate = ({ dropdowns: { companies, users, currencies, games, types
             display="none"
             onChange={value => updateValue('rate', value)}
             error={form.errors.rate}
+          />
+
+          <Checkbox
+            label="¿Es una hoja de falla?"
+            description="Seleccione si desea agregar una hoja de falla"
+            mt="xl"
+            checked={isFaultSheet}
+            onChange={handleFaulSheetChange}
           />
 
           <Group
