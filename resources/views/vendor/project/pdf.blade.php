@@ -93,7 +93,7 @@
                     </tr>
                     <tr>
                         <td><p>TIEMPO DE EJECUCIÓN:</p></td>
-                        <td><p>{{ count($project->timeLogs) > 0 ? $project->timeLogs[0]->minutes . '/hrs' : 'No registrado' }}</p></td>
+                        <td><p>{{ count($project->timeLogs) > 0 ? $project->timeLogs[0]->minutes . '/min' . $project->timeLogs[0]->timer_stop % 60 . '/seg' : 'No registrado' }}</p></td>
                     </tr>
                     <tr>
                         <td><p>FECHA DE VENCIMIENTO:</p></td>
@@ -136,7 +136,7 @@
         @php
             $aceptado = $project->userReview ? base64_encode(file_get_contents(public_path($project->userReview->signature))) : null;
             $validado = $project->userFinalize ? base64_encode(file_get_contents(public_path($project->userFinalize->signature))) : null;
-            $realizado = $timeLogs ? base64_encode(file_get_contents(public_path($timeLogs->user->signature))) : null;
+            $realizado = $timeLogs ? ($timeLogs->user->signature ? base64_encode(file_get_contents(public_path($timeLogs->user->signature))) : null) : null;
         @endphp
 
         <thead>
