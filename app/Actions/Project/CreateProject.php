@@ -26,6 +26,7 @@ class CreateProject
                 'game_id' => $data['game_id'] ?? null,
                 'period_id' => $data['period_id'] ?? null,
                 'type_id' => $data['type_id'] ?? null,
+                'user_generate' => auth()->id(),
                 'name' => $data['name'],
                 'due_on' => $data['due_on'] ?? now(),
                 'fault_date' => $data['fault_date'] ?? null,
@@ -40,6 +41,7 @@ class CreateProject
             $project->moveToStart();
             $project->users()->attach($data['users'] ?? []);
             $project->labels()->attach($data['labels']);
+
             ProjectCreated::dispatch($project);
 
             $taskGroup = $project->taskGroups()->createMany([ // Almacenar solo los periodos predeterminados
@@ -61,6 +63,7 @@ class CreateProject
                         'hidden_from_clients' => 0,
                         'billable' => 1,
                         'sent_archive' => $checklist->archive,
+                        'type_check' => $checklist->type,
                         'completed_at' => null,
                     ]);
                     $task->labels()->attach([1]); // Pendiente

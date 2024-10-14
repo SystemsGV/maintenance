@@ -34,6 +34,9 @@ class Project extends Model implements AuditableContract, Sortable
         'game_id',
         'period_id',
         'type_id',
+        'user_generate',
+        'user_review',
+        'user_finalize',
         'name',
         'number',
         'description',
@@ -69,6 +72,9 @@ class Project extends Model implements AuditableContract, Sortable
     public array $defaultWith = [
         'clientCompany:id,name',
         'users:id,name,signature',
+        'userGenerate:id,name,signature',
+        'userReview:id,name,signature',
+        'userFinalize:id,name,signature',
         'game:id,name',
         'type:id,name',
         'period:id,name',
@@ -80,6 +86,7 @@ class Project extends Model implements AuditableContract, Sortable
     {
         return [
             (new WhereInFilter('group_id'))->setQueryName('groups'),
+            (new WhereInFilter('due_on'))->setQueryName('date'),
             (new WhereInFilter('project_user_access'))->setQueryName('assignees'),
             (new ProjectOverdueFilter('due_on'))->setQueryName('overdue'),
             (new IsNullFilter('due_on'))->setQueryName('not_set'),
@@ -130,7 +137,6 @@ class Project extends Model implements AuditableContract, Sortable
         return $this->hasMany(TaskGroup::class, 'project_id');
     }
 
-
     public function game(): BelongsTo
     {
         return $this->belongsTo(Game::class);
@@ -144,6 +150,21 @@ class Project extends Model implements AuditableContract, Sortable
     public function type(): BelongsTo
     {
         return $this->belongsTo(ProjectType::class, 'type_id');
+    }
+
+    public function userGenerate(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_generate');
+    }
+
+    public function userReview(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_review');
+    }
+
+    public function userFinalize(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_finalize');
     }
 
     public function labels(): BelongsToMany
@@ -166,6 +187,11 @@ class Project extends Model implements AuditableContract, Sortable
         )
             ->where('favoriteable_type', $this->getMorphClass())
             ->where('user_id', auth()->id());
+    }
+
+    public function checkLists()
+    {
+        return $this->hasMany(CheckList::class, 'game_id', 'game_id');
     }
 
     public function activities(): MorphMany

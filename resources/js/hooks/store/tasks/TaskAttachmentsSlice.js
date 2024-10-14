@@ -3,10 +3,11 @@ import axios from 'axios';
 import { produce } from "immer";
 
 const createTaskAttachmentsSlice = (set, get) => ({
-  uploadAttachments: async (task, files) => {
+  uploadAttachments: async (task, files, setLoading) => {
     const index = get().tasks[task.group_id].findIndex((i) => i.id == task.id);
 
     try {
+      setLoading(true);
       const { data } = await axios.postForm(
         route("projects.tasks.attachments.upload", [task.project_id, task.id]),
         { attachments: files.filter(i => i.id == undefined) },
@@ -18,9 +19,11 @@ const createTaskAttachmentsSlice = (set, get) => ({
           ...state.tasks[task.group_id][index].attachments,
           ...data.files,
         ];
+        setLoading(false);
       }));
     } catch (e) {
       console.error(e);
+      setLoading(false);
       alert("Failed to upload attachments");
     }
   },

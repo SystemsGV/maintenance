@@ -5,6 +5,8 @@ import { getInitials } from "@/utils/user";
 import { Avatar, Flex, Group, Table, Text } from "@mantine/core";
 
 export default function TableRow({ item }) {
+  console.log(item.roles[0]);
+
   return (
     <Table.Tr key={item.id}>
       <Table.Td>
@@ -49,6 +51,7 @@ export default function TableRow({ item }) {
           </Text>
         </Table.Td>
       )}
+
       {(can("editar usuario") || can("archivar usuario") || can("restaurar usuario")) && (
         <Table.Td>
           <TableRowActions

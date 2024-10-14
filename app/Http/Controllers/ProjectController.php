@@ -18,16 +18,20 @@ use App\Models\Currency;
 use App\Models\Game;
 use App\Models\Label;
 use App\Models\OwnerCompany;
+use App\Models\Period;
 use App\Models\Project;
 use App\Models\ProjectGroup;
 use App\Models\ProjectType;
 use App\Models\Task;
+use App\Models\TimeLog;
+use App\Models\TypeCheck;
 use App\Models\User;
 use App\Services\ProjectService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -73,35 +77,41 @@ class ProjectController extends Controller
         $user = auth()->user();
         $groupedProjects = ProjectGroup::with(['projects' => fn ($query) => $query->withArchived()])->get()
             ->mapWithKeys(function (ProjectGroup $group) use ($request, $user) {
+                $projects = Project::where('group_id', $group->id)
+                ->searchByQueryString()
+                ->filterByQueryString()
+                ->when($request->user()->isNotAdmin(), function ($query) {
+                    $query->whereHas('users', fn ($query) => $query->where('id', auth()->id()));
+                })
+                ->with([
+                    'tasks' => function ($query) use ($user) {
+                        $query->when($user->hasRole('cliente'), fn ($query) => $query->where('hidden_from_clients', false))
+                            // ->where('assigned_to_user_id', $user->id)
+                            ->orderByRaw('number ASC')
+                            ->with([
+                                'labels:id,name,color',
+                                'assignedToUser:id,name',
+                                'taskGroup:id,name',
+                                'attachments',
+                            ]);
+                    },
+                ])
+                ->withCount([
+                    'tasks AS all_tasks_count',
+                    'tasks AS completed_tasks_count' => fn ($query) => $query->whereNotNull('completed_at'),
+                    'tasks AS overdue_tasks_count' => fn ($query) => $query->whereNull('completed_at')->whereDate('due_on', '<', now()),
+                ])
+                ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
+                ->withDefault()
+                // ->orderBy('', 'desc')
+                ->get();
+                foreach ($projects as $project) {
+                    $project->check_list_count = $project->checkLists()
+                        ->where('period_id', $project->period_id) // Filtra por period_id
+                        ->count();
+                }
                 return [
-                    $group->id => Project::where('group_id', $group->id)
-                        ->searchByQueryString()
-                        ->filterByQueryString()
-                        ->when($request->user()->isNotAdmin(), function ($query) {
-                            $query->whereHas('users', fn ($query) => $query->where('id', auth()->id()));
-                        })
-                        ->with([
-                            'tasks' => function ($query) use ($user) {
-                                $query->when($user->hasRole('cliente'), fn ($query) => $query->where('hidden_from_clients', false))
-                                    // ->where('assigned_to_user_id', $user->id)
-                                    ->orderByRaw('number ASC')
-                                    ->with([
-                                        'labels:id,name,color',
-                                        'assignedToUser:id,name',
-                                        'taskGroup:id,name',
-                                        'attachments',
-                                    ]);
-                            },
-                        ])
-                        ->withCount([
-                            'tasks AS all_tasks_count',
-                            'tasks AS completed_tasks_count' => fn ($query) => $query->whereNotNull('completed_at'),
-                            'tasks AS overdue_tasks_count' => fn ($query) => $query->whereNull('completed_at')->whereDate('due_on', '<', now()),
-                        ])
-                        ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
-                        ->withDefault()
-                        // ->orderBy('', 'desc')
-                        ->get(),
+                    $group->id => $projects,
                 ];
             });
 
@@ -113,6 +123,7 @@ class ProjectController extends Controller
             'users_access' => User::withoutRole('cliente')->get(['id', 'name']),
             'games' => Game::dropdownValues(),
             'types' => ProjectType::dropdownValues(),
+            'typeChecks' => TypeCheck::dropdownValues(),
         ]);
     }
 
@@ -189,7 +200,10 @@ class ProjectController extends Controller
 
     public function destroy(Request $request, Project $project)
     {
-        $project->update(['motive_archived' => $request->motive_archived]);
+        $project->update([
+            'name' => $project->name . '(archivado)',
+            'motive_archived' => $request->motive_archived
+        ]);
         $project->archive();
         ProjectDeleted::dispatch($project->id);
 
@@ -252,6 +266,15 @@ class ProjectController extends Controller
         Project::setNewOrder($request->ids);
         Project::whereIn('id', $request->ids)->update(['group_id' => $request->to_group_id,]);
 
+        $groupMappings = [
+            2 => [3 => 'user_review'],
+            3 => [4 => 'user_finalize'],
+        ];
+
+        if (isset($groupMappings[$request->from_group_id][$request->to_group_id])) {
+            $field = $groupMappings[$request->from_group_id][$request->to_group_id];
+            Project::whereIn('id', $request->ids)->update([$field => auth()->id()]);
+        }
         ProjectGroupChanged::dispatch(
             $request->from_group_id,
             $request->to_group_id,
@@ -295,6 +318,16 @@ class ProjectController extends Controller
             $task->labels()->sync(2);
         }
 
+        if(!$request->check && $request->type_check){
+            $task->update([
+                'check' => $request->check,
+                'type_check' => $request->type_check,
+                'group_id' => $project->taskGroups()->pluck('id', 'name')['Pendiente'],
+                'completed_at' => null,
+            ]);
+            $task->labels()->sync(1);
+        }
+
         $user = auth()->user();
         $project = Project::find($project->id)
                     ->loadDefault()
@@ -319,7 +352,7 @@ class ProjectController extends Controller
         return response()->json([
             'project' => $project,
             'task' => $task->loadDefault(),
-            'message' => $task->sent_archive == 1 && $task->attachments->isEmpty() ? true : false,
+            'message' => $task->sent_archive == 1 && $task->attachments->isEmpty() && $request->check ? true : false,
         ]);
     }
 
@@ -354,14 +387,16 @@ class ProjectController extends Controller
 
     public function pdf(Project $project)
     {
+        if($project->type_id == null){
+            $project->update(['type_id' => 2]);
+        }
         $data = [
             'ownerCompany' => OwnerCompany::first(),
-            'user' => User::find(auth()->id()),
             'project' => $project->loadDefault(),
             'asset' => Asset::find($project->game()->get('asset_id')),
             'tasks' => Task::where('project_id', $project->id)->withDefault()->get(),
+            'timeLogs' => TimeLog::where('project_id', $project->id)->first(),
         ];
-
         $pdf = Pdf::loadView('vendor.project.pdf', $data);
         return $pdf->stream();
     }

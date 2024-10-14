@@ -7,6 +7,7 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
@@ -89,6 +90,22 @@ class User extends Authenticatable implements AuditableContract, CanResetPasswor
     {
         return $this->belongsToMany(Task::class, 'subscribe_task');
     }
+
+    public function usersGenerate(): HasMany
+    {
+        return $this->hasMany(Project::class, 'user_generate');
+    }
+
+    public function usersReview(): HasMany
+    {
+        return $this->hasMany(Project::class, 'user_review');
+    }
+
+    public function usersFinalize(): HasMany
+    {
+        return $this->hasMany(Project::class, 'user_finalize');
+    }
+
 
     public function hasProjectAccess(Project $project): bool
     {

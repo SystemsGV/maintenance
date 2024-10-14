@@ -40,17 +40,17 @@
                         <td class="titulos"><p class="titulos tituloRec">Datos generales</p></td>
                     </tr>
                     <tr>
-                        <td><p>Generó: <span>{{ $user->name }}</span></p></td>
+                        <td><p>Generó: <span>{{ $project->userGenerate->name }}</span></p></td>
                     </tr>
                     <tr>
                         @if ($project->fault_date)
-                            <td><p>Duración estimada: <span>{{ $project->estimation }} /hr</span></p></td>
-                        @else
                             <td><p>Tiempo fuera de servicio: <span>{{ $project->estimation }} /hr</span></p></td>
+                        @else
+                            <td><p>Duración estimada: <span>{{ $project->estimation }} /hr</span></p></td>
                         @endif
                     </tr>
                     <tr>
-                        <td><p>Responsable: <span>{{ $user->name }}</span></p></td>
+                        <td><p>Responsable: <span>{{ $timeLogs->user->name ?? '' }}</span></p></td>
                     </tr>
                     <tr>
                         <td><p>{{$project->fault_date ? 'Hoja de falla' : 'Orden de trabajo'}}: <span>{{ $project->name }}</span></p></td>
@@ -134,26 +134,32 @@
     </table>
     <table class="table_firmas">
         @php
-            $signatureAcept = $user->signature ? base64_encode(file_get_contents(public_path($user->signature))) : null;
-            $signatureValid = $user->signature ? base64_encode(file_get_contents(public_path($user->signature))) : null;
-            $signatureDo = count($project->users) > 0 ? base64_encode(file_get_contents(public_path($project->users[0]->signature))) : null;
+            $aceptado = $project->userReview ? base64_encode(file_get_contents(public_path($project->userReview->signature))) : null;
+            $validado = $project->userFinalize ? base64_encode(file_get_contents(public_path($project->userFinalize->signature))) : null;
+            $realizado = $timeLogs ? base64_encode(file_get_contents(public_path($timeLogs->user->signature))) : null;
         @endphp
 
         <thead>
             <tr>
                 <td>
-                    @if($project->group_id == 4 && $signatureAcept)
-                        <img  src="data:image;base64, {{ $signatureAcept }}" height="100" >
+                    @if(intval($project->group_id) >= 3 && $aceptado)
+                        <img  src="data:image;base64, {{ $aceptado }}" height="100" >
+                        <br>
+                        {{$project->userReview->name}}
                     @endif
                 </td>
                 <td>
-                    @if($project->group_id == 3 && $signatureValid)
-                        <img  src="data:image;base64, {{ $signatureValid }}" height="100" >
+                    @if($project->group_id == 4 && $validado)
+                        <img  src="data:image;base64, {{ $validado }}" height="100" >
+                        <br>
+                        {{$project->userFinalize->name}}
                     @endif
                 </td>
                 <td>
-                    @if($signatureDo)
-                        <img  src="data:image;base64, {{ $signatureDo }}" height="100" >
+                    @if($realizado)
+                        <img  src="data:image;base64, {{ $realizado }}" height="100" >
+                        <br>
+                        {{$timeLogs->user->name}}
                     @endif
                 </td>
             </tr>
@@ -284,11 +290,6 @@
         width: 100%;
         margin-top: 100px;
         margin-bottom: 10px;
-    }
-
-    .table_firmas thead tr {
-        /* background-color: rgba(95, 95, 95, 0.452); */
-        color: #FFF;
     }
 
     .table_firmas thead tr td {

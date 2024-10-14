@@ -18,6 +18,9 @@ return new class extends Migration
             $table->foreignId('game_id')->nullable();
             $table->foreignId('period_id')->nullable();
             $table->foreignId('type_id')->nullable();
+            $table->foreignId('user_generate')->nullable();
+            $table->foreignId('user_review')->nullable();
+            $table->foreignId('user_finalize')->nullable();
             $table->string('name');
             $table->unsignedInteger('number');
             $table->text('description')->nullable();

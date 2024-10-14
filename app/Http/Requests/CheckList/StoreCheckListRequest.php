@@ -24,6 +24,7 @@ class StoreCheckListRequest extends FormRequest
         return [
             'name' => 'required|string',
             'archive' => 'boolean',
+            'type' => 'string',
             'game_id' => ['required', 'exists:games,id'],
             'period_id' => ['required', 'exists:periods,id'],
         ];

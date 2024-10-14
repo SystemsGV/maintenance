@@ -1,7 +1,7 @@
 import useTaskDrawerStore from '@/hooks/store/useTaskDrawerStore';
 import RichTextEditor from '@/components/RichTextEditor';
 import useTasksStore from '@/hooks/store/useTasksStore';
-import { Button, Flex, Text, TextInput } from '@mantine/core';
+import { Button, Flex, Loader, LoadingOverlay, Text, TextInput } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { useEffect, useRef, useState } from 'react';
 import Dropzone from '@/components/Dropzone';
@@ -11,7 +11,8 @@ function ModalForm(task) {
 
   const { findTask, updateTaskProperty, deleteAttachment, uploadAttachments } = useTasksStore();
   const editorRef = useRef(null);
-  const newTask = findTask(task.id)
+  const newTask = findTask(task.id);
+  const [loading, setLoading] = useState(false);
 
   const [data, setData] = useState({
     group_id: '',
@@ -51,6 +52,8 @@ function ModalForm(task) {
 
   return (
     <form>
+      <LoadingOverlay visible={loading} loaderProps={{ children: <Loader size={40} /> }} />
+
       <TextInput
         label='Nombre'
         placeholder='Nombre de la tarea'
@@ -76,8 +79,8 @@ function ModalForm(task) {
         <Dropzone
           mt='xl'
           selected={newTask.attachments}
-          onChange={files => uploadAttachments(newTask, files)}
-          remove={index => deleteAttachment(newTask, index)}
+          onChange={files => uploadAttachments(newTask, files, setLoading)}
+          remove={index => deleteAttachment(newTask, index, setLoading)}
         />
       )}
 

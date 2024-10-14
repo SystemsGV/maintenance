@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             PermissionSeeder::class,
             LabelSeeder::class,
+            TypeCheckSeeder::class,
             ProjectTypeSeeder::class,
             PeriodSeeder::class,
             CurrencySeeder::class,

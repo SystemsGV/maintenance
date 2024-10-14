@@ -11,13 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('check_lists', function (Blueprint $table) {
+        Schema::create('type_checks', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('game_id');
-            $table->unsignedBigInteger('period_id');
             $table->string('name');
-            $table->boolean('archive');
-            $table->char('type', 1)->default(1);
             $table->archivedAt();
             $table->timestamps();
         });
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('check_lists');
+        Schema::dropIfExists('type_checks');
     }
 };

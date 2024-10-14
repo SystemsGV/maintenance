@@ -15,7 +15,7 @@ class CheckList extends Model implements AuditableContract
 {
     use Archivable, Auditable, HasFactory, IsSearchable, IsSortable;
 
-    protected $fillable = ['name', 'period_id', 'game_id', 'archive'];
+    protected $fillable = ['name', 'period_id', 'game_id', 'archive', 'type'];
     protected $searchable = ['name'];
     protected $sortable = ['name' => 'asc',];
 
@@ -27,6 +27,11 @@ class CheckList extends Model implements AuditableContract
     public function period(): BelongsTo
     {
         return $this->belongsTo(Period::class);
+    }
+
+    public function typeCheck(): BelongsTo
+    {
+        return $this->belongsTo(TypeCheck::class, 'type');
     }
 
 }

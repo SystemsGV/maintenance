@@ -216,22 +216,13 @@ export function EditTaskDrawer() {
                 placeholder="Seleccionar asignado"
                 searchable
                 mt="md"
+                display="none"
                 value={data.assigned_to_user_id?.toString()}
                 onChange={(value) => updateValue("assigned_to_user_id", value)}
                 data={usersWithAccessToProject.map((i) => ({
                   value: i.id.toString(),
                   label: i.name,
                 }))}
-                readOnly={!can("editar tarea")}
-              />
-
-              <Select
-                label="Check List"
-                placeholder="Seleccione el check list"
-                mt="md"
-                value={data.check?.toString()}
-                onChange={(value) => updateValue("check", value)}
-                data={['bien', 'mal', 'n/a']}
                 readOnly={!can("editar tarea")}
               />
 

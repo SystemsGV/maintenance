@@ -2,7 +2,7 @@
     background-color: light-dark(var(--mantine-color-blue-8), var(--mantine-color-dark-7));
     height: 100vh;
     height: 100dvh;
-    width: rem(300px);
+    width: rem(250px);
     padding: var(--mantine-spacing-md);
     padding-bottom: 0;
     display: flex;

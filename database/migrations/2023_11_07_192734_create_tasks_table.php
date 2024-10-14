@@ -27,6 +27,7 @@ return new class extends Migration
             $table->boolean('hidden_from_clients')->default(false);
             $table->boolean('billable')->default(true);
             $table->boolean('sent_archive')->default(false);
+            $table->char('type_check', 1);
             $table->unsignedInteger('order_column');
             $table->timestamps();
             $table->timestamp('assigned_at')->nullable();

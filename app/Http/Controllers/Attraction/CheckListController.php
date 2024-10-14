@@ -9,6 +9,7 @@ use App\Http\Resources\CheckList\CheckListResource;
 use App\Models\CheckList;
 use App\Models\Game;
 use App\Models\Period;
+use App\Models\TypeCheck;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -46,6 +47,7 @@ class CheckListController extends Controller
             'dropdowns' => [
                 'games' => Game::dropdownValues(),
                 'periods' => Period::dropdownValues(),
+                'typeChecks' => TypeCheck::dropdownValues(),
             ],
         ]);
     }
@@ -63,6 +65,7 @@ class CheckListController extends Controller
             'dropdowns' => [
                 'games' => Game::dropdownValues(),
                 'periods' => Period::dropdownValues(),
+                'typeChecks' => TypeCheck::dropdownValues(),
             ],
         ]);
     }

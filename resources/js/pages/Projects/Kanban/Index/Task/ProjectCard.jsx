@@ -83,12 +83,21 @@ export default function   ProjectCard({ project, index }) {
             </Group>
 
             <Group wrap="nowrap" justify="space-between">
-              <Text c="dimmed" fz="sm" mt="md">
-                Tareas completadas:{" "}
+              {project.default == 1 && (
+                <Text c="dimmed" fz="sm" mt="md">
+                  Total de tareas:{" "}
+                <Text span fw={500} c="bright">
+                  {project.check_list_count}
+                </Text>
+                </Text>
+              ) || project.default != 1 && (
+                <Text c="dimmed" fz="sm" mt="md">
+                  Tareas completadas:{" "}
                 <Text span fw={500} c="bright">
                   {project.completed_tasks_count} / {project.all_tasks_count}
                 </Text>
-              </Text>
+                </Text>
+              )}
             </Group>
           </div>
         </div>

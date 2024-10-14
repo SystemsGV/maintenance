@@ -42,7 +42,7 @@ export function CreateTaskDrawer() {
     sent_archive: false,
     billable: true,
     subscribed_users: [user.id.toString()],
-    labels: [],
+    labels: [1],
     attachments: [],
   };
 
@@ -167,21 +167,6 @@ export function CreateTaskDrawer() {
               label: i.name,
             }))}
             error={form.errors.group_id}
-          />
-
-          <Select
-            label="Asigando"
-            placeholder="Seleccionar asignado"
-            searchable
-            required
-            mt="md"
-            value={form.data.assigned_to_user_id}
-            onChange={(value) => updateValue("assigned_to_user_id", value)}
-            data={usersWithAccessToProject.map((i) => ({
-              value: i.id.toString(),
-              label: i.name,
-            }))}
-            error={form.errors.assigned_to_user_id}
           />
 
           <DateInput

@@ -11,6 +11,7 @@ const useProjectFiltersStore = create((set, get) => ({
   filters: {
     groups: params.groups || [],
     assignees: params.assignees || [],
+    date: params.date,
     due_date: {
       not_set: params.not_set || 0,
       overdue: params.overdue || 0,
@@ -43,6 +44,7 @@ const useProjectFiltersStore = create((set, get) => ({
       filters: {
         groups: [],
         assignees: [],
+        date: '',
         due_date: {
           not_set: 0,
           overdue: 0,

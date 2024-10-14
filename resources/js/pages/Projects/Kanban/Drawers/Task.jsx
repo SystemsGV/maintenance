@@ -4,6 +4,7 @@ import { redirectTo } from '@/utils/route';
 import { isOverdue } from '@/utils/task';
 import {
   Button,
+  CheckIcon,
   Chip,
   Combobox,
   Flex,
@@ -19,22 +20,31 @@ import classes from './css/Task.module.css';
 import { useEffect, useState } from 'react';
 import TaskGroupLabel from '@/components/TaskGroupLabel';
 import EditTaskModal from '../Index/Modals/EditTaskModal';
+import { usePage } from '@inertiajs/react';
 
-export default function Task({ task, onCheckChange  }) {
+export default function Task({ task, onCheckChange }) {
 
+  const { typeChecks } = usePage().props;
   const [check, setCheck] = useState(task.check || '');
-  const [viewType, setViewType] = useState('check 1');
+  const [type, setType] = useState(task.type_check || '');
+
   const handleChange = (value) => {
     setCheck(value);
-    onCheckChange(task.id, value);
+    onCheckChange(task.id, value, type);
   };
+
   const handleComboboxChange = (value) => {
-    setViewType(value);
+    setType(value);
+    onCheckChange(task.id, null, value);
   };
+
   const handleInputChange = (e) => {
     const value = e.target.value;
     setCheck(value);
-    onCheckChange(task.id, value); // Actualiza el valor en la tabla de tareas
+  };
+
+  const handleBlur = () => {
+    onCheckChange(task.id, check, type);
   };
 
   const combobox = useCombobox({
@@ -91,8 +101,8 @@ export default function Task({ task, onCheckChange  }) {
         </Grid.Col>
 
           <Grid.Col span={4}>
-            {viewType == 'check 1' && (
-              <Chip.Group onChange={handleChange} value={check || false}>
+            {type == 1 && (
+              <Chip.Group onChange={handleChange} value={check || null}>
                 <Group justify='center'>
                   <Chip value='bien'>Bien</Chip>
                   <Chip value='mal'>Mal</Chip>
@@ -100,8 +110,8 @@ export default function Task({ task, onCheckChange  }) {
                 </Group>
               </Chip.Group>
             )}
-            {viewType == 'check 2' && (
-              <Chip.Group onChange={handleChange} value={check || false}>
+            {type == 2 && (
+              <Chip.Group onChange={handleChange} value={check || null}>
                 <Group justify='center'>
                   <Chip value='aprobo'>Aprobo</Chip>
                   <Chip value='alerta'>Alerta</Chip>
@@ -109,8 +119,8 @@ export default function Task({ task, onCheckChange  }) {
                 </Group>
               </Chip.Group>
             )}
-            {viewType == 'check 3' && (
-              <Chip.Group onChange={handleChange} value={check || false}>
+            {type == 3 && (
+              <Chip.Group onChange={handleChange} value={check || null}>
                 <Group justify='center'>
                   <Chip value='si'>Si</Chip>
                   <Chip value='no'>No</Chip>
@@ -118,38 +128,45 @@ export default function Task({ task, onCheckChange  }) {
                 </Group>
               </Chip.Group>
             )}
-            {viewType == 'check 4' && (
+            {type == 4 && (
               <TextInput
                 placeholder="Ingrese el resultado de la tarea"
                 value={check}
                 onChange={handleInputChange}
+                onBlur={handleBlur}
               />
             )}
           </Grid.Col>
 
-        <Grid.Col span={1}>
-          <Combobox
-          store={combobox}
-          width={250}
-          position="bottom-start"
-          withArrow
-          onOptionSubmit={handleComboboxChange}
-          >
-            <Combobox.Target>
-              <Button variant="light" radius="xl" color='violet' onClick={() => combobox.toggleDropdown()}>Tipo</Button>
-            </Combobox.Target>
+        {can('editar tarea') && (
+          <Grid.Col span={1}>
+            <Combobox
+            store={combobox}
+            width={250}
+            position="bottom-start"
+            withArrow
+            onOptionSubmit={handleComboboxChange}
+            >
+              <Combobox.Target>
+                <Button variant="light" radius="xl" color='violet' onClick={() => combobox.toggleDropdown()}>Tipo</Button>
+              </Combobox.Target>
 
-            <Combobox.Dropdown>
-              <Combobox.Options>
-                <Combobox.Option value="check 1" key="check 1">Bien/Mal/Na</Combobox.Option>
-                <Combobox.Option value="check 2" key="check 2">Aprobo/Alerta/Fallo</Combobox.Option>
-                <Combobox.Option value="check 3" key="check 3">Si/No/Na</Combobox.Option>
-                <Combobox.Option value="check 4" key="check 4">Texto</Combobox.Option>
-              </Combobox.Options>
-            </Combobox.Dropdown>
+              <Combobox.Dropdown>
+                <Combobox.Options>
+                  {typeChecks.map( option => (
+                    <Combobox.Option value={option.value} key={option.value} active={type}>
+                      <Group gap="xs">
+                        {option.value == type && <CheckIcon size={12} />}
+                        <span>{option.label}</span>
+                      </Group>
+                    </Combobox.Option>
+                  ))}
+                </Combobox.Options>
+              </Combobox.Dropdown>
 
-          </Combobox>
-        </Grid.Col>
+            </Combobox>
+          </Grid.Col>
+        )}
 
       </Grid>
   );

@@ -15,7 +15,7 @@ const GamesIndex = () => {
   const { items } = usePage().props;
 
   const columns = prepareColumns([
-    { label: 'Juego', column: 'name' },
+    { label: 'Atracción', column: 'name' },
     { label: 'Ubicación', sortable: false },
     {
       label: 'Acciones',

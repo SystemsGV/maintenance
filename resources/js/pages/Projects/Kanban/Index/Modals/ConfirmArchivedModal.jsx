@@ -32,7 +32,7 @@ function ModalForm({idProject}) {
 
       <Flex justify="flex-end" mt="xl">
         <Button type="submit" w={100} color="red" loading={form.processing}>
-          Arvhivar
+          Archivar
         </Button>
       </Flex>
     </form>

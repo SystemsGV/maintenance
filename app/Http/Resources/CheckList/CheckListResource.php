@@ -18,6 +18,7 @@ class CheckListResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'archive' => $this->archive,
+            'type' => $this->typeCheck->only(['id', 'name']),
             'game_id' => $this->game->only(['id', 'name']),
             'period_id' => $this->period->only(['id', 'name']),
         ];

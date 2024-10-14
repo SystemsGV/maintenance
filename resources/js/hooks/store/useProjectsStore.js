@@ -182,6 +182,7 @@ const useProjectsStore = create((set, get) => ({
           created_at: null,
           updated_at: null,
           default: 0,
+          type_id: 1,
           id: null,
           labels: [],
           users: accessUsers.users,

@@ -18,10 +18,11 @@ import {
 } from '@mantine/core';
 
 const CheckListCreate = () => {
-  const { dropdowns: { games, periods } } = usePage().props;
+  const { dropdowns: { games, periods, typeChecks } } = usePage().props;
   const [form, submit, updateValue] = useForm('post', route('attractions.checklists.store'), {
     name: '',
     archive: false,
+    type: '',
     period_id: '',
     game_id: '',
   });
@@ -88,6 +89,17 @@ const CheckListCreate = () => {
             onChange={value => updateValue('game_id', value)}
             data={games}
             error={form.errors.game_id}
+          />
+
+          <Select
+            label='Tipo de check'
+            placeholder='Seleccione el tipo del checklist'
+            mt='md'
+            required
+            value={form.data.type}
+            onChange={value => updateValue('type', value)}
+            data={typeChecks}
+            error={form.errors.type}
           />
 
           <Checkbox

@@ -58,9 +58,9 @@ export function EditProjectDrawer() {
     tasks: [],
   });
 
-  const handleCheckChange = async (taskId, value) => {
+  const handleCheckChange = async (taskId, check, type) => {
     setLoading(true);
-    const response = await axios.post(route("projects.kanban.check-list", [project.id, taskId]), { check: value })
+    const response = await axios.post(route("projects.kanban.check-list", [project.id, taskId]), { check: check, type_check: type })
                       .catch(() => alert("No se pudo guardar la acción checked de la tarea"));
 
     if (response.data.message) {
@@ -348,7 +348,8 @@ export function EditProjectDrawer() {
                   <Task
                     key={task.id}
                     task={task}
-                    onCheckChange={handleCheckChange}/>
+                    onCheckChange={handleCheckChange}
+                  />
                 ))}
               </>
             ) : (

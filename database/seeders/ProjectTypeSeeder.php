@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Label;
 use App\Models\ProjectType;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class ProjectTypeSeeder extends Seeder
 {
@@ -14,10 +15,11 @@ class ProjectTypeSeeder extends Seeder
     public function run(): void
     {
         ProjectType::insert([
-            ['name' => 'Preventivo'],
+            ['name' => 'Inspección'],
             ['name' => 'Correctivo'],
-            ['name' => 'Predictivo'],
-            ['name' => 'Fiable'],
+            ['name' => 'Preventivo'],
+            ['name' => 'Correctivo programado'],
+            ['name' => 'Correctivo no programado'],
         ]);
     }
 }
