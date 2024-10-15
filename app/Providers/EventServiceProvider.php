@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Events\Project\ProjectCreated;
 use App\Events\Task\CommentCreated;
 use App\Events\Task\TaskCreated;
 use App\Events\UserCreated;
+use App\Listeners\NotifyProjectSubscribers;
 use App\Listeners\NotifyTaskSubscribers;
 use App\Listeners\SendEmailWithCredentials;
 use App\Models\Comment;
@@ -29,6 +31,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         TaskCreated::class => [
             NotifyTaskSubscribers::class,
+        ],
+        ProjectCreated::class => [
+            NotifyProjectSubscribers::class,
         ],
         CommentCreated::class => [
             NotifyTaskSubscribers::class,
@@ -59,6 +64,6 @@ class EventServiceProvider extends ServiceProvider
      */
     public function shouldDiscoverEvents(): bool
     {
-        return false;
+        return true;
     }
 }

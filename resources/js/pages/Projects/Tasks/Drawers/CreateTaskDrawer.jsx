@@ -43,7 +43,7 @@ export function CreateTaskDrawer() {
     hidden_from_clients: false,
     sent_archive: false,
     billable: true,
-    subscribed_users: [user.id.toString()],
+    subscribed_users: usersWithAccessToProject.map(i => String(i.id)),
     labels: [1],
     attachments: [],
   };

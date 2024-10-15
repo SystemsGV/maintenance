@@ -28,7 +28,7 @@ class UpdateTaskRequest extends FormRequest
             'description' => ['nullable'],
             'estimation' => ['nullable'],
             'due_on' => ['nullable'],
-            'type_check' => ['required'],
+            'type_check' => ['nullable'],
             'hidden_from_clients' => ['boolean'],
             'billable' => ['boolean'],
             'sent_archive' => ['boolean'],

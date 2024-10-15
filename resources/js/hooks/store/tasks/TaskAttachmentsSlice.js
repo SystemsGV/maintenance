@@ -23,7 +23,7 @@ const createTaskAttachmentsSlice = (set, get) => ({
       }));
     } catch (e) {
       console.error(e);
-      setLoading(false);
+      // setLoading(false);
       alert("Failed to upload attachments");
     }
   },

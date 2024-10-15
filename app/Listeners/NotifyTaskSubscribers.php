@@ -7,6 +7,8 @@ use App\Events\Task\TaskCreated;
 use App\Models\User;
 use App\Notifications\CommentCreatedMentionedUserNotification;
 use App\Notifications\CommentCreatedNotification;
+use App\Notifications\ProjectCreatedMentionedUserNotification;
+use App\Notifications\ProjectCreatedNotification;
 use App\Notifications\TaskCreatedMentionedUserNotification;
 use App\Notifications\TaskCreatedNotification;
 use App\Services\UserMentionService;

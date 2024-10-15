@@ -11,6 +11,8 @@ import {
   Checkbox,
   Drawer,
   Group,
+  Loader,
+  LoadingOverlay,
   MultiSelect,
   NumberInput,
   Select,
@@ -41,6 +43,8 @@ export function EditTaskDrawer() {
     typeChecks,
     auth: { user },
   } = usePage().props;
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (openedTask) setTimeout(() => openEditTask(openedTask), 50);
@@ -152,6 +156,8 @@ export function EditTaskDrawer() {
     >
       {task ? (
         <>
+              <LoadingOverlay visible={loading} loaderProps={{ children: <Loader size={40} /> }} />
+
           <Breadcrumbs
             c="dark.3"
             ml={24}
@@ -193,8 +199,8 @@ export function EditTaskDrawer() {
                 <Dropzone
                   mt="xl"
                   selected={task.attachments}
-                  onChange={(files) => uploadAttachments(task, files)}
-                  remove={(index) => deleteAttachment(task, index)}
+                  onChange={(files) => uploadAttachments(task, files, setLoading)}
+                  remove={(index) => deleteAttachment(task, index, setLoading)}
                 />
               )}
 

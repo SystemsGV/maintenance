@@ -24,7 +24,7 @@ class CreateClient
 
             $user->update(['avatar' => UserService::storeOrFetchAvatar($user, $data['avatar'])]);
 
-            $user->assignRole('client');
+            $user->assignRole('cliente');
 
             if (! empty($data['companies'])) {
                 $user->clientCompanies()->attach($data['companies']);

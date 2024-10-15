@@ -19,7 +19,6 @@ class UserMentionService
     public static function getUsersFromMentions(string $content, Project $project): Collection
     {
         $users = PermissionService::usersWithAccessToProject($project);
-
         $foundUsers = $users->filter(function ($user) use ($content) {
             return Str::of($content)->contains("@{$user['name']}");
         });
