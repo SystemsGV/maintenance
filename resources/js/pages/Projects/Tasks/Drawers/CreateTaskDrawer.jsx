@@ -28,6 +28,7 @@ export function CreateTaskDrawer() {
     usersWithAccessToProject,
     taskGroups,
     labels,
+    typeChecks,
     auth: { user },
   } = usePage().props;
 
@@ -38,6 +39,7 @@ export function CreateTaskDrawer() {
     description: "",
     estimation: "",
     due_on: "",
+    type_check: "",
     hidden_from_clients: false,
     sent_archive: false,
     billable: true,
@@ -178,6 +180,17 @@ export function CreateTaskDrawer() {
             placeholder="Elija la fecha de vencimiento de la tarea"
             value={form.data.due_on}
             onChange={(value) => updateValue("due_on", value)}
+          />
+
+          <Select
+            label='Tipo de check'
+            placeholder='Seleccione el tipo del checklist'
+            mt='md'
+            required
+            value={form.data.type_check}
+            onChange={value => updateValue('type_check', value)}
+            data={typeChecks}
+            error={form.errors.type_check}
           />
 
           <LabelsDropdown

@@ -28,6 +28,7 @@ class CreateTask
                 'number' => $project->tasks()->withArchived()->count() + 1,
                 'description' => $data['description'],
                 'due_on' => $data['due_on'],
+                'type_check' => $data['type_check'],
                 'estimation' => $data['estimation'],
                 'hidden_from_clients' => $data['hidden_from_clients'],
                 'billable' => $data['billable'],

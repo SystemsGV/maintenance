@@ -28,6 +28,7 @@ class StoreTaskRequest extends FormRequest
             'description' => ['nullable'],
             'estimation' => ['nullable'],
             'due_on' => ['nullable'],
+            'type_check' => ['required'],
             'hidden_from_clients' => ['required', 'boolean'],
             'billable' => ['required', 'boolean'],
             'sent_archive' => ['required', 'boolean'],

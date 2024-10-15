@@ -38,6 +38,7 @@ export function EditTaskDrawer() {
     labels,
     openedTask,
     controle,
+    typeChecks,
     auth: { user },
   } = usePage().props;
 
@@ -52,6 +53,7 @@ export function EditTaskDrawer() {
     assigned_to_user_id: "",
     name: "",
     check: "",
+    type_check: "",
     description: "",
     estimation: 0,
     due_on: "",
@@ -77,6 +79,7 @@ export function EditTaskDrawer() {
         check: task?.check || "",
         description: task?.description || "",
         estimation: task?.estimation || 0,
+        type_check: task?.type_check || "",
         due_on: task?.due_on ? dayjs(task?.due_on).toDate() : "",
         hidden_from_clients:
           task?.hidden_from_clients !== undefined ? task.hidden_from_clients : false,
@@ -236,6 +239,16 @@ export function EditTaskDrawer() {
                 value={data.due_on}
                 onChange={(value) => updateValue("due_on", value)}
                 readOnly={!can("editar tarea")}
+              />
+
+              <Select
+                label='Tipo de check'
+                placeholder='Seleccione el tipo del checklist'
+                mt='md'
+                required
+                value={data.type_check}
+                onChange={value => updateValue('type_check', value)}
+                data={typeChecks}
               />
 
               <LabelsDropdown

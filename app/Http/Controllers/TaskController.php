@@ -15,6 +15,7 @@ use App\Models\Label;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\TaskGroup;
+use App\Models\TypeCheck;
 use App\Services\PermissionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -57,6 +58,7 @@ class TaskController extends Controller
             'labels' => Label::get(['id', 'name', 'color']),
             'taskGroups' => $groups,
             'groupedTasks' => $groupedTasks,
+            'typeChecks' => TypeCheck::dropdownValues(),
             'controle' => $controle,
             'openedTask' => $task ? $task->loadDefault() : null,
         ]);
