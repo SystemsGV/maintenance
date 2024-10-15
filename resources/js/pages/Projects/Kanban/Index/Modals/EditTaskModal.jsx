@@ -103,7 +103,10 @@ const EditTaskModal = (task) => {
     centered: true,
     size: '70%',
     padding: 'xl',
-    overlayProps: { backgroundOpacity: 0.55, blur: 3 },
+    overlayProps: {
+      backgroundOpacity: 0.55,
+      blur: 3,
+    },
     children: <ModalForm {...task} />,
   });
 };

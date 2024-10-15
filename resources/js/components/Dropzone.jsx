@@ -6,6 +6,7 @@ import { IconFiles, IconUpload, IconX } from "@tabler/icons-react";
 import JsFileDownloader from "js-file-downloader";
 import { useState } from "react";
 import { openConfirmModal } from "./ConfirmModal";
+import { openConfirmModal as  openConfirmModalAttachment} from "./ConfirmAttachment";
 import FileThumbnail from "./FileThumbnail";
 import ImageModal from "./ImageModal";
 
@@ -24,10 +25,18 @@ export default function Dropzone({ selected, onChange, remove, ...props }) {
     });
   };
 
+  const confirmViewAttachment = (image) => {
+    openConfirmModalAttachment({
+      title: image?.name,
+      content: image,
+    });
+  };
+
   const openFile = (file) => {
     if (isImage(file)) {
       setSelectedImage(file);
-      open();
+      confirmViewAttachment(file);
+      // open();
     } else if (isViewable(file)) {
       window.open(file.path, "_blank");
     } else {
@@ -42,7 +51,7 @@ export default function Dropzone({ selected, onChange, remove, ...props }) {
 
   return (
     <>
-      <ImageModal image={selectedImage} opened={opened} close={close} />
+      {/* <ImageModal image={selectedImage} opened={opened} close={close} /> */}
 
       <MantineDropzone
         onDrop={(files) => onChange([...selected, ...files])}

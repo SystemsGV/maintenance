@@ -164,7 +164,10 @@ export function EditProjectDrawer() {
       }
       position="right"
       size={1300}
-      overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
+      overlayProps={{
+        backgroundOpacity: 0.55,
+        blur: 3
+      }}
       transitionProps={{
         transition: "slide-left",
         duration: 400,
