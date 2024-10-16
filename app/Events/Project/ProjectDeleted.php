@@ -29,7 +29,7 @@ class ProjectDeleted implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel("App.Models.Project"),
+            new PrivateChannel("App.Models.Project.{$this->projectId}"),
         ];
     }
 }

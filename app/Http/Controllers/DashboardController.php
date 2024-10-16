@@ -5,16 +5,33 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\User;
+use App\Notifications\ProjectsOverdueNotification;
 use App\Services\PermissionService;
+use Carbon\Carbon;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class DashboardController extends Controller
 {
-    public function index(): Response
+    public function index()
     {
+        $user = User::find(auth()->user()->id);
         $projectIds = PermissionService::projectsThatUserCanAccess(auth()->user())->pluck('id');
-
+        $projectsOverdue = Project::whereIn('id', $projectIds)
+                            ->where('default', 1)
+                            ->whereIn('period_id', [2, 3, 4, 5])
+                            ->whereIn('due_on', [
+                                    Carbon::now()->subDays(3)->format('Y-m-d'),
+                                    Carbon::now()->subDays(2)->format('Y-m-d'),
+                                    Carbon::now()->subDays(1)->format('Y-m-d'),
+                                ])
+                            ->get(['id', 'name', 'due_on']);
+        $message = "Órdenes de trabajo a punto de vencer:\n";
+        foreach ($projectsOverdue as $project) {
+            $message .= " - {$project['name']} (Fecha de vencimiento: {$project['due_on']})\n";
+        }
+        $user->notify(new ProjectsOverdueNotification($message));
         return Inertia::render('Dashboard/Index', [
             'projects' => Project::whereIn('id', $projectIds)
                 ->where('default', '!=', 1)

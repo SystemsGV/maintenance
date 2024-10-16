@@ -56,6 +56,7 @@ export function EditProjectDrawer() {
     users: [],
     labels: [],
     tasks: [],
+    time_logs: [],
   });
 
   const handleCheckChange = async (taskId, check, type) => {
@@ -180,7 +181,7 @@ export function EditProjectDrawer() {
       <Tabs defaultValue="info">
         <Tabs.List grow>
           <Tabs.Tab value="info">Información</Tabs.Tab>
-          <Tabs.Tab value="tasks" disabled={project?.completed_at != null ? true : false}>Tareas</Tabs.Tab>
+          <Tabs.Tab value="tasks" disabled={project?.completed_at != null || project?.time_logs.length ==  0 ? true : false}>Tareas</Tabs.Tab>
         </Tabs.List>
 
         <form>
@@ -335,7 +336,7 @@ export function EditProjectDrawer() {
             )}
           </Tabs.Panel>
           <Tabs.Panel value="tasks">
-            {edit.opened && project.tasks.length && can('ver tareas') ? (
+            {edit.opened && project.tasks.length && can('ver tareas') && project.time_logs.length ? (
               <>
                 <Breadcrumbs
                   c="dark.3"

@@ -35,7 +35,7 @@ class AttachmentDeleted implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel("App.Models.Project.{$this->task->project_id}"),
+            new PrivateChannel("App.Models.Project.{$this->task->id}"),
         ];
     }
 }

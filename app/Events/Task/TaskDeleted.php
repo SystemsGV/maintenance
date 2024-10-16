@@ -30,7 +30,7 @@ class TaskDeleted implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel("App.Models.Project.{$this->projectId}"),
+            new PrivateChannel("App.Models.Project.{$this->taskId}"),
         ];
     }
 }

@@ -66,6 +66,8 @@ class CreateTask
                     ->resize(800, 500)
                     ->save(storage_path("app/public/{$filepath}"));
 
+                chmod(storage_path("app/public/{$filepath}"), 0755);
+
                 $thumbFilepath = $this->generateThumb($item, $task, $filename);
 
                 return [

@@ -53,7 +53,7 @@ export default function   ProjectCard({ project, index }) {
               c={isOverdue(project) && project.completed_at == null ? "red.7" : ""}
               onClick={(e) => {
                 e.stopPropagation();
-                if(project.default != 1){
+                if(can('editar proyecto') || project.default != 1){
                   setIsClicked(true);
                   openEditProject(project);
                   setTimeout(() => setIsClicked(false), 300);
