@@ -7,7 +7,7 @@ import { DateInput } from "@mantine/dates";
 import dayjs from "dayjs";
 
 export default function Filters() {
-  const { usersWithAccessToProject, labels } = usePage().props;
+  const { usersWithAccessToProject, labels , periods } = usePage().props;
 
   const { groups } = useProjectGroupsStore();
   const { filters, toggleArrayFilter, toggleObjectFilter, toggleValueFilter } =
@@ -35,24 +35,38 @@ export default function Filters() {
           </div>
         )}
 
-        {/* {usersWithAccessToProject.length > 0 && (
+        {periods.length > 0 && (
           <div>
             <Text fz="xs" fw={700} tt="uppercase" mb="sm">
-              Assignees
+              Grupo de periodos
             </Text>
             <Stack justify="flex-start" gap={6}>
-              {usersWithAccessToProject.map((item) => (
+              {periods.map((item) => (
                 <FilterButton
                   key={item.id}
-                  selected={filters.assignees.includes(item.id)}
-                  onClick={() => toggleArrayFilter("assignees", item.id)}
+                  selected={filters.periods.includes(item.id)}
+                  onClick={() => toggleArrayFilter("periods", item.id)}
                 >
                   {item.name}
                 </FilterButton>
               ))}
             </Stack>
           </div>
-        )} */}
+        )}
+
+          <div>
+          <Text fz="xs" fw={700} tt="uppercase" mb="sm">
+            Tipo
+          </Text>
+          <Stack justify="flex-start" gap={6}>
+            <FilterButton
+              selected={filters.fault_date == "fault_date"}
+              onClick={() => toggleValueFilter("fault_date", "fault_date")}
+            >
+              Hoja de falla
+            </FilterButton>
+          </Stack>
+        </div>
 
         <div>
           <Text fz="xs" fw={700} tt="uppercase" mb="sm">

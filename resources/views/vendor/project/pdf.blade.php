@@ -46,7 +46,7 @@
                         @if ($project->fault_date)
                             <td><p>Tiempo fuera de servicio: <span>{{ $project->estimation }} /hr</span></p></td>
                         @else
-                            <td><p>Duración estimada: <span>{{ $project->estimation }} /hr</span></p></td>
+                            <td><p>Duración estimada: <span>{{ $project->estimation * 10 }} /min</span></p></td>
                         @endif
                     </tr>
                     <tr>

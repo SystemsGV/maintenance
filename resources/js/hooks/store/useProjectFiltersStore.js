@@ -10,12 +10,14 @@ const useProjectFiltersStore = create((set, get) => ({
   openedDrawer: false,
   filters: {
     groups: params.groups || [],
+    periods: params.periods || [],
     assignees: params.assignees || [],
     date: params.date,
     due_date: {
       not_set: params.not_set || 0,
       overdue: params.overdue || 0,
     },
+    fault_date: params.fault_date || 0,
     status: params.status || 0,
     labels: params.labels || [],
   },
@@ -43,6 +45,7 @@ const useProjectFiltersStore = create((set, get) => ({
     return set(() => ({
       filters: {
         groups: [],
+        periods: [],
         assignees: [],
         date: '',
         due_date: {
@@ -50,6 +53,7 @@ const useProjectFiltersStore = create((set, get) => ({
           overdue: 0,
         },
         status: 0,
+        fault_date: 0,
         labels: [],
       }
     }));

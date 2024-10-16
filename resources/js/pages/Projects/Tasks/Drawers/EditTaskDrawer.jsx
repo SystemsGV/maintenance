@@ -88,7 +88,7 @@ export function EditTaskDrawer() {
         hidden_from_clients:
           task?.hidden_from_clients !== undefined ? task.hidden_from_clients : false,
         billable: task?.billable !== undefined ? task.billable : true,
-        sent_archive: task?.sent_archive !== undefined ? task.sent_archive : false,
+        sent_archive: task?.sent_archive,
         subscribed_users: (task?.subscribed_users || []).map((i) => i.id.toString()),
         labels: (task?.labels || []).map((i) => i.id),
       });
@@ -156,7 +156,7 @@ export function EditTaskDrawer() {
     >
       {task ? (
         <>
-              <LoadingOverlay visible={loading} loaderProps={{ children: <Loader size={40} /> }} />
+          <LoadingOverlay visible={loading} loaderProps={{ children: <Loader size={40} /> }} />
 
           <Breadcrumbs
             c="dark.3"

@@ -125,6 +125,7 @@ class ProjectController extends Controller
             'openedProject' => $project ? $project->loadDefault() : null,
             'users_access' => User::withoutRole('cliente')->get(['id', 'name']),
             'games' => Game::dropdownValues(),
+            'periods' => Period::get(['id', 'name']),
             'types' => ProjectType::dropdownValues(),
             'typeChecks' => TypeCheck::dropdownValues(),
         ]);
