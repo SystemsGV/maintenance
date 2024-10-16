@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\Project\CreateProject;
 use App\Actions\Project\UpdateProject;
+use App\Actions\Task\CreateTask;
 use App\Events\Project\ProjectDeleted;
 use App\Events\Project\ProjectGroupChanged;
 use App\Events\Project\ProjectOrderChanged;
@@ -145,10 +146,20 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function store(StoreProjectRequest $request): RedirectResponse
+    public function store(StoreProjectRequest $request)//: RedirectResponse
     {
-        (new CreateProject)->create($request->validated());
-
+        $project = (new CreateProject)->create($request->validated());
+        if(count($request->tasks) > 0){
+            foreach($request->tasks as $task){
+                $data = [
+                    'name' => $task,
+                    'group_id' => $project->taskGroups()->where('name', 'Pendiente')->pluck('id')->first(),
+                    'sent_archive' => true,
+                    'type_check' => 1,
+                ];
+                (new CreateTask)->create($project, $data);
+            }
+        }
         return redirect()->route('projects.kanban')->success('Orden de trabajo creado', 'La orden de trabajo se creó exitosamente.');
     }
 
@@ -202,7 +213,7 @@ class ProjectController extends Controller
         return response()->json();
     }
 
-    public function destroy(Request $request, Project $project)
+    public function destroy(Request $request, Project $project): RedirectResponse
     {
         $project->update([
             'name' => $project->name . '(archivado)',

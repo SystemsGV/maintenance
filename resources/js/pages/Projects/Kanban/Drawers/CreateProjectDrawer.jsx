@@ -11,6 +11,7 @@ import {
   MultiSelect,
   NumberInput,
   Select,
+  TagsInput,
   Text,
   TextInput,
   Textarea,
@@ -49,6 +50,7 @@ export function CreateProjectDrawer() {
     default: false,
     labels: [],
     users: [],
+    tasks: [],
   };
 
   const [form, submit, updateValue] = useForm(
@@ -64,6 +66,7 @@ export function CreateProjectDrawer() {
   };
 
   useEffect(() => {
+    setIsFaultSheet(false);
     updateValue({ ...initial });
   }, [create.opened]);
 
@@ -130,11 +133,21 @@ export function CreateProjectDrawer() {
             placeholder='Descripción de la orden de trabajo'
             mt='md'
             autosize
-            minRows={15}
+            minRows={isFaultSheet ? 10 : 15}
             maxRows={20}
             value={form.data.description}
             onChange={e => updateValue('description', e.target.value)}
           />
+
+          {isFaultSheet && (
+            <TagsInput
+              label="Tareas programadas"
+              mt="md"
+              placeholder="Ingresar tareas de la hoja de falla"
+              value={form.data.tasks}
+              onChange={values => updateValue('tasks', values)}
+            />
+          )}
 
           <MultiSelect
             label='Conceder acceso a las usuarias'

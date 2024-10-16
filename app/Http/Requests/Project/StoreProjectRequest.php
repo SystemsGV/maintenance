@@ -38,6 +38,7 @@ class StoreProjectRequest extends FormRequest
             'default' => ['boolean'],
             'labels' => ['array'],
             'users' => ['array'],
+            'tasks' => ['array'],
         ];
     }
 }

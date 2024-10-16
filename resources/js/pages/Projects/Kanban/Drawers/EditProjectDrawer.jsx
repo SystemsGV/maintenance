@@ -181,7 +181,7 @@ export function EditProjectDrawer() {
       <Tabs defaultValue="info">
         <Tabs.List grow>
           <Tabs.Tab value="info">Información</Tabs.Tab>
-          <Tabs.Tab value="tasks" disabled={project?.completed_at != null || project?.time_logs.length ==  0 ? true : false}>Tareas</Tabs.Tab>
+          <Tabs.Tab value="tasks" disabled={project?.completed_at != null || project?.time_logs.length == 0 ? true : false}>Tareas</Tabs.Tab>
         </Tabs.List>
 
         <form>

@@ -64,6 +64,9 @@
                     <tr>
                         <td><p>Tipo: <span>{{ $project->type ? $project->type->name : '' }}</span></p></td>
                     </tr>
+                    <tr>
+                        <td><p>Descripción: <span>{{ $project->description }}</span></p></td>
+                    </tr>
                     @if ($project->archived_at != null)
                         <tr>
                             <td><p>Motivo de cancelación: <span>{{ $project->motive_archived }}</span></p></td>

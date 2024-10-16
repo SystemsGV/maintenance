@@ -7,6 +7,7 @@ import { date } from "@/utils/datetime";
 import { hasRoles } from "@/utils/user";
 import { usePage } from "@inertiajs/react";
 import {
+  Box,
   Breadcrumbs,
   Checkbox,
   Drawer,
@@ -157,7 +158,6 @@ export function EditTaskDrawer() {
       {task ? (
         <>
           <LoadingOverlay visible={loading} loaderProps={{ children: <Loader size={40} /> }} />
-
           <Breadcrumbs
             c="dark.3"
             ml={24}
