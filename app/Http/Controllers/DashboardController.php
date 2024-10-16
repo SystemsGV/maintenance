@@ -27,7 +27,7 @@ class DashboardController extends Controller
                                     Carbon::now()->subDays(1)->format('Y-m-d'),
                                 ])
                             ->get(['id', 'name', 'due_on']);
-        if($projectsOverdue){
+        if(!$projectsOverdue->isEmpty()){
             $message = "Órdenes de trabajo a punto de vencer:\n";
             foreach ($projectsOverdue as $project) {
                 $message .= " - {$project['name']} (Fecha de vencimiento: {$project['due_on']})\n";
