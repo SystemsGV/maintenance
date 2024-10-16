@@ -27,11 +27,13 @@ class DashboardController extends Controller
                                     Carbon::now()->subDays(1)->format('Y-m-d'),
                                 ])
                             ->get(['id', 'name', 'due_on']);
-        $message = "Órdenes de trabajo a punto de vencer:\n";
-        foreach ($projectsOverdue as $project) {
-            $message .= " - {$project['name']} (Fecha de vencimiento: {$project['due_on']})\n";
+        if($projectsOverdue){
+            $message = "Órdenes de trabajo a punto de vencer:\n";
+            foreach ($projectsOverdue as $project) {
+                $message .= " - {$project['name']} (Fecha de vencimiento: {$project['due_on']})\n";
+            }
+            $user->notify(new ProjectsOverdueNotification($message));
         }
-        $user->notify(new ProjectsOverdueNotification($message));
         return Inertia::render('Dashboard/Index', [
             'projects' => Project::whereIn('id', $projectIds)
                 ->where('default', '!=', 1)
