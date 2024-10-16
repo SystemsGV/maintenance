@@ -146,7 +146,7 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function store(StoreProjectRequest $request)//: RedirectResponse
+    public function store(StoreProjectRequest $request): RedirectResponse
     {
         $project = (new CreateProject)->create($request->validated());
         if(count($request->tasks) > 0){
