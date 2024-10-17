@@ -70,10 +70,10 @@ class CommentCreatedMentionedUserNotification extends Notification implements Sh
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject("[{$this->comment->task->project->name}] {$this->comment->user->name} has mentioned you in a comment on {$this->comment->task->name} task")
-            ->greeting("{$this->comment->user->name} has mentioned you in a comment on {$this->comment->task->name} task")
+            ->subject("[{$this->comment->task->project->name}] {$this->comment->user->name} te ha mencionado en un comentario en la tarea {$this->comment->task->name}")
+            ->greeting("{$this->comment->user->name} te ha mencionado en un comentario en la tarea {$this->comment->task->name}")
             ->line($this->comment->content)
-            ->action('Open task', route('projects.tasks.open', ['project' => $this->comment->task->project_id, 'task' => $this->comment->task->id]));
+            ->action('Ver tarea', route('projects.tasks.open', ['project' => $this->comment->task->project_id, 'task' => $this->comment->task->id]));
     }
 
     /**
@@ -85,8 +85,8 @@ class CommentCreatedMentionedUserNotification extends Notification implements Sh
     {
         return [
             'task_id' => $this->comment->task->id,
-            'title' => "{$this->comment->user->name} has mentioned you in a comment on \"{$this->comment->task->name}\" task",
-            'subtitle' => "On \"{$this->comment->task->project->name}\" project",
+            'title' => "{$this->comment->user->name} te ha mencionado en un comentario en la tarea \"{$this->comment->task->name}\"",
+            'subtitle' => "En orden de trabajo \"{$this->comment->task->project->name}\"",
             'link' => route('projects.tasks.open', [$this->comment->task->project_id, $this->comment->task->id]),
             'created_at' => $notifiable->created_at,
             'read_at' => $notifiable->read_at,

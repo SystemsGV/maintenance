@@ -70,9 +70,9 @@ class TaskCreatedNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject("[{$this->task->project->name}] Task {$this->task->name} was created")
-            ->greeting("{$this->task->createdByUser->name} created a new task")
-            ->action('Open task', route('projects.tasks.open', ['project' => $this->task->project_id, 'task' => $this->task->id]))
+            ->subject("[{$this->task->project->name}] La tarea {$this->task->name} fue creada")
+            ->greeting("{$this->task->createdByUser->name} creó una nueva tarea")
+            ->action('Ver tarea', route('projects.tasks.open', ['project' => $this->task->project_id, 'task' => $this->task->id]))
             ->line($this->task->description);
     }
 
@@ -85,8 +85,8 @@ class TaskCreatedNotification extends Notification implements ShouldQueue
     {
         return [
             'task_id' => $this->task->id,
-            'title' => "{$this->task->createdByUser->name} created a new task",
-            'subtitle' => "On \"{$this->task->project->name}\" project",
+            'title' => "{$this->task->createdByUser->name} creó una nueva tarea",
+            'subtitle' => "En la orden de trabajo \"{$this->task->project->name}\"",
             'link' => route('projects.tasks.open', [$this->task->project_id, $this->task->id]),
             'created_at' => $notifiable->created_at,
             'read_at' => $notifiable->read_at,

@@ -70,9 +70,9 @@ class ProjectCreatedMentionedUserNotification extends Notification implements Sh
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject("[{$this->project->project->name}] You were mentioned in a new \"{$this->project->name}\" project")
-            ->greeting("{$this->project->createdByUser->name} has mentioned you in a new \"{$this->project->name}\" orden de trabajo")
-            ->action('Open project', route('projects.kanban.open', ['project' => $this->project->id]))
+            ->subject("[{$this->project->name}] Fuiste mencionado en una nueva orden de trabajo \"{$this->project->name}\"")
+            ->greeting("{$this->project->createdByUser->name} te ha mencionado en una nueva orden de trabajo \"{$this->project->name}\"")
+            ->action('Ver orden de trabajo', route('projects.kanban.open', ['project' => $this->project->id]))
             ->line($this->project->description);
     }
 
@@ -85,8 +85,8 @@ class ProjectCreatedMentionedUserNotification extends Notification implements Sh
     {
         return [
             'project_id' => $this->project->id,
-            'title' => "{$this->project->userGenerate->name} has mentioned you in a new \"{$this->project->name}\" orden de trabajo",
-            'subtitle' => "On \"{$this->project->name}\" orden de trabajo",
+            'title' => "{$this->project->userGenerate->name} te ha mencionado en una nueva orden de trabajo \"{$this->project->name}\"",
+            'subtitle' => "En la orden de trabajo \"{$this->project->name}\"",
             'link' => route('projects.kanban.open', [$this->project->id]),
             'created_at' => $notifiable->created_at,
             'read_at' => $notifiable->read_at,

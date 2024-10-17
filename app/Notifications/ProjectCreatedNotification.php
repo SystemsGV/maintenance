@@ -70,9 +70,9 @@ class ProjectCreatedNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject("[{$this->project->name}] Project {$this->project->name} was created")
-            ->greeting("{$this->project->userGenerate->name} created a new task")
-            ->action('Open Project', route('projects.kanban.open', ['project' => $this->project->id]))
+            ->subject("[{$this->project->name}] La orden de trabjo {$this->project->name} fue creada")
+            ->greeting("{$this->project->userGenerate->name} creó una nueva orden de trabajo")
+            ->action('Ver orden de trabajo', route('projects.kanban.open', ['project' => $this->project->id]))
             ->line($this->project->description);
     }
 
@@ -85,8 +85,8 @@ class ProjectCreatedNotification extends Notification implements ShouldQueue
     {
         return [
             'project_id' => $this->project->id,
-            'title' => "{$this->project->userGenerate->name} created a new project",
-            'subtitle' => "On \"{$this->project->name}\" project",
+            'title' => "{$this->project->userGenerate->name} creó una nueva orden de trabajo",
+            'subtitle' => "\"{$this->project->name}\"",
             'link' => route('projects.kanban.open', [$this->project->id]),
             'created_at' => $notifiable->created_at,
             'read_at' => $notifiable->read_at,

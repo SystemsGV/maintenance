@@ -149,7 +149,7 @@ class ProjectController extends Controller
     public function store(StoreProjectRequest $request): RedirectResponse
     {
         $project = (new CreateProject)->create($request->validated());
-        if(count($request->tasks) > 0){
+        if($request->tasks && count($request->tasks) > 0){
             foreach($request->tasks as $task){
                 $data = [
                     'name' => $task,
@@ -184,6 +184,7 @@ class ProjectController extends Controller
             $project->update($request->validated());
             return redirect()->route('projects.kanban')->success('Orden de trabajo actualizado', 'La orden de trabajo se actualizó exitosamente..');
         }
+
 
         $data = $request->validated();
         $updateField = key($data);

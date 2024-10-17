@@ -6,6 +6,7 @@ use App\Events\Project\ProjectCreated;
 use App\Events\Task\CommentCreated;
 use App\Events\Task\TaskCreated;
 use App\Events\UserCreated;
+use App\Listeners\NotifyProjectSubscribers;
 use App\Listeners\NotifyTaskSubscribers;
 use App\Listeners\SendEmailWithCredentials;
 use App\Models\Comment;
@@ -29,9 +30,6 @@ class EventServiceProvider extends ServiceProvider
             SendEmailWithCredentials::class,
         ],
         TaskCreated::class => [
-            NotifyTaskSubscribers::class,
-        ],
-        ProjectCreated::class => [
             NotifyTaskSubscribers::class,
         ],
         CommentCreated::class => [

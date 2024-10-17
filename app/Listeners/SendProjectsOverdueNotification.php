@@ -34,9 +34,9 @@ class SendProjectsOverdueNotification
                                 ->get(['id', 'name', 'due_on']);
 
             if(!$projectsOverdue->isEmpty() && $user->isAdmin()){
-                $message = "Órdenes de trabajo a punto de vencer:";
-                foreach ($projectsOverdue as $project) {
-                    $message .= " - {$project['name']} (Fecha de vencimiento: {$project['due_on']})";
+                $message = "";
+                foreach ($projectsOverdue as $index => $project) {
+                    $message .= ($index + 1) . ". **{$project['name']}** (Fecha de vencimiento: *{$project['due_on']}*)  \n";
                 }
                 $user->notify(new ProjectsOverdueNotification($message));
             }

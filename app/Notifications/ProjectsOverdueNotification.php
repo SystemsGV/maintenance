@@ -39,10 +39,10 @@ class ProjectsOverdueNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Sistema Mantenimiento - Orden de trabajo a punto de vencer!')
-            ->greeting("{$notifiable->getFirstName()}, pendiente!")
+            ->subject('¡Atención! Órdenes de trabajo a punto de vencer')
+            ->greeting("Hola {$notifiable->getFirstName()}, tenemos una actualización importante!")
+            ->line('Estas son las órdenes de trabajo que están a punto de vencer:')
             ->line($this->data)
-            ->action('Generar orden de trabajo', route('dashboard'))
-            ->salutation('Chao!');
+            ->salutation('No olvidar!');
     }
 }

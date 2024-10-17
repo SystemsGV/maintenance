@@ -70,9 +70,9 @@ class TaskCreatedMentionedUserNotification extends Notification implements Shoul
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject("[{$this->task->project->name}] You were mentioned in a new \"{$this->task->name}\" task")
-            ->greeting("{$this->task->createdByUser->name} has mentioned you in a new \"{$this->task->name}\" task")
-            ->action('Open task', route('projects.tasks.open', ['project' => $this->task->project_id, 'task' => $this->task->id]))
+            ->subject("[{$this->task->project->name}] Fuiste mencionado en una nueva tarea \"{$this->task->name}\"")
+            ->greeting("{$this->task->createdByUser->name} te ha mencionado en una nueva tarea \"{$this->task->name}\"")
+            ->action('Abrir tarea', route('projects.tasks.open', ['project' => $this->task->project_id, 'task' => $this->task->id]))
             ->line($this->task->description);
     }
 
@@ -85,8 +85,8 @@ class TaskCreatedMentionedUserNotification extends Notification implements Shoul
     {
         return [
             'task_id' => $this->task->id,
-            'title' => "{$this->task->createdByUser->name} has mentioned you in a new \"{$this->task->name}\" task",
-            'subtitle' => "On \"{$this->task->project->name}\" project",
+            'title' => "{$this->task->createdByUser->name} te ha mencionado en una nueva tarea \"{$this->task->name}\"",
+            'subtitle' => "En la orden de trabajo \"{$this->task->project->name}\"",
             'link' => route('projects.tasks.open', [$this->task->project_id, $this->task->id]),
             'created_at' => $notifiable->created_at,
             'read_at' => $notifiable->read_at,
