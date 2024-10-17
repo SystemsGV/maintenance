@@ -45,9 +45,9 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $observers = [
-        // Project::class => [ProjectObserver::class],
-        // Task::class => [TaskObserver::class],
-        // Comment::class => [CommentObserver::class],
+        Project::class => [ProjectObserver::class],
+        Task::class => [TaskObserver::class],
+        Comment::class => [CommentObserver::class],
     ];
 
     /**
