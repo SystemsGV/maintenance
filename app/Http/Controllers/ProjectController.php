@@ -105,7 +105,7 @@ class ProjectController extends Controller
                 ->when($request->has('archived'), fn ($query) => $query->onlyArchived())
                 ->where(function ($query) {
                     $query->whereNull('completed_at')
-                          ->orWhereDate('completed_at', '<=', now()->subDays(3));
+                          ->orWhereDate('completed_at', '>=', now()->subDays(3));
                 })
                 ->withDefault()
                 ->get();
