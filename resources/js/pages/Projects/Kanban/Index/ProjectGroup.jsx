@@ -9,9 +9,10 @@ import { useState } from "react";
 import AccesUsersModal from "./Modals/AccesUsersModal";
 import { usePage } from "@inertiajs/react";
 
-export default function ProjectGroup({ group, projects, ...props }) {
+export default function ProjectGroup({ group, projectsGroup, ...props }) {
 
-  const { selectedProjects, moveSelectedProjects } = useProjectsStore();
+  const { projects, selectedProjects, moveSelectedProjects } = useProjectsStore();
+
   const [loading, setLoading] = useState  (false);
   const disabledAction = () => {
     if (selectedProjects.length == 0){ return false};
@@ -50,7 +51,7 @@ export default function ProjectGroup({ group, projects, ...props }) {
                 /> */}
               </div>
               <Text size="xl" fw={700}>
-                {group.name}
+                {group.name} {projects[group.id].length}
               </Text>
               {/* <ProjectGroupActions group={group} className={classes.actions} /> */}
             </Group>
@@ -76,7 +77,7 @@ export default function ProjectGroup({ group, projects, ...props }) {
                 {...provided.droppableProps}
                 className={snapshot.isDraggingOver ? "isDraggingOver" : ""}
               >
-                {projects.map((project, index) => (
+                {projectsGroup.map((project, index) => (
                   <Project key={project.id} project={project} index={index} />
                 ))}
                 <div className={classes.placeholder}>{provided.placeholder}</div>

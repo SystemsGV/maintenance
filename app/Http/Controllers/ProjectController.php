@@ -331,7 +331,7 @@ class ProjectController extends Controller
                 'group_id' => $project->taskGroups()->pluck('id', 'name')['Proceso'],
                 'completed_at' => now(),
             ]);
-            $task->labels()->sync(2);
+            $task->labels()->sync(7);
         }
 
         if(!$request->check && $request->type_check){
@@ -345,7 +345,7 @@ class ProjectController extends Controller
         }
 
         $user = auth()->user();
-        $project = Project::find($project->id)
+        $projectGroup = Project::find($project->id)
                     ->loadDefault()
                     ->load([
                         'tasks' => function ($query) use ($user) {
@@ -365,8 +365,14 @@ class ProjectController extends Controller
                         'tasks AS completed_tasks_count' => fn ($query) => $query->whereNotNull('completed_at'),
                         'tasks AS overdue_tasks_count' => fn ($query) => $query->whereNull('completed_at')->whereDate('due_on', '<', now()),
                     ]);
+
+        if ($projectGroup->all_tasks_count == $projectGroup->completed_tasks_count && !$projectGroup->labels()->where('id', 7)->exists()) {
+            $projectGroup->labels()->attach(7);
+            $projectGroup->load('labels');
+        }
+
         return response()->json([
-            'project' => $project,
+            'project' => $projectGroup,
             'task' => $task->loadDefault(),
             'message' => $task->sent_archive == 1 && $task->attachments->isEmpty() && $request->check ? true : false,
         ]);

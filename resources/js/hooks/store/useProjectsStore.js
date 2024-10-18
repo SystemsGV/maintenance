@@ -26,6 +26,7 @@ const useProjectsStore = create((set, get) => ({
       }
     }));
   },
+
   findProject: (id) => {
     for (const groupId in get().projects) {
       const project = get().projects[groupId].find((i) => i.id === id);
@@ -36,15 +37,20 @@ const useProjectsStore = create((set, get) => ({
     }
     return null;
   },
+
   updateProjectProperty: async (project, property, value, options = null) => {
     try {
-      if(property != 'completed_tasks_count'){
+      if(property != 'completed_tasks_count' && options != 'updateLabels'){
         await axios
         .put(
           route("projects.kanban.update", [project.id]),
           { [property]: value },
           { progress: false },
         )
+      }
+
+      if(options == 'updateLabels'){
+        options = value;
       }
 
       return set(produce(state => {
@@ -66,6 +72,7 @@ const useProjectsStore = create((set, get) => ({
       alert("Failed to save project property change");
     }
   },
+
   complete: (project, checked) => {
     const newState = checked ? true : null;
     const index = get().projects[project.group_id].findIndex((i) => i.id == project.id);
@@ -78,6 +85,7 @@ const useProjectsStore = create((set, get) => ({
       state.projects[project.group_id][index].completed_at = newState
     }));
   },
+
   reorderProject: (source, destination) => {
     const sourceGroupId = +source.droppableId.split("-")[1];
 
@@ -96,6 +104,7 @@ const useProjectsStore = create((set, get) => ({
 
     return set(produce(state => { state.projects[sourceGroupId] = result }));
   },
+
   moveProject: async (source, destination, setLoading) => {
     setLoading(true);
     const sourceGroupId = +source.droppableId.split("-")[1];
@@ -126,9 +135,10 @@ const useProjectsStore = create((set, get) => ({
     await axios
       .post(route("projects.kanban.move", [route().params.project]), data, { progress: false }) // revisar el params.proyect
       .then(response => {
-        const label = response.data.find(item => item.id == project.group_id);
+        const idsLabel = [project.group_id, 7];
+        const labels = response.data.filter(item => idsLabel.includes(item.id));
         get().clearSelectedProjects();
-        get().updateProjectProperty(project, 'labels', [project.group_id], [label]); // Para actualizar los labels
+        get().updateProjectProperty(project, 'labels', [project.group_id, 7], labels); // Para actualizar los labels
       })
       .catch(() => alert("No se pudo guardar la acción de movimiento del proyecto"));
 
@@ -219,8 +229,9 @@ const useProjectsStore = create((set, get) => ({
        await axios
               .post(route("projects.kanban.move", [route().params.project]), data, { progress: true })
               .then(response => {
-                const label = response.data.find(item => item.id == projectMoved.group_id);
-                get().updateProjectProperty(projectMoved, 'labels', [projectMoved.group_id], [label]); // Para actualizar los labels
+                const idsLabel = [projectMoved.group_id, 7];
+                const labels = response.data.filter(item => idsLabel.includes(item.id));
+                get().updateProjectProperty(projectMoved, 'labels', [projectMoved.group_id, 7], labels); // Para actualizar los labels
               });
 
       set(produce(state => {

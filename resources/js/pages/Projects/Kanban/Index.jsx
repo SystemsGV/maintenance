@@ -93,7 +93,7 @@ const KanbanIndex = () => {
                                 key={group.id}
                                 index={index}
                                 group={group}
-                                projects={projects[group.id] || []}
+                                projectsGroup={projects[group.id] || []}
                               />
                             ))}
                           {provided.placeholder}

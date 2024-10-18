@@ -68,6 +68,10 @@ export function EditProjectDrawer() {
       alert("No puedes cambiar el estado, primero deberás subir una imagen.");
     }
 
+    if(response.data.project.all_tasks_count == response.data.project.completed_tasks_count){
+      await updateProjectProperty(project, 'labels', response.data.project.labels , 'updateLabels');
+    }
+
     await updateProjectProperty(project, 'tasks', response.data.project.tasks);
     await updateProjectProperty(project, 'completed_tasks_count', response.data.project.completed_tasks_count);
     return setLoading(false);
