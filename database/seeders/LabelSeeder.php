@@ -19,6 +19,7 @@ class LabelSeeder extends Seeder
             ['name' => 'Finalizado', 'color' => '#37B24D'],
             ['name' => 'Inconveniente', 'color' => '#E03231'],
             ['name' => 'Vencido', 'color' => '#FF0000'],
+            ['name' => 'Completado', 'color' => '#2B9267'],
         ]);
     }
 }

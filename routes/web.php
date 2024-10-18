@@ -23,6 +23,7 @@ use App\Http\Controllers\Task\CommentController;
 use App\Http\Controllers\Task\GroupController;
 use App\Http\Controllers\Task\TimeLogController;
 use App\Http\Controllers\Project\TimeLogController as TimeLogProjectController;
+use App\Http\Controllers\Settings\TypeCheckController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -179,6 +180,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         Route::resource('labels', LabelController::class)->except(['show']);
         Route::post('labels/{labelId}/restore', [LabelController::class, 'restore'])->name('labels.restore');
+
+        Route::resource('typesCheck', TypeCheckController::class)->except(['show']);
+        Route::post('typeCheck/{typeCheckId}/restore', [TypeCheckController::class, 'restore'])->name('typesCheck.restore');
     });
 
     // Account

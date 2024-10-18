@@ -37,3 +37,21 @@
 .completed {
     opacity: 0.35;
 }
+
+/* Personaliza la barra de desplazamiento para navegadores WebKit */
+div::-webkit-scrollbar {
+    width: 8px; /* Ancho de la barra */
+  }
+
+  div::-webkit-scrollbar-track {
+    background: #f1f1f19c; /* Color del track */
+  }
+
+  div::-webkit-scrollbar-thumb {
+    background: #424242; /* Color del "thumb" */
+    border-radius: 8px; /* Bordes redondeados del "thumb" */
+  }
+
+  div::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Color del "thumb" al pasar el ratón */
+  }

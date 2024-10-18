@@ -8,6 +8,7 @@ import useProjectsStore from "@/hooks/store/useProjectsStore";
 import { useState } from "react";
 import AccesUsersModal from "./Modals/AccesUsersModal";
 import { usePage } from "@inertiajs/react";
+import { openConfirmModal } from "@/components/ConfirmModal";
 
 export default function ProjectGroup({ group, projectsGroup, ...props }) {
 
@@ -20,8 +21,19 @@ export default function ProjectGroup({ group, projectsGroup, ...props }) {
   };
   const assignedUsers = () => {
     const projectDefault = selectedProjects.every(p => p.default == 1);
+    const projectFinalize = selectedProjects.every(p => p.group_id == 3);
     if(projectDefault){
       return AccesUsersModal(setLoading);
+    }
+    if(projectFinalize){
+      return openConfirmModal({
+        type: "info",
+        title: "Finalizar Orden de Trabajo",
+        content: `¿Estás seguro de que deseas finalizar esta orden de trabajo?`,
+        confirmLabel: "Finalizar",
+        confirmProps: { color: "blue" },
+        onConfirm: () => moveSelectedProjects(selectedProjects, setLoading, null),
+      });
     }
     moveSelectedProjects(selectedProjects, setLoading, null)
   };
@@ -72,16 +84,23 @@ export default function ProjectGroup({ group, projectsGroup, ...props }) {
           <Droppable droppableId={`group-${group.id}-projects`} type="project">
             {(provided, snapshot) => (
 
+
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
                 className={snapshot.isDraggingOver ? "isDraggingOver" : ""}
+                style={{
+                  maxHeight: '550px',
+                  overflowY: 'auto',
+                }}
+
               >
                 {projectsGroup.map((project, index) => (
                   <Project key={project.id} project={project} index={index} />
                 ))}
                 <div className={classes.placeholder}>{provided.placeholder}</div>
               </div>
+
             )}
           </Droppable>
         </div>

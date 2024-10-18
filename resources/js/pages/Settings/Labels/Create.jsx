@@ -32,7 +32,7 @@ const LabelCreate = () => {
         <form onSubmit={submit}>
           <TextInput
             label="Nombre"
-            placeholder="Label name"
+            placeholder="nombre de la etiqueta"
             required
             value={form.data.name}
             onChange={(e) => updateValue("name", e.target.value)}
@@ -66,7 +66,7 @@ const LabelCreate = () => {
 
           <Group justify="space-between" mt="xl">
             <BackButton route="settings.labels.index" />
-            <ActionButton loading={form.processing}>Create</ActionButton>
+            <ActionButton loading={form.processing}>Crear</ActionButton>
           </Group>
         </form>
       </ContainerBox>

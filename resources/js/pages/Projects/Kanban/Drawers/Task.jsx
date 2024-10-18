@@ -28,6 +28,7 @@ export default function Task({ task, onCheckChange }) {
   const [check, setCheck] = useState(task.check || '');
   const [type, setType] = useState(task.type_check || '');
 
+
   const handleChange = (value) => {
     setCheck(value);
     onCheckChange(task.id, value, type);
@@ -101,40 +102,21 @@ export default function Task({ task, onCheckChange }) {
         </Grid.Col>
 
           <Grid.Col span={4}>
-            {type == 1 && (
-              <Chip.Group onChange={handleChange} value={check || null}>
-                <Group justify='center'>
-                  <Chip value='bien'>Bien</Chip>
-                  <Chip value='mal'>Mal</Chip>
-                  <Chip value='n/a'>N/A</Chip>
-                </Group>
-              </Chip.Group>
-            )}
-            {type == 2 && (
-              <Chip.Group onChange={handleChange} value={check || null}>
-                <Group justify='center'>
-                  <Chip value='aprobo'>Aprobo</Chip>
-                  <Chip value='alerta'>Alerta</Chip>
-                  <Chip value='fallo'>Fallo</Chip>
-                </Group>
-              </Chip.Group>
-            )}
-            {type == 3 && (
-              <Chip.Group onChange={handleChange} value={check || null}>
-                <Group justify='center'>
-                  <Chip value='si'>Si</Chip>
-                  <Chip value='no'>No</Chip>
-                  <Chip value='n/a'>N/A</Chip>
-                </Group>
-              </Chip.Group>
-            )}
-            {type == 4 && (
+            {type == 4 ? (
               <TextInput
                 placeholder="Ingrese el resultado de la tarea"
                 value={check}
                 onChange={handleInputChange}
                 onBlur={handleBlur}
               />
+            ) : (
+              <Chip.Group onChange={handleChange} value={check || null}>
+                <Group justify='center'>
+                  <Chip value={typeChecks[type-1]['option1']}>{typeChecks[type-1]['option1']}</Chip>
+                  <Chip value={typeChecks[type-1]['option2']}>{typeChecks[type-1]['option2']}</Chip>
+                  <Chip value={typeChecks[type-1]['option3']}>{typeChecks[type-1]['option3']}</Chip>
+                </Group>
+              </Chip.Group>
             )}
           </Grid.Col>
 

@@ -14,6 +14,9 @@ return new class extends Migration
         Schema::create('type_checks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('option1')->nullable();
+            $table->string('option2')->nullable();
+            $table->string('option3')->nullable();
             $table->archivedAt();
             $table->timestamps();
         });

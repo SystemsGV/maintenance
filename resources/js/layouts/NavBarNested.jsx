@@ -181,6 +181,12 @@ export default function Sidebar() {
             active: route().current("settings.labels.*"),
             visible: can("ver etiquetas"),
           },
+          {
+            label: "Tipos de check",
+            link: route("settings.typesCheck.index"),
+            active: route().current("settings.typesCheck.*"),
+            visible: can("editar proyecto"),
+          },
         ],
       },
     ]);

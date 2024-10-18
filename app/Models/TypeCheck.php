@@ -13,10 +13,10 @@ class TypeCheck extends Model
 {
     use Archivable, IsSearchable, IsSortable;
 
-    protected $fillable = ['name', 'color'];
+    protected $fillable = ['name', 'option1', 'option2', 'option3'];
 
     protected $searchable = [
-        'name',
+        'name', 'option1', 'option2', 'option3'
     ];
 
     protected $sortable = [
@@ -30,9 +30,15 @@ class TypeCheck extends Model
 
     public static function dropdownValues(): array
     {
-        return self::orderBy('name')
-            ->get(['id', 'name'])
-            ->map(fn ($i) => ['value' => (string) $i->id, 'label' => $i->name])
+        return self::orderBy('id')
+            ->get(['id', 'name', 'option1', 'option2', 'option3'])
+            ->map(fn ($i) => [
+                'value' => (string) $i->id,
+                'label' => $i->name,
+                'option1' => $i->option1,
+                'option2' => $i->option2,
+                'option3' => $i->option3,
+                ])
             ->toArray();
     }
 
