@@ -80,9 +80,9 @@ class ProjectController extends Controller
         $groups = ProjectGroup::when($request->has('archived'), fn ($query) => $query->onlyArchived())->get();
         $user = auth()->user();
         $key = $request->archived ? 'groupedProjects' . $request->archived : 'groupedProjects';
-        if(Cache::has($key)){
-            $groupedProjects = Cache::get($key);
-        }else{
+        // if(Cache::has($key)){
+            // $groupedProjects = Cache::get($key);
+        // }else{
             $groupedProjects = ProjectGroup::with(['projects' => fn ($query) => $query->withArchived()])->get()
             ->mapWithKeys(function (ProjectGroup $group) use ($request, $user) {
                 $projects = Project::where('group_id', $group->id)
@@ -127,7 +127,7 @@ class ProjectController extends Controller
             });
 
             Cache::put($key, $groupedProjects);
-        }
+        // }
 
 
         return Inertia::render('Projects/Kanban/Index', [
