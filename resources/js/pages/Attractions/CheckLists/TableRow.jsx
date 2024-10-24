@@ -37,6 +37,15 @@ export default function TableRow({ item }) {
           {item.period_id.name}
         </Badge>
       </Table.Td>
+      <Table.Td>
+        <Badge
+          variant='light'
+          color={item.archive == 1 ? 'green' : 'red'}
+          tt='unset'
+        >
+          {item.archive == 1 ? 'SI' : 'NO'}
+        </Badge>
+      </Table.Td>
       {(can('editar checklist') || can('archivar checklist') || can('restaurar checklist')) && (
         <Table.Td>
           <TableRowActions

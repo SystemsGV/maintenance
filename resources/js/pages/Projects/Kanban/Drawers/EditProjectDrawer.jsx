@@ -40,6 +40,8 @@ export function EditProjectDrawer() {
   const [loading, setLoading] = useState(false);
 
   const project = findProject(edit.project.id);
+  const projectLocalStorage = project ? localStorage.getItem(`project-${project.id}`) : null;
+  const commentLocalStorage = project ? localStorage.getItem(`project-comments-${project.id}`) : null;
 
   const [data, setData] = useState({
     client_company_id: "",
@@ -64,19 +66,21 @@ export function EditProjectDrawer() {
   const handleCheckChange = async (taskId, check, type) => {
     // setLoading(true);
 
-    if(localStorage.getItem('tasks')){
+    if(projectLocalStorage || commentLocalStorage){
 
-      const tasksLocalStorage = JSON.parse(localStorage.getItem('tasks'));
-      const findTasksLocalStorage = tasksLocalStorage.find((task) => task.id == taskId);
+      const projectLocal = JSON.parse(projectLocalStorage);
+      const findTaskLocal = projectLocal.tasks.find((task) => task.id == taskId);
 
-      if (findTasksLocalStorage.attachments.length == 0 && findTasksLocalStorage.sent_archive == 1) {
+      if (findTaskLocal.attachments.length == 0 && findTaskLocal.sent_archive == 1) {
         alert("No puedes cambiar el estado, primero deberás subir una imagen.");
         return setLoading(false);
       }
 
-      const updateTasksLocalStorage = tasksLocalStorage.map((task) => task.id == taskId ? { ...task, check } : task);
-      localStorage.setItem('tasks', JSON.stringify(updateTasksLocalStorage));
-      await updateProjectProperty(project, 'tasks', updateTasksLocalStorage);
+      const updateTasksLocal = projectLocal.tasks.map((task) => task.id == taskId ? { ...task, check } : task);
+      console.log(updateTasksLocal);
+
+      localStorage.setItem('tasks', JSON.stringify(updateTasksLocal));
+      await updateProjectProperty(project, 'tasks', updateTasksLocal);
       return setLoading(false);
 
     }
@@ -104,8 +108,8 @@ export function EditProjectDrawer() {
 
   const downloadOffline = () => {
     setLoading(true);
-    localStorage.setItem('tasks', JSON.stringify(project.tasks));
-    localStorage.setItem('comments', JSON.stringify([]));
+    localStorage.setItem(`project-${project.id}`, JSON.stringify(project));
+    localStorage.setItem(`project-comments-${project.id}`, JSON.stringify([]));
     notifications .show({
       title: 'Modo Offline',
       message: 'Estas trabajando en modo offline, no olvides guardar tus tareas al finalizar!',
@@ -122,20 +126,20 @@ export function EditProjectDrawer() {
     setLoading(true);
     try {
 
-      const commentsLocal = JSON.parse(localStorage.getItem('comments'));
-      localStorage.removeItem('tasks');
-      localStorage.removeItem('comments');
+      const commentsLocal = JSON.parse(commentLocalStorage);
+      localStorage.removeItem(`project-${project.id}`);
+      localStorage.removeItem(`project-comments-${project.id}`);
 
-      const projectLocal = findProject(project.id);
+      // const projectLocal = findProject(project.id);
 
-      for (const task of projectLocal.tasks) {
-        await uploadAttachments(task, task.attachments, setLoading);
-        handleCheckChange(task.id, task.check, task.type_check);
-      }
+      // for (const task of projectLocal.tasks) {
+      //   await uploadAttachments(task, task.attachments, setLoading);
+      //   handleCheckChange(task.id, task.check, task.type_check);
+      // }
 
-      for (const comment of commentsLocal) {
-        await saveComment(findTask(comment.taskId), comment.content, () => {});
-      }
+      // for (const comment of commentsLocal) {
+      //   await saveComment(findTask(comment.taskId), comment.content, () => {});
+      // }
 
       notifications .show({
         title: 'Modo Online',
@@ -144,11 +148,12 @@ export function EditProjectDrawer() {
         color: 'green',
         autoClose: 3000,
       });
+      setLoading(false);
 
-      window.location.href = route("projects.kanban");
-      setTimeout(() => {
-        setLoading(false);
-      }, 5000);
+      // window.location.href = route("projects.kanban");
+      // setTimeout(() => {
+      //   setLoading(false);
+      // }, 5000);
 
 
     } catch (error) {
@@ -172,20 +177,10 @@ export function EditProjectDrawer() {
       })
       .catch(() => alert("Fallo al consultar tareas"));
 
-      if(localStorage.getItem('tasks')){
-        const tasksLocalStorage = JSON.parse(localStorage.getItem('tasks'));
-
-        const updatedTasks = tasksLocalStorage.map(taskLocal => {
-          const attachments = taskLocal.attachments || []; // Asegúrate de que existen
-          // Convierte cada attachment de base64 a File
-          const updatedAttachments = attachments.map(attachment => {
-            return convertBase64ToFile(attachment);
-          });
-
-
-          return {...taskLocal, attachments: updatedAttachments};
-        });
-        updateProjectProperty(project, 'tasks', updatedTasks)
+      if(projectLocalStorage || commentLocalStorage){
+        const projectLocal = JSON.parse(projectLocalStorage);
+        console.log(projectLocal);
+        updateProjectProperty(project, 'tasks', projectLocal.tasks)
       }
 
       return initProjectWebSocket(project);
@@ -459,9 +454,9 @@ export function EditProjectDrawer() {
                     onCheckChange={handleCheckChange}
                   />
                 ))}
-                { can("editar proyecto") && (
+                { can("crear factura") && (
                   <Group justify="center" mt="xl">
-                  { localStorage.getItem('tasks') ?
+                  { projectLocalStorage || commentLocalStorage ?
                     <Button
                       fullWidth
                       loading={loading}

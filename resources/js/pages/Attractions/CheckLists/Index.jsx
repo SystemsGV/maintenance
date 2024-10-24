@@ -38,6 +38,7 @@ const CheckListIndex = () => {
     { label: 'CheckList', column: 'name' },
     { label: 'Atracción', column: 'game_id' },
     { label: 'Periodo', column: 'period_id' },
+    { label: 'Imagen', column: 'archive' },
     {
       label: 'Acciones',
       sortable: false,
