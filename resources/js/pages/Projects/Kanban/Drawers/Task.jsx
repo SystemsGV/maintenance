@@ -28,7 +28,6 @@ export default function Task({ task, onCheckChange }) {
   const [check, setCheck] = useState(task.check || '');
   const [type, setType] = useState(task.type_check || '');
 
-
   const handleChange = (value) => {
     setCheck(value);
     onCheckChange(task.id, value, type);
@@ -54,7 +53,7 @@ export default function Task({ task, onCheckChange }) {
 
   useEffect(() => {
     setCheck(task.check || '');
-  }, [task.check]);
+  }, [task]);
 
   return (
       <Grid>
@@ -82,7 +81,9 @@ export default function Task({ task, onCheckChange }) {
               fw={500}
               truncate='end'
               c={isOverdue(task) && task.completed_at === null ? 'red' : ''}
-              onClick={() => EditTaskModal(task)}
+              onClick={() => {
+                EditTaskModal(task);
+              }}
             >
               #{task.number + ': ' + task.name}
             </Text>
@@ -149,7 +150,6 @@ export default function Task({ task, onCheckChange }) {
             </Combobox>
           </Grid.Col>
         )}
-
       </Grid>
   );
 }

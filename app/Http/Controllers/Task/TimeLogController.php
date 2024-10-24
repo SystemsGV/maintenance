@@ -10,6 +10,7 @@ use App\Models\Project;
 use App\Models\Task;
 use App\Models\TimeLog;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
 
 class TimeLogController extends Controller
 {
@@ -22,6 +23,7 @@ class TimeLogController extends Controller
             'minutes' => null,
             'timer_start' => now()->timestamp,
         ]);
+        Cache::flush();
 
         return response()->json(['timeLog' => $timeLog->load(['user:id,name'])]);
     }
@@ -36,6 +38,7 @@ class TimeLogController extends Controller
         ]);
 
         TimeLogCreated::dispatch($task, $timeLog);
+        Cache::flush();
 
         return response()->json(['timeLog' => $timeLog->load(['user:id,name'])]);
     }
@@ -49,6 +52,7 @@ class TimeLogController extends Controller
         );
 
         TimeLogCreated::dispatch($task, $timeLog);
+        Cache::flush();
 
         return response()->json(['timeLog' => $timeLog->load(['user:id,name'])]);
     }
@@ -60,6 +64,7 @@ class TimeLogController extends Controller
         $timeLog->delete();
 
         TimeLogDeleted::dispatch($task, $timeLog->id);
+        Cache::flush();
 
         return response()->json();
     }

@@ -10,6 +10,7 @@ use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 
 class AttachmentController extends Controller
@@ -17,6 +18,7 @@ class AttachmentController extends Controller
     public function store(Request $request, Project $project, Task $task): JsonResponse
     {
         $files = (new CreateTask)->uploadAttachments($task, $request->attachments);
+        Cache::flush();
 
         return response()->json(['files' => $files]);
     }
@@ -29,6 +31,7 @@ class AttachmentController extends Controller
         $attachment->delete();
 
         AttachmentDeleted::dispatch($task, $attachment->id);
+        Cache::flush();
 
         return response()->json();
     }

@@ -40,7 +40,7 @@ const useProjectsStore = create((set, get) => ({
 
   updateProjectProperty: async (project, property, value, options = null) => {
     try {
-      if(property != 'completed_tasks_count' && options != 'updateLabels'){
+      if(property != 'completed_tasks_count' && options != 'updateLabels' && !localStorage.getItem('tasks') ){
         await axios
         .put(
           route("projects.kanban.update", [project.id]),
@@ -67,6 +67,7 @@ const useProjectsStore = create((set, get) => ({
           state.projects[project.group_id][index][property] = options || value;
         }
       }));
+
     } catch (e) {
       console.error(e);
       alert("Failed to save project property change");

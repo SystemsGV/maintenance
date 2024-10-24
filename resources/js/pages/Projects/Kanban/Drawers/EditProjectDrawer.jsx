@@ -4,6 +4,7 @@ import useWebSockets from "@/hooks/useWebSockets";
 import { usePage } from "@inertiajs/react";
 import {
   Breadcrumbs,
+  Button,
   Center,
   Drawer,
   Group,
@@ -26,14 +27,15 @@ import Timer from "./Timer";
 import Task from "./Task";
 import classes from "./css/ProjectDrawer.module.css";
 import EmptyWithIcon from "@/components/EmptyWithIcon";
-import { IconSearch } from "@tabler/icons-react";
+import { IconCloudDownload, IconCloudUpload, IconSearch } from "@tabler/icons-react";
 import useTasksStore from "@/hooks/store/useTasksStore";
+import { notifications } from "@mantine/notifications";
 
 export function EditProjectDrawer() {
   const { edit, openEditProject, closeEditProject } = useProjectDrawerStore();
   const { initProjectWebSocket, initTaskWebSocket } = useWebSockets();
   const { findProject, updateProjectProperty } = useProjectsStore();
-  const { tasks, setTasks } = useTasksStore();
+  const { findTask, setTasks, convertBase64ToFile, uploadAttachments, saveComment } = useTasksStore();
   const {users_access, games, labels, types, openedProject } = usePage().props;
   const [loading, setLoading] = useState(false);
 
@@ -60,12 +62,35 @@ export function EditProjectDrawer() {
   });
 
   const handleCheckChange = async (taskId, check, type) => {
-    setLoading(true);
+    // setLoading(true);
+
+    if(localStorage.getItem('tasks')){
+
+      const tasksLocalStorage = JSON.parse(localStorage.getItem('tasks'));
+      const findTasksLocalStorage = tasksLocalStorage.find((task) => task.id == taskId);
+
+      if (findTasksLocalStorage.attachments.length == 0 && findTasksLocalStorage.sent_archive == 1) {
+        alert("No puedes cambiar el estado, primero deberás subir una imagen.");
+        return setLoading(false);
+      }
+
+      const updateTasksLocalStorage = tasksLocalStorage.map((task) => task.id == taskId ? { ...task, check } : task);
+      localStorage.setItem('tasks', JSON.stringify(updateTasksLocalStorage));
+      await updateProjectProperty(project, 'tasks', updateTasksLocalStorage);
+      return setLoading(false);
+
+    }
+
     const response = await axios.post(route("projects.kanban.check-list", [project.id, taskId]), { check: check, type_check: type })
-                      .catch(() => alert("No se pudo guardar la acción checked de la tarea"));
+                      .catch((e) =>{
+                        setLoading(false);
+                        console.log(e);
+                        alert("No se pudo guardar la acción checked de la tarea");
+                      });
 
     if (response.data.message) {
       alert("No puedes cambiar el estado, primero deberás subir una imagen.");
+      return setLoading(false);
     }
 
     if(response.data.project.all_tasks_count == response.data.project.completed_tasks_count){
@@ -77,8 +102,66 @@ export function EditProjectDrawer() {
     return setLoading(false);
   };
 
+  const downloadOffline = () => {
+    setLoading(true);
+    localStorage.setItem('tasks', JSON.stringify(project.tasks));
+    localStorage.setItem('comments', JSON.stringify([]));
+    notifications .show({
+      title: 'Modo Offline',
+      message: 'Estas trabajando en modo offline, no olvides guardar tus tareas al finalizar!',
+      radius: 'md',
+      color: 'blue',
+      autoClose: 3000,
+    });
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  };
+
+  const uploadOffline = async () => {
+    setLoading(true);
+    try {
+
+      const commentsLocal = JSON.parse(localStorage.getItem('comments'));
+      localStorage.removeItem('tasks');
+      localStorage.removeItem('comments');
+
+      const projectLocal = findProject(project.id);
+
+      for (const task of projectLocal.tasks) {
+        await uploadAttachments(task, task.attachments, setLoading);
+        handleCheckChange(task.id, task.check, task.type_check);
+      }
+
+      for (const comment of commentsLocal) {
+        await saveComment(findTask(comment.taskId), comment.content, () => {});
+      }
+
+      notifications .show({
+        title: 'Modo Online',
+        message: 'Se guardaron los cambios de las tareas con exito!',
+        radius: 'md',
+        color: 'green',
+        autoClose: 3000,
+      });
+
+      window.location.href = route("projects.kanban");
+      setTimeout(() => {
+        setLoading(false);
+      }, 5000);
+
+
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+      alert("No se pudo guardar las tareas");
+    }
+  };
+
   useEffect(() => {
-    if (openedProject) setTimeout(() => openEditProject(openedProject), 50);
+    if (openedProject) {
+      setTimeout(() => openEditProject(openedProject), 50);
+    }
   }, []);
 
   useEffect(() => {
@@ -88,6 +171,23 @@ export function EditProjectDrawer() {
         setTasks(response.data);
       })
       .catch(() => alert("Fallo al consultar tareas"));
+
+      if(localStorage.getItem('tasks')){
+        const tasksLocalStorage = JSON.parse(localStorage.getItem('tasks'));
+
+        const updatedTasks = tasksLocalStorage.map(taskLocal => {
+          const attachments = taskLocal.attachments || []; // Asegúrate de que existen
+          // Convierte cada attachment de base64 a File
+          const updatedAttachments = attachments.map(attachment => {
+            return convertBase64ToFile(attachment);
+          });
+
+
+          return {...taskLocal, attachments: updatedAttachments};
+        });
+        updateProjectProperty(project, 'tasks', updatedTasks)
+      }
+
       return initProjectWebSocket(project);
     }
   }, [edit.opened]);
@@ -359,6 +459,26 @@ export function EditProjectDrawer() {
                     onCheckChange={handleCheckChange}
                   />
                 ))}
+                { can("editar proyecto") && (
+                  <Group justify="center" mt="xl">
+                  { localStorage.getItem('tasks') ?
+                    <Button
+                      fullWidth
+                      loading={loading}
+                      rightSection={<IconCloudUpload size={20} />}
+                      onClick={uploadOffline}
+                    > Guardar
+                    </Button> :
+                    <Button
+                      fullWidth
+                      loading={loading}
+                      rightSection={<IconCloudDownload size={20} />}
+                      onClick={downloadOffline}
+                    > Descargar
+                    </Button>
+                  }
+                  </Group>
+                )}
               </>
             ) : (
               <Center mih={400}>

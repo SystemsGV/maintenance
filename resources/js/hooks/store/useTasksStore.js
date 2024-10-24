@@ -36,12 +36,14 @@ const useTasksStore = create((set, get) => ({
   },
   updateTaskProperty: async (task, property, value, options = null) => {
     try {
-      await axios
+      if(!localStorage.getItem('tasks')){
+        await axios
         .put(
           route("projects.tasks.update", [task.project_id, task.id]),
           { [property]: value },
           { progress: false },
         )
+      }
 
       return set(produce(state => {
 

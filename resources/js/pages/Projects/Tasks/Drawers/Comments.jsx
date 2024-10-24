@@ -22,6 +22,7 @@ export default function Comments({ task }) {
   const [loading, setLoading] = useState(true);
   const [comment, setComment] = useState("");
   const editorRef = useRef(null);
+  const tasksLocal = localStorage.getItem('tasks') || false;
 
   useEffect(() => {
     fetchComments(task, () => setLoading(false));
@@ -63,9 +64,10 @@ export default function Comments({ task }) {
       ) : (
         <Stack gap={30} mt="md">
           {comments.map((comment) => (
-            <div key={comment.id}>
+            <div key={tasksLocal ? task.id : comment.id}>
               <Group justify="space-between">
-                <Group>
+                {!tasksLocal && (
+                  <Group>
                   <Avatar src={comment.user.avatar} radius="xl" color="blue" />
                   <div>
                     <Text size="sm" c="blue" fw={500}>
@@ -76,7 +78,8 @@ export default function Comments({ task }) {
                     </Text>
                   </div>
                 </Group>
-                <Tooltip label={dateTime(comment.created_at)} openDelay={250} withArrow>
+              )}
+                <Tooltip label={dateTime(tasksLocal ? new Date().toLocaleDateString() : comment.created_at)} openDelay={250} withArrow>
                   <Text size="xs" c="dimmed">
                     {diffForHumans(comment.created_at)}
                   </Text>

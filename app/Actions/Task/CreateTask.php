@@ -66,8 +66,7 @@ class CreateTask
                     ->resize(800, 500)
                     ->save(storage_path("app/public/{$filepath}"));
 
-                chmod(storage_path("app/public/{$filepath}"), 0755);
-
+                $this->changePermissionsRecursively(storage_path("app/public/tasks"));
                 $thumbFilepath = $this->generateThumb($item, $task, $filename);
 
                 return [
@@ -90,7 +89,7 @@ class CreateTask
         ]);
 
         if ($dispatchEvent) {
-            AttachmentsUploaded::dispatch($task, $attachments);
+            // AttachmentsUploaded::dispatch($task, $attachments);
         }
 
         return $attachments;
@@ -109,12 +108,24 @@ class CreateTask
 
 
                 Storage::put("public/$thumbFilepath", $image);
-
+                $this->changePermissionsRecursively(storage_path("app/public/tasks"));
                 return $thumbFilepath;
             } catch (Throwable $e) {
                 return null;
             }
         }
         return null;
+    }
+
+    protected function changePermissionsRecursively($dir) {
+        $files = scandir($dir);
+        foreach ($files as $file) {
+            if ($file === '.' || $file === '..') continue;
+            $fullPath = $dir . '/' . $file;
+            if (is_dir($fullPath)) {
+                $this->changePermissionsRecursively($fullPath);
+            }
+            chmod($fullPath, 755);
+        }
     }
 }

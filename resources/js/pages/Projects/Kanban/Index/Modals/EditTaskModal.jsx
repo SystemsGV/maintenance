@@ -6,13 +6,17 @@ import { modals } from '@mantine/modals';
 import { useEffect, useRef, useState } from 'react';
 import Dropzone from '@/components/Dropzone';
 import Comments from '../../../Tasks/Drawers/Comments';
+import useProjectsStore from '@/hooks/store/useProjectsStore';
 
-function ModalForm(task) {
+function ModalForm({task}) {
 
-  const { findTask, updateTaskProperty, deleteAttachment, uploadAttachments } = useTasksStore();
+  const { findTask, updateTaskProperty, deleteAttachment, uploadAttachments,
+    convertBase64ToFile, viewAttachments } = useTasksStore();
+  const { findProject, updateProjectProperty } = useProjectsStore();
   const editorRef = useRef(null);
   const newTask = findTask(task.id);
   const [loading, setLoading] = useState(false);
+  const tasksLocal = localStorage.getItem('tasks') || false;
 
   const [data, setData] = useState({
     group_id: '',
@@ -27,14 +31,33 @@ function ModalForm(task) {
   useEffect(() => {
     setData({
       group_id: newTask?.group_id || '',
-      assigned_to_user_id: newTask?.assigned_to_user_id || '',
       name: newTask?.name || '',
-      check: newTask?.check || '',
-      description: newTask?.description || '',
-      estimation: newTask?.estimation || 0,
     });
     editorRef.current?.setContent(newTask?.description || '');
   }, [newTask]);
+
+  useEffect(() => {
+    if(tasksLocal){
+
+      const project = findProject(newTask.project_id);
+      const updatedTasks = JSON.parse(tasksLocal).map(taskLocal => {
+        if(taskLocal.id == newTask.id){
+          // Convertir de base64 a tipo File
+            const attachments = taskLocal.attachments || []; // Asegúrate de que existen
+            attachments.forEach(attachment => {
+              if(newTask.attachments.length == 0){
+                viewAttachments(newTask, [attachment])
+              }
+            });
+            updateTaskProperty(taskLocal, 'check', taskLocal.check);
+        }
+        return taskLocal;
+      });
+
+      updateProjectProperty(project, 'tasks', updatedTasks)
+    }
+  }, [localStorage.getItem('tasks')]);
+
 
   const updateValue = (field, value) => {
     setData({ ...data, [field]: value });
@@ -80,7 +103,7 @@ function ModalForm(task) {
         <Dropzone
           mt='xl'
           selected={newTask.attachments}
-          onChange={files => uploadAttachments(newTask, files, setLoading)}
+          onChange={files => uploadAttachments(newTask, files, setLoading) }
           remove={index => deleteAttachment(newTask, index, setLoading)}
         />
       )}
@@ -108,7 +131,7 @@ const EditTaskModal = (task) => {
       backgroundOpacity: 0.55,
       blur: 3,
     },
-    children: <ModalForm {...task} />,
+    children: <ModalForm task={task} />,
   });
 };
 

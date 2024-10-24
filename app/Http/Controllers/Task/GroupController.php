@@ -13,6 +13,7 @@ use App\Http\Requests\TaskGroup\UpdateTaskGroupRequest;
 use App\Models\Project;
 use App\Models\TaskGroup;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class GroupController extends Controller
 {
@@ -23,6 +24,7 @@ class GroupController extends Controller
         $taskGroup = $project->taskGroups()->create($request->validated());
 
         TaskGroupCreated::dispatch($taskGroup);
+        Cache::flush();
 
         return redirect()->route('projects.tasks', $project)->success('Tasks group created', 'A new tasks group was successfully created.');
     }
@@ -34,6 +36,7 @@ class GroupController extends Controller
         $taskGroup->update($request->validated());
 
         TaskGroupUpdated::dispatch($taskGroup);
+        Cache::flush();
 
         return redirect()->route('projects.tasks', $project)->success('Tasks group updated', 'The tasks group was successfully updated.');
     }
@@ -49,6 +52,7 @@ class GroupController extends Controller
         $taskGroup->archive();
 
         TaskGroupDeleted::dispatch($taskGroup->id, $project->id);
+        Cache::flush();
 
         return redirect()->route('projects.tasks', $project)->success('Tasks group archived', 'The tasks group was successfully archived.');
     }
@@ -62,6 +66,7 @@ class GroupController extends Controller
         $taskGroup->unArchive();
 
         TaskGroupRestored::dispatch($taskGroup);
+        Cache::flush();
 
         return redirect()->back()->success('Tasks group restored', 'The restoring of the tasks group was completed successfully.');
     }
@@ -73,6 +78,7 @@ class GroupController extends Controller
         TaskGroup::setNewOrder($request->ids);
 
         TaskGroupOrderChanged::dispatch($project->id, $request->ids);
+        Cache::flush();
 
         return response()->json();
     }

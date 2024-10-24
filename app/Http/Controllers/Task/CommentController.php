@@ -8,12 +8,14 @@ use App\Http\Requests\Comment\StoreCommentRequest;
 use App\Models\Comment;
 use App\Models\Project;
 use App\Models\Task;
+use Illuminate\Support\Facades\Cache;
 
 class CommentController extends Controller
 {
     public function index(Project $project, Task $task)
     {
         $this->authorize('viewAny', [Comment::class, $project]);
+        Cache::flush();
 
         return response()->json(
             $task->comments()->with(['user:id,name,avatar,job_title'])->latest()->get(),
@@ -29,6 +31,7 @@ class CommentController extends Controller
         );
 
         CommentCreated::dispatch($comment);
+        Cache::flush();
 
         return response()->json(['comment' => $comment->load(['user:id,name,avatar,job_title'])]);
     }

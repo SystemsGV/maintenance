@@ -11,6 +11,7 @@ import FileThumbnail from "./FileThumbnail";
 import ImageModal from "./ImageModal";
 
 export default function Dropzone({ selected, onChange, remove, ...props }) {
+
   const [opened, { close, open }] = useDisclosure(false);
   const [selectedImage, setSelectedImage] = useState(null);
 

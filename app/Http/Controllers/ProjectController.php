@@ -32,7 +32,9 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -72,11 +74,16 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function kanban(Request $request, ?Project $project = null): Response
+    public function kanban(Request $request, ?Project $project = null)  : Response
     {
+
         $groups = ProjectGroup::when($request->has('archived'), fn ($query) => $query->onlyArchived())->get();
         $user = auth()->user();
-        $groupedProjects = ProjectGroup::with(['projects' => fn ($query) => $query->withArchived()])->get()
+        $key = $request->archived ? 'groupedProjects' . $request->archived : 'groupedProjects';
+        if(Cache::has($key)){
+            $groupedProjects = Cache::get($key);
+        }else{
+            $groupedProjects = ProjectGroup::with(['projects' => fn ($query) => $query->withArchived()])->get()
             ->mapWithKeys(function (ProjectGroup $group) use ($request, $user) {
                 $projects = Project::where('group_id', $group->id)
                 ->searchByQueryString()
@@ -119,6 +126,10 @@ class ProjectController extends Controller
                 ];
             });
 
+            Cache::put($key, $groupedProjects);
+        }
+
+
         return Inertia::render('Projects/Kanban/Index', [
             'labels' => Label::get(['id', 'name', 'color']),
             'projectGroups' => $groups,
@@ -160,6 +171,7 @@ class ProjectController extends Controller
                 (new CreateTask)->create($project, $data);
             }
         }
+        Cache::flush();
         return redirect()->route('projects.kanban')->success('Orden de trabajo creado', 'La orden de trabajo se creó exitosamente.');
     }
 
@@ -210,6 +222,7 @@ class ProjectController extends Controller
         }
 
         ProjectUpdated::dispatch($project, $updateField);
+        Cache::flush();
 
         return response()->json();
     }
@@ -222,6 +235,7 @@ class ProjectController extends Controller
         ]);
         $project->archive();
         ProjectDeleted::dispatch($project->id);
+        Cache::flush();
 
         return redirect()->back()->success('Orden de trabajo archivado', 'La orden de trabajo fue archivado exitosamente.');
     }
@@ -235,6 +249,7 @@ class ProjectController extends Controller
         $project->update(['motive_archived' => null]);
         $project->unArchive();
         ProjectRestored::dispatch($project);
+        Cache::flush();
 
         return redirect()->back()->success('Orden de trabajo restaurado', 'La restauración de la orden se completó con éxito.');
     }
@@ -272,6 +287,8 @@ class ProjectController extends Controller
             $request->to_index,
         );
 
+        Cache::flush();
+
         return response()->json();
     }
 
@@ -297,6 +314,7 @@ class ProjectController extends Controller
             $request->from_index,
             $request->to_index,
         );
+        Cache::flush();
 
         return response()->json(Label::get(['id', 'name', 'color']));
     }
@@ -309,6 +327,7 @@ class ProjectController extends Controller
             'completed_at' => ($request->completed == true) ? now() : null,
         ]);
         ProjectUpdated::dispatch($project, 'completed_at');
+        Cache::flush();
 
         return response()->json();
     }
@@ -318,12 +337,13 @@ class ProjectController extends Controller
 
         $request->option ? $project->labels()->sync(6, false) :  $project->labels()->detach(6);
         ProjectUpdated::dispatch($project, 'labels');
+        Cache::flush();
+
         return response()->json();
     }
 
     public function checklist(Request $request, Project $project, Task $task): JsonResponse
     {
-        // $this->authorize('complete', [Task::class, $project]);
 
         if($request->check && ($task->sent_archive != 1 || !$task->attachments->isEmpty())){
             $task->update([
@@ -371,6 +391,8 @@ class ProjectController extends Controller
             $projectGroup->load('labels');
         }
 
+        Cache::flush();
+
         return response()->json([
             'project' => $projectGroup,
             'task' => $task->loadDefault(),
@@ -404,6 +426,8 @@ class ProjectController extends Controller
                         'tasks AS completed_tasks_count' => fn ($query) => $query->whereNotNull('completed_at'),
                         'tasks AS overdue_tasks_count' => fn ($query) => $query->whereNull('completed_at')->whereDate('due_on', '<', now()),
                     ]);
+        Cache::flush();
+
         return response()->json($project);
     }
 

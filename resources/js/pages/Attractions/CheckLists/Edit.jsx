@@ -22,7 +22,7 @@ const CheckListEdit = () => {
   const [form, submit, updateValue] = useForm('post', route('attractions.checklists.update', item.id), {
     _method: 'put',
     name: item.name,
-    archive: item.archive,
+    archive: item?.archive !== undefined ? item.archive : false,
     type: item.type.id.toString(),
     period_id: item.period_id.id.toString(),
     game_id: item.game_id.id.toString(),

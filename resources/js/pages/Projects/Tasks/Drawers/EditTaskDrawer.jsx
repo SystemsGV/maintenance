@@ -86,10 +86,9 @@ export function EditTaskDrawer() {
         estimation: task?.estimation || 0,
         type_check: task?.type_check || "",
         due_on: task?.due_on ? dayjs(task?.due_on).toDate() : "",
-        hidden_from_clients:
-          task?.hidden_from_clients !== undefined ? task.hidden_from_clients : false,
+        hidden_from_clients: task?.hidden_from_clients !== undefined ? task.hidden_from_clients : false,
         billable: task?.billable !== undefined ? task.billable : true,
-        sent_archive: task?.sent_archive,
+        sent_archive: task?.sent_archive !== undefined ? task.sent_archive : false,
         subscribed_users: (task?.subscribed_users || []).map((i) => i.id.toString()),
         labels: (task?.labels || []).map((i) => i.id),
       });
@@ -283,9 +282,11 @@ export function EditTaskDrawer() {
               <Checkbox
                 label="Subir imagen"
                 description="Habilitar para que sea obligatorio"
-                mt="xl"
+                mt="md"
                 checked={data.sent_archive}
-                onChange={(event) => updateValue("sent_archive", event.currentTarget.checked)}
+                onChange={(event) =>
+                  updateValue("sent_archive", event.currentTarget.checked)
+                }
                 disabled={!can("editar tarea")}
               />
 
@@ -297,7 +298,7 @@ export function EditTaskDrawer() {
                   onChange={(event) => updateValue("billable", event.currentTarget.checked)}
                 />
 
-              {!hasRoles(user, ["client"]) && (
+              {!hasRoles(user, ["cliente"]) && (
                 <Checkbox
                   label="Hidden from clients"
                   mt="md"

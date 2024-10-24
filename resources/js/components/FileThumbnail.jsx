@@ -97,11 +97,13 @@ export default function FileThumbnail({ file, remove, open, ...props }) {
           {file.type}
         </Text>
       </div>
-      <IconCircleX
+      <div>
+        <IconCircleX
           className={classes.remove}
           stroke={1.5}
           onClick={() => remove()}
-      />
+        />
+      </div>
     </Group>
   );
 }
