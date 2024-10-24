@@ -74,7 +74,7 @@ class ProjectController extends Controller
         ]);
     }
 
-    public function kanban(Request $request, ?Project $project = null)  : Response
+    public function kanban(Request $request, ?Project $project = null)
     {
 
         $groups = ProjectGroup::when($request->has('archived'), fn ($query) => $query->onlyArchived())->get();
